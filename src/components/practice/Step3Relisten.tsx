@@ -26,12 +26,12 @@ export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps
       {/* 説明 */}
       <div className="text-center">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          意味を思い出しながら聞きましょう
+          意味（いみ）を思（おも）い出（だ）しながら聞（き）きましょう
         </h2>
         <p className="text-gray-600 text-sm">
-          スクリプトを見ないで、{TARGET_PLAY_COUNT}回聞いてみてください。
+          スクリプトを見（み）ないで、{TARGET_PLAY_COUNT}回（かい）聞（き）いてみてください。
           <br />
-          意味がわかりながら聞けることを確認しましょう。
+          意味（いみ）がわかりながら聞（き）けることを確認（かくにん）しましょう。
         </p>
       </div>
 
@@ -39,7 +39,7 @@ export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps
       <div className="text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full">
           <span className="text-blue-600 font-medium">
-            再生回数: {playCount} / {TARGET_PLAY_COUNT}
+            再生回数（さいせいかいすう）: {playCount} / {TARGET_PLAY_COUNT}
           </span>
           {isEnoughPlays && (
             <svg
@@ -71,9 +71,9 @@ export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
         <h3 className="font-medium text-green-900 mb-2 text-sm">💡 ポイント</h3>
         <ul className="text-green-800 text-sm space-y-1">
-          <li>• 頭の中で意味をイメージしながら聞く</li>
-          <li>• 単語のつながりに注意して聞く</li>
-          <li>• わからない部分があれば前のステップに戻ってOK</li>
+          <li>• 頭（あたま）の中（なか）で意味（いみ）をイメージしながら聞（き）く</li>
+          <li>• 単語（たんご）のつながりに注意（ちゅうい）して聞（き）く</li>
+          <li>• わからない部分（ぶぶん）があれば前（まえ）のステップに戻（もど）ってOK</li>
         </ul>
       </div>
 
@@ -83,7 +83,7 @@ export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps
           onClick={onBack}
           className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
         >
-          ← 戻る
+          ← 戻（もど）る
         </button>
         <button
           onClick={onComplete}
@@ -93,14 +93,14 @@ export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps
               : 'bg-gray-300 text-gray-500'
           }`}
         >
-          次へ：声に出す →
+          次（つぎ）へ：声（こえ）に出（だ）す →
         </button>
       </div>
 
       {/* 補足メッセージ */}
       {!isEnoughPlays && (
         <p className="text-center text-sm text-gray-500">
-          あと{TARGET_PLAY_COUNT - playCount}回聞くと次に進めます
+          あと{TARGET_PLAY_COUNT - playCount}回（かい）聞（き）くと次（つぎ）に進（すす）めます
         </p>
       )}
     </div>

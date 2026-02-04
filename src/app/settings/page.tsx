@@ -25,7 +25,7 @@ export default function SettingsPage() {
   const handleResetProgress = () => {
     if (
       window.confirm(
-        'すべての学習進捗をリセットしますか？\nこの操作は取り消せません。'
+        'すべての学習進捗（がくしゅうしんちょく）をリセットしますか？\nこの操作（そうさ）は取（と）り消（け）せません。'
       )
     ) {
       resetProgress();
@@ -36,7 +36,7 @@ export default function SettingsPage() {
   const handleResetSettings = () => {
     if (
       window.confirm(
-        'すべての設定を初期値に戻しますか？\nこの操作は取り消せません。'
+        'すべての設定（せってい）を初期値（しょきち）に戻（もど）しますか？\nこの操作（そうさ）は取（と）り消（け）せません。'
       )
     ) {
       resetSettings();
@@ -48,7 +48,7 @@ export default function SettingsPage() {
       <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
-          <p className="text-gray-600">読み込み中...</p>
+          <p className="text-gray-600">読（よ）み込（こ）み中（ちゅう）...</p>
         </div>
       </div>
     );
@@ -80,21 +80,21 @@ export default function SettingsPage() {
               clipRule="evenodd"
             />
           </svg>
-          戻る
+          戻（もど）る
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">設定</h1>
+        <h1 className="text-2xl font-bold text-gray-900">設定（せってい）</h1>
       </div>
 
       {/* 学習統計 */}
       <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">学習統計</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">学習統計（がくしゅうとうけい）</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-600 mb-1">完了したレッスン</p>
+            <p className="text-sm text-blue-600 mb-1">完了（かんりょう）したレッスン</p>
             <p className="text-2xl font-bold text-blue-700">{completedCount}</p>
           </div>
           <div className="bg-green-50 rounded-lg p-4">
-            <p className="text-sm text-green-600 mb-1">総練習回数</p>
+            <p className="text-sm text-green-600 mb-1">総（そう）練習回数（れんしゅうかいすう）</p>
             <p className="text-2xl font-bold text-green-700">
               {totalPracticeCount}
             </p>
@@ -104,12 +104,12 @@ export default function SettingsPage() {
 
       {/* 再生設定 */}
       <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">再生設定</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">再生（さいせい）設定（せってい）</h2>
         <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
           {/* 再生速度 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              デフォルト再生速度
+              デフォルト再生速度（さいせいそくど）
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -130,10 +130,10 @@ export default function SettingsPage() {
           {/* 自動再生回数 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              ステップ3の再生回数
+              ステップ3の再生回数（さいせいかいすう）
             </label>
             <p className="text-xs text-gray-500 mb-2">
-              「もう一度聴く」ステップで何回再生するかを設定します
+              「もう一度（いちど）聴（き）く」ステップで何回（なんかい）再生（さいせい）するかを設定（せってい）します
             </p>
             <div className="flex items-center gap-2">
               <button
@@ -144,7 +144,7 @@ export default function SettingsPage() {
                 -
               </button>
               <span className="w-12 text-center text-lg font-medium">
-                {settings.autoPlayCount}回
+                {settings.autoPlayCount}回（かい）
               </span>
               <button
                 onClick={() => setAutoPlayCount(settings.autoPlayCount + 1)}
@@ -161,14 +161,14 @@ export default function SettingsPage() {
       {/* データ管理 */}
       <section className="mb-8">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          データ管理
+          データ管理（かんり）
         </h2>
         <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">学習進捗をリセット</p>
+              <p className="font-medium text-gray-900">学習進捗（がくしゅうしんちょく）をリセット</p>
               <p className="text-xs text-gray-500">
-                完了したレッスンや練習回数がリセットされます
+                完了（かんりょう）したレッスンや練習回数（れんしゅうかいすう）がリセットされます
               </p>
             </div>
             <button
@@ -181,16 +181,16 @@ export default function SettingsPage() {
           <div className="border-t border-gray-100" />
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">設定を初期化</p>
+              <p className="font-medium text-gray-900">設定（せってい）を初期化（しょきか）</p>
               <p className="text-xs text-gray-500">
-                再生設定が初期値に戻ります
+                再生設定（さいせいせってい）が初期値（しょきち）に戻（もど）ります
               </p>
             </div>
             <button
               onClick={handleResetSettings}
               className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
             >
-              初期化
+              初期化（しょきか）
             </button>
           </div>
         </div>
@@ -199,11 +199,11 @@ export default function SettingsPage() {
       {/* アプリ情報 */}
       <section>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          アプリ情報
+          アプリ情報（じょうほう）
         </h2>
         <div className="bg-gray-50 rounded-lg p-4">
           <p className="text-sm text-gray-600">
-            日本語発音練習アプリ（MVP版）
+            日本語（にほんご）発音（はつおん）練習（れんしゅう）アプリ（MVP版（ばん））
           </p>
           <p className="text-xs text-gray-500 mt-1">Version 1.0.0</p>
         </div>

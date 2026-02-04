@@ -88,9 +88,9 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
   };
 
   const evaluationOptions: { value: SelfEvaluation; label: string }[] = [
-    { value: 'same', label: 'お手本と同じように言えた' },
-    { value: 'close', label: 'だいたい言えたけど、少し違った' },
-    { value: 'difficult', label: '難しかった' },
+    { value: 'same', label: 'お手本（てほん）と同（おな）じように言（い）えた' },
+    { value: 'close', label: 'だいたい言（い）えたけど、少（すこ）し違（ちが）った' },
+    { value: 'difficult', label: '難（むずか）しかった' },
     { value: 'unknown', label: 'わからない' },
   ];
 
@@ -99,16 +99,16 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       {/* 説明 */}
       <div className="text-center">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          録音してAIに聞いてもらいましょう
+          録音（ろくおん）してAIに聞（き）いてもらいましょう
         </h2>
         <p className="text-gray-600 text-sm">
-          お手本を見ながら録音して、AIからアドバイスをもらいましょう。
+          お手本（てほん）を見（み）ながら録音（ろくおん）して、AIからアドバイスをもらいましょう。
         </p>
       </div>
 
       {/* お手本スクリプト */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-900 mb-2">📝 お手本</h3>
+        <h3 className="text-sm font-medium text-blue-900 mb-2">📝 お手本（てほん）</h3>
         <p className="text-lg text-blue-900">{lesson.script.japanese}</p>
       </div>
 
@@ -124,7 +124,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       {recordingUrl && !feedback && (
         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
           <h3 className="font-medium text-gray-900 mb-3">
-            自分の発音、どうでしたか？
+            自分（じぶん）の発音（はつおん）、どうでしたか？
           </h3>
           <div className="space-y-2">
             {evaluationOptions.map((option) => (
@@ -180,7 +180,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  AIが解析中...
+                  AIが解析中（かいせきちゅう）...
                 </span>
               ) : (
                 'AIにアドバイスをもらう'
@@ -198,7 +198,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
             onClick={handleRetry}
             className="mt-2 text-red-600 underline text-sm"
           >
-            やり直す
+            やり直（なお）す
           </button>
         </div>
       )}
@@ -210,7 +210,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
           {transcription && (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-700 mb-2">
-                🤖 AIが聞き取った結果
+                🤖 AIが聞（き）き取（と）った結果（けっか）
               </h3>
               <p className="text-gray-900">{transcription}</p>
             </div>
@@ -224,7 +224,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
           {/* 良かった点 */}
           {feedback.goodPoints.length > 0 && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-medium text-blue-900 mb-2">👍 良かったところ</h3>
+              <h3 className="font-medium text-blue-900 mb-2">👍 良（よ）かったところ</h3>
               <ul className="text-blue-800 space-y-1">
                 {feedback.goodPoints.map((point, index) => (
                   <li key={index}>• {point}</li>
@@ -237,7 +237,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
           {feedback.improvementTip && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <h3 className="font-medium text-yellow-900 mb-2">
-                💡 もっと良くなるヒント
+                💡 もっと良（よ）くなるヒント
               </h3>
               <p className="text-yellow-800">{feedback.improvementTip}</p>
             </div>
@@ -250,15 +250,15 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
 
           {/* 聞き比べ */}
           <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium text-gray-900 mb-3">🎧 聞き比べ</h3>
+            <h3 className="font-medium text-gray-900 mb-3">🎧 聞（き）き比（くら）べ</h3>
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-gray-600 mb-1">お手本</p>
+                <p className="text-sm text-gray-600 mb-1">お手本（てほん）</p>
                 <AudioPlayer audioUrl={lesson.audioUrl} showSpeedControl={false} />
               </div>
               {recordingUrl && (
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">あなたの録音</p>
+                  <p className="text-sm text-gray-600 mb-1">あなたの録音（ろくおん）</p>
                   <audio src={recordingUrl} controls className="w-full" />
                 </div>
               )}
@@ -270,7 +270,7 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
             onClick={handleRetry}
             className="w-full py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
           >
-            もう一度録音する
+            もう一度（いちど）録音（ろくおん）する
           </button>
         </div>
       )}
@@ -281,13 +281,13 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
           onClick={onBack}
           className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
         >
-          ← 戻る
+          ← 戻（もど）る
         </button>
         <button
           onClick={onComplete}
           className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-lg transition-colors shadow-md"
         >
-          練習完了 ✓
+          練習完了（れんしゅうかんりょう） ✓
         </button>
       </div>
     </div>

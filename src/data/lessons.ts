@@ -7,7 +7,7 @@ export interface Lesson {
   id: string;
   title: string;
   level: 'N5' | 'N4';
-  category: '挨拶' | '日常' | '買い物' | '食事' | '交通';
+  category: '挨拶（あいさつ）' | '日常（にちじょう）' | '買い物（かいもの）' | '食事（しょくじ）' | '交通（こうつう）';
   audioUrl: string;
   script: {
     japanese: string;         // ひらがな表記（ふりがな付き）
@@ -49,9 +49,9 @@ export const lessons: Lesson[] = [
   // ============================================
   {
     id: 'lesson-001',
-    title: '朝の挨拶',
+    title: '朝（あさ）の挨拶（あいさつ）',
     level: 'N5',
-    category: '挨拶',
+    category: '挨拶（あいさつ）',
     audioUrl: '/audio/lesson-001.mp3',
     script: {
       japanese: 'おはようございます。きょうも いいてんきですね。',
@@ -113,9 +113,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-002',
-    title: '自己紹介',
+    title: '自己紹介（じこしょうかい）',
     level: 'N5',
-    category: '挨拶',
+    category: '挨拶（あいさつ）',
     audioUrl: '/audio/lesson-002.mp3',
     script: {
       japanese: 'はじめまして。わたしは リンです。ベトナムから きました。どうぞ よろしく おねがいします。',
@@ -177,9 +177,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-003',
-    title: 'お礼を言う',
+    title: 'お礼（れい）を言（い）う',
     level: 'N5',
-    category: '挨拶',
+    category: '挨拶（あいさつ）',
     audioUrl: '/audio/lesson-003.mp3',
     script: {
       japanese: 'きのう、たすけてくれて ありがとうございました。ほんとうに たすかりました。',
@@ -245,9 +245,9 @@ export const lessons: Lesson[] = [
   // ============================================
   {
     id: 'lesson-004',
-    title: '週末の予定',
+    title: '週末（しゅうまつ）の予定（よてい）',
     level: 'N5',
-    category: '日常',
+    category: '日常（にちじょう）',
     audioUrl: '/audio/lesson-004.mp3',
     script: {
       japanese: 'こんしゅうまつは ともだちと えいがを みに いきます。たのしみです。',
@@ -314,9 +314,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-005',
-    title: '昨日の出来事',
+    title: '昨日（きのう）の出来事（できごと）',
     level: 'N5',
-    category: '日常',
+    category: '日常（にちじょう）',
     audioUrl: '/audio/lesson-005.mp3',
     script: {
       japanese: 'きのう、ともだちと えいがを みました。とても おもしろかったです。',
@@ -383,9 +383,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-006',
-    title: '趣味について',
+    title: '趣味（しゅみ）について',
     level: 'N5',
-    category: '日常',
+    category: '日常（にちじょう）',
     audioUrl: '/audio/lesson-006.mp3',
     script: {
       japanese: 'わたしの しゅみは おんがくを きくことです。にほんの うたが すきです。',
@@ -458,7 +458,7 @@ export const lessons: Lesson[] = [
     id: 'lesson-007',
     title: 'コンビニで',
     level: 'N5',
-    category: '買い物',
+    category: '買い物（かいもの）',
     audioUrl: '/audio/lesson-007.mp3',
     script: {
       japanese: 'すみません、この おにぎりを ください。あと、おちゃも おねがいします。',
@@ -520,9 +520,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-008',
-    title: '値段を聞く',
+    title: '値段（ねだん）を聞（き）く',
     level: 'N5',
-    category: '買い物',
+    category: '買い物（かいもの）',
     audioUrl: '/audio/lesson-008.mp3',
     script: {
       japanese: 'すみません、これは いくらですか。',
@@ -577,9 +577,9 @@ export const lessons: Lesson[] = [
   // ============================================
   {
     id: 'lesson-009',
-    title: 'レストランで注文',
+    title: 'レストランで注文（ちゅうもん）',
     level: 'N5',
-    category: '食事',
+    category: '食事（しょくじ）',
     audioUrl: '/audio/lesson-009.mp3',
     script: {
       japanese: 'すみません、ラーメンを ひとつと、ぎょうざを おねがいします。',
@@ -646,9 +646,9 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-010',
-    title: '食事の感想',
+    title: '食事（しょくじ）の感想（かんそう）',
     level: 'N5',
-    category: '食事',
+    category: '食事（しょくじ）',
     audioUrl: '/audio/lesson-010.mp3',
     script: {
       japanese: 'このラーメン、とても おいしいですね。スープが さいこうです。',

@@ -14,7 +14,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <span className="text-2xl">🎧</span>
           <span className="font-bold text-gray-900 text-lg hidden sm:inline">
-            日本語練習
+            日本語（にほんご）練習（れんしゅう）
           </span>
         </Link>
 
@@ -25,13 +25,13 @@ export function Header() {
               href="/lessons"
               className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              レッスン一覧
+              レッスン一覧（いちらん）
             </Link>
           )}
           <Link
             href="/settings"
             className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="設定"
+            aria-label="設定（せってい）"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

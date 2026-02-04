@@ -55,13 +55,13 @@ export function AudioRecorder({
   const getStatusMessage = () => {
     switch (recordingState) {
       case 'recording':
-        return '録音中...';
+        return '録音中（ろくおんちゅう）...';
       case 'paused':
-        return '一時停止中';
+        return '一時停止中（いちじていしちゅう）';
       case 'stopped':
-        return '録音完了';
+        return '録音完了（ろくおんかんりょう）';
       default:
-        return 'マイクボタンを押して録音開始';
+        return 'マイクボタンを押（お）して録音開始（ろくおんかいし）';
     }
   };
 
@@ -86,7 +86,7 @@ export function AudioRecorder({
           {formatDuration(duration)}
         </p>
         <p className="text-xs text-gray-500 mt-1">
-          最大 {formatDuration(maxDuration)}
+          最大（さいだい） {formatDuration(maxDuration)}
         </p>
       </div>
 
@@ -121,7 +121,7 @@ export function AudioRecorder({
                 clipRule="evenodd"
               />
             </svg>
-            録音開始
+            録音開始（ろくおんかいし）
           </button>
         )}
 
@@ -143,7 +143,7 @@ export function AudioRecorder({
                   clipRule="evenodd"
                 />
               </svg>
-              一時停止
+              一時停止（いちじていし）
             </button>
             <button
               onClick={handleStopAndSubmit}
@@ -161,7 +161,7 @@ export function AudioRecorder({
                   clipRule="evenodd"
                 />
               </svg>
-              完了
+              完了（かんりょう）
             </button>
           </>
         )}
@@ -184,7 +184,7 @@ export function AudioRecorder({
                   clipRule="evenodd"
                 />
               </svg>
-              再開
+              再開（さいかい）
             </button>
             <button
               onClick={handleStopAndSubmit}
@@ -202,7 +202,7 @@ export function AudioRecorder({
                   clipRule="evenodd"
                 />
               </svg>
-              完了
+              完了（かんりょう）
             </button>
           </>
         )}
@@ -224,7 +224,7 @@ export function AudioRecorder({
                 clipRule="evenodd"
               />
             </svg>
-            やり直す
+            やり直（なお）す
           </button>
         )}
       </div>
@@ -232,7 +232,7 @@ export function AudioRecorder({
       {/* 録音プレビュー */}
       {recordingState === 'stopped' && audioURL && (
         <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-          <p className="text-sm font-medium text-gray-700 mb-2">録音プレビュー</p>
+          <p className="text-sm font-medium text-gray-700 mb-2">録音（ろくおん）プレビュー</p>
           <audio src={audioURL} controls className="w-full" preload="metadata" />
         </div>
       )}

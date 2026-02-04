@@ -8,11 +8,11 @@ interface StepIndicatorProps {
 }
 
 const STEPS: { step: PracticeStep; label: string; shortLabel: string }[] = [
-  { step: 1, label: '聞く', shortLabel: '聞' },
-  { step: 2, label: '理解', shortLabel: '理' },
-  { step: 3, label: '再聴', shortLabel: '再' },
-  { step: 4, label: '発音', shortLabel: '発' },
-  { step: 5, label: '録音', shortLabel: '録' },
+  { step: 1, label: '聞（き）く', shortLabel: '聞' },
+  { step: 2, label: '理解（りかい）', shortLabel: '理' },
+  { step: 3, label: '再聴（さいちょう）', shortLabel: '再' },
+  { step: 4, label: '発音（はつおん）', shortLabel: '発' },
+  { step: 5, label: '録音（ろくおん）', shortLabel: '録' },
 ];
 
 export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) {

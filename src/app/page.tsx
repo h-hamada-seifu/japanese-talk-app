@@ -5,7 +5,7 @@ import { useUserSettings } from '@/hooks';
 import type { Language } from '@/types';
 
 const languages: { value: Language; label: string; flag: string }[] = [
-  { value: 'ja', label: '日本語', flag: '🇯🇵' },
+  { value: 'ja', label: '日本語（にほんご）', flag: '🇯🇵' },
   { value: 'en', label: 'English', flag: '🇺🇸' },
   { value: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
   { value: 'zh', label: '中文', flag: '🇨🇳' },
@@ -28,20 +28,20 @@ export default function Home() {
 
         {/* タイトル */}
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          日本語リスニング・発音練習
+          日本語（にほんご）リスニング・発音（はつおん）練習（れんしゅう）
         </h1>
 
         {/* 説明 */}
         <p className="text-gray-600 mb-6">
-          スマートフォンで隙間時間に
+          スマートフォンで隙間時間（すきまじかん）に
           <br />
-          日本語の聞く力・話す力を伸ばそう
+          日本語（にほんご）の聞（き）く力（ちから）・話（はな）す力（ちから）を伸（の）ばそう
         </p>
 
         {/* 言語選択 */}
         <div className="mb-8 bg-white rounded-lg p-4 shadow-sm border border-gray-200">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            あなたの母語を選んでください
+            あなたの母語（ぼご）を選（えら）んでください
           </label>
           <select
             value={isLoaded ? settings.userLanguage : 'ja'}
@@ -55,7 +55,7 @@ export default function Home() {
             ))}
           </select>
           <p className="text-xs text-gray-500 mt-2">
-            翻訳や発音ヒント、AIアドバイスに使用されます
+            翻訳（ほんやく）や発音（はつおん）ヒント、AIアドバイスに使用（しよう）されます
           </p>
         </div>
 
@@ -64,18 +64,18 @@ export default function Home() {
           href="/lessons"
           className="inline-block w-full py-4 px-6 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-lg text-lg transition-colors shadow-lg"
         >
-          練習をはじめる
+          練習（れんしゅう）をはじめる
         </Link>
 
         {/* 特徴リスト */}
         <div className="mt-10 grid grid-cols-3 gap-4 text-center">
           <div className="p-3">
             <div className="text-3xl mb-2">⏱️</div>
-            <p className="text-xs text-gray-600">1回15〜20分</p>
+            <p className="text-xs text-gray-600">1回（かい）15〜20分（ふん）</p>
           </div>
           <div className="p-3">
             <div className="text-3xl mb-2">📱</div>
-            <p className="text-xs text-gray-600">スマホで簡単</p>
+            <p className="text-xs text-gray-600">スマホで簡単（かんたん）</p>
           </div>
           <div className="p-3">
             <div className="text-3xl mb-2">🤖</div>
@@ -85,27 +85,27 @@ export default function Home() {
 
         {/* 学習フロー説明 */}
         <div className="mt-8 p-4 bg-white rounded-lg shadow-sm text-left">
-          <h2 className="font-bold text-gray-900 mb-3 text-sm">5ステップで学ぶ</h2>
+          <h2 className="font-bold text-gray-900 mb-3 text-sm">5ステップで学（まな）ぶ</h2>
           <ol className="text-sm text-gray-600 space-y-2">
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-              音声を聞く
+              音声（おんせい）を聞（き）く
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-              スクリプトで意味を確認
+              スクリプトで意味（いみ）を確認（かくにん）
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
-              もう一度聞く
+              もう一度（いちど）聞（き）く
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">4</span>
-              声に出して練習
+              声（こえ）に出（だ）して練習（れんしゅう）
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">5</span>
-              録音してAIアドバイス
+              録音（ろくおん）してAIアドバイス
             </li>
           </ol>
         </div>
@@ -135,7 +135,7 @@ export default function Home() {
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          設定
+          設定（せってい）
         </Link>
       </div>
     </div>

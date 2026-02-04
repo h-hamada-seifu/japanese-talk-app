@@ -24,11 +24,11 @@ export default function LessonsPage() {
     <div className="max-w-4xl mx-auto px-4 py-6">
       {/* ページヘッダー */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">レッスン一覧</h1>
+        <h1 className="text-2xl font-bold text-gray-900">レッスン一覧（いちらん）</h1>
         <Link
           href="/settings"
           className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="設定"
+          aria-label="設定（せってい）"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ export default function LessonsPage() {
               <span className="text-2xl">🎯</span>
             </div>
             <div>
-              <p className="text-sm text-gray-600">完了したレッスン</p>
+              <p className="text-sm text-gray-600">完了（かんりょう）したレッスン</p>
               <p className="text-xl font-bold text-gray-900">
                 {completedCount} / {lessons.length}
               </p>
@@ -139,7 +139,7 @@ export default function LessonsPage() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      完了
+                      完了（かんりょう）
                     </span>
                   )}
                   <span className="text-xs text-gray-500">{lesson.level}</span>
@@ -157,10 +157,10 @@ export default function LessonsPage() {
               {/* フッター */}
               <div className="flex items-center justify-between text-xs text-gray-500">
                 <div className="flex items-center gap-2">
-                  <span>約{lesson.duration}秒</span>
+                  <span>約（やく）{lesson.duration}秒（びょう）</span>
                   {practiceCount > 0 && (
                     <span className="px-2 py-0.5 bg-gray-100 rounded">
-                      {practiceCount}回練習
+                      {practiceCount}回（かい）練習（れんしゅう）
                     </span>
                   )}
                 </div>
@@ -169,7 +169,7 @@ export default function LessonsPage() {
                     isCompleted ? 'text-green-500' : 'text-blue-500'
                   }`}
                 >
-                  {isCompleted ? 'もう一度' : '練習する'}
+                  {isCompleted ? 'もう一度（いちど）' : '練習（れんしゅう）する'}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"

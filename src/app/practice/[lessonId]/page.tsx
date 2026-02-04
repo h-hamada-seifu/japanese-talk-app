@@ -37,7 +37,7 @@ export default function PracticePage() {
       // レッスン開始を記録
       startLesson(lessonId);
     } else {
-      setError('レッスンが見つかりませんでした');
+      setError('レッスンが見（み）つかりませんでした');
     }
     setLoading(false);
   }, [lessonId, startLesson]);
@@ -80,7 +80,7 @@ export default function PracticePage() {
       <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
-          <p className="text-gray-600">読み込み中...</p>
+          <p className="text-gray-600">読（よ）み込（こ）み中（ちゅう）...</p>
         </div>
       </div>
     );
@@ -94,13 +94,13 @@ export default function PracticePage() {
           <div className="text-5xl mb-4">😢</div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">エラー</h1>
           <p className="text-gray-600 mb-6">
-            {error || 'レッスンが見つかりませんでした'}
+            {error || 'レッスンが見（み）つかりませんでした'}
           </p>
           <button
             onClick={() => router.push('/lessons')}
             className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
           >
-            レッスン一覧に戻る
+            レッスン一覧（いちらん）に戻（もど）る
           </button>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function PracticePage() {
               clipRule="evenodd"
             />
           </svg>
-          レッスン一覧
+          レッスン一覧（いちらん）
         </button>
         <h1 className="text-xl font-bold text-gray-900">{lesson.title}</h1>
         <div className="flex items-center gap-2 mt-1">
@@ -135,7 +135,7 @@ export default function PracticePage() {
             {lesson.category}
           </span>
           <span className="text-xs text-gray-500">{lesson.level}</span>
-          <span className="text-xs text-gray-500">約{lesson.duration}秒</span>
+          <span className="text-xs text-gray-500">約（やく）{lesson.duration}秒（びょう）</span>
         </div>
       </div>
 

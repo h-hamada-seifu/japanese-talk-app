@@ -29,10 +29,10 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
       {/* 説明 */}
       <div className="text-center">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          声に出してみましょう
+          声（こえ）に出（だ）してみましょう
         </h2>
         <p className="text-gray-600 text-sm">
-          お手本を聞きながら、一緒に声に出して練習しましょう。
+          お手本（てほん）を聞（き）きながら、一緒（いっしょ）に声（こえ）に出（だ）して練習（れんしゅう）しましょう。
         </p>
       </div>
 
@@ -48,7 +48,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
         >
           <span className="block font-bold">オーバーラッピング</span>
           <span className="block text-xs mt-1 opacity-80">
-            音声と同時に読む
+            音声（おんせい）と同時（どうじ）に読（よ）む
           </span>
         </button>
         <button
@@ -61,7 +61,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
         >
           <span className="block font-bold">リピーティング</span>
           <span className="block text-xs mt-1 opacity-80">
-            一文ずつ真似する
+            一文（いちぶん）ずつ真似（まね）する
           </span>
         </button>
       </div>
@@ -77,7 +77,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
       <div className="text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full">
           <span className="text-green-600 font-medium">
-            練習回数: {practiceCount} / {TARGET_PRACTICE_COUNT}
+            練習回数（れんしゅうかいすう）: {practiceCount} / {TARGET_PRACTICE_COUNT}
           </span>
           {isEnoughPractice && (
             <svg
@@ -104,7 +104,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
         onClick={handlePractice}
         className="w-full py-3 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-bold rounded-lg transition-colors"
       >
-        {mode === 'overlapping' ? '一緒に読めた！' : '真似できた！'} ✓
+        {mode === 'overlapping' ? '一緒（いっしょ）に読（よ）めた！' : '真似（まね）できた！'} ✓
       </button>
 
       {/* モード別のヒント */}
@@ -114,15 +114,15 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
         </h3>
         {mode === 'overlapping' ? (
           <ul className="text-yellow-800 text-sm space-y-1">
-            <li>• 音声を再生しながら、同時にスクリプトを読む</li>
-            <li>• お手本のスピード・リズムに合わせる</li>
-            <li>• 最初は難しくても、繰り返すとできるようになります</li>
+            <li>• 音声（おんせい）を再生（さいせい）しながら、同時（どうじ）にスクリプトを読（よ）む</li>
+            <li>• お手本（てほん）のスピード・リズムに合（あ）わせる</li>
+            <li>• 最初（さいしょ）は難（むずか）しくても、繰（く）り返（かえ）すとできるようになります</li>
           </ul>
         ) : (
           <ul className="text-yellow-800 text-sm space-y-1">
-            <li>• 音声を少し聞いて、一時停止</li>
-            <li>• 聞いた部分を真似して言う</li>
-            <li>• 自分のペースでゆっくり練習できます</li>
+            <li>• 音声（おんせい）を少（すこ）し聞（き）いて、一時停止（いちじていし）</li>
+            <li>• 聞（き）いた部分（ぶぶん）を真似（まね）して言（い）う</li>
+            <li>• 自分（じぶん）のペースでゆっくり練習（れんしゅう）できます</li>
           </ul>
         )}
       </div>
@@ -133,7 +133,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
           onClick={onBack}
           className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
         >
-          ← 戻る
+          ← 戻（もど）る
         </button>
         <button
           onClick={onComplete}
@@ -143,14 +143,14 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
               : 'bg-gray-300 text-gray-500'
           }`}
         >
-          次へ：録音 →
+          次（つぎ）へ：録音（ろくおん） →
         </button>
       </div>
 
       {/* 補足メッセージ */}
       {!isEnoughPractice && (
         <p className="text-center text-sm text-gray-500">
-          あと{TARGET_PRACTICE_COUNT - practiceCount}回練習すると次に進めます
+          あと{TARGET_PRACTICE_COUNT - practiceCount}回（かい）練習（れんしゅう）すると次（つぎ）に進（すす）めます
         </p>
       )}
     </div>
