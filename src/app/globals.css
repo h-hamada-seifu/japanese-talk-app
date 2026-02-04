@@ -19,6 +19,30 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* iOSでのフォーム入力時ズーム防止 */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* iOS Safe Area対応 */
+@supports (padding: env(safe-area-inset-bottom)) {
+  main {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* スムーズスクロール */
+html {
+  scroll-behavior: smooth;
+}
+
+/* タッチ操作の最適化 */
+* {
+  touch-action: manipulation;
+}
+
 /* スクロールバーのスタイル（オプション） */
 ::-webkit-scrollbar {
   width: 6px;

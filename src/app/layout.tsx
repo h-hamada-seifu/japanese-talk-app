@@ -5,6 +5,14 @@ import './globals.css';
 export const metadata: Metadata = {
   title: '日本語リスニング・発音練習',
   description: '日本語超初級者向けリスニング・発音練習アプリ',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: '日本語練習',
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
