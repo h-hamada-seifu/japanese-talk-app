@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
  * 音声データを文字起こしする
  */
 export async function transcribeAudio(audioBuffer: Buffer): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   // 音声データをBase64エンコード
   const base64Audio = audioBuffer.toString('base64');
@@ -41,7 +41,7 @@ export async function generateFeedback(
   selfEvaluation: SelfEvaluation,
   userLanguage: Language
 ): Promise<AIFeedback> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   const selfEvaluationMap: Record<SelfEvaluation, string> = {
     same: 'お手本と同じように言えた',
