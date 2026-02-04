@@ -2,21 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useUserSettings, useLessonProgress } from '@/hooks';
-import type { Language } from '@/types';
-
-const languages: { value: Language; label: string; native: string }[] = [
-  { value: 'ja', label: '日本語', native: '日本語' },
-  { value: 'en', label: '英語', native: 'English' },
-  { value: 'vi', label: 'ベトナム語', native: 'Tiếng Việt' },
-  { value: 'zh', label: '中国語', native: '中文' },
-];
 
 export default function SettingsPage() {
   const router = useRouter();
   const {
     settings,
     isLoaded: isSettingsLoaded,
-    setUserLanguage,
     setPlaybackSpeed,
     setAutoPlayCount,
     resetSettings,
@@ -111,35 +102,6 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      {/* 言語設定 */}
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">言語設定</h2>
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            翻訳・説明の言語
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            レッスンの翻訳や発音ヒントをどの言語で表示するかを選択します
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {languages.map((lang) => (
-              <button
-                key={lang.value}
-                onClick={() => setUserLanguage(lang.value)}
-                className={`p-3 rounded-lg border-2 transition-colors text-left ${
-                  settings.userLanguage === lang.value
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <p className="font-medium text-gray-900">{lang.native}</p>
-                <p className="text-xs text-gray-500">{lang.label}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 再生設定 */}
       <section className="mb-8">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">再生設定</h2>
@@ -221,7 +183,7 @@ export default function SettingsPage() {
             <div>
               <p className="font-medium text-gray-900">設定を初期化</p>
               <p className="text-xs text-gray-500">
-                言語・再生設定が初期値に戻ります
+                再生設定が初期値に戻ります
               </p>
             </div>
             <button

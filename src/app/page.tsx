@@ -1,6 +1,24 @@
+'use client';
+
 import Link from 'next/link';
+import { useUserSettings } from '@/hooks';
+import type { Language } from '@/types';
+
+const languages: { value: Language; label: string; flag: string }[] = [
+  { value: 'ja', label: '日本語', flag: '🇯🇵' },
+  { value: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { value: 'zh', label: '中文', flag: '🇨🇳' },
+  { value: 'my', label: 'မြန်မာ', flag: '🇲🇲' },
+  { value: 'ne', label: 'नेपाली', flag: '🇳🇵' },
+];
 
 export default function Home() {
+  const { settings, setUserLanguage, isLoaded } = useUserSettings();
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserLanguage(e.target.value as Language);
+  };
+
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
@@ -13,11 +31,32 @@ export default function Home() {
         </h1>
 
         {/* 説明 */}
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 mb-6">
           スマートフォンで隙間時間に
           <br />
           日本語の聞く力・話す力を伸ばそう
         </p>
+
+        {/* 言語選択 */}
+        <div className="mb-8 bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            あなたの母語を選んでください
+          </label>
+          <select
+            value={isLoaded ? settings.userLanguage : 'ja'}
+            onChange={handleLanguageChange}
+            className="w-full p-3 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            {languages.map((lang) => (
+              <option key={lang.value} value={lang.value}>
+                {lang.flag} {lang.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500 mt-2">
+            翻訳や発音ヒント、AIアドバイスに使用されます
+          </p>
+        </div>
 
         {/* メインボタン */}
         <Link

@@ -3,7 +3,7 @@
  */
 
 // 対応言語
-export type Language = 'ja' | 'en' | 'vi' | 'zh';
+export type Language = 'ja' | 'vi' | 'zh' | 'my' | 'ne';
 
 // レッスンレベル
 export type Level = 'N5' | 'N4';

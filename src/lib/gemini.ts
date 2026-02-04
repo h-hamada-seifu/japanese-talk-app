@@ -50,15 +50,17 @@ export async function generateFeedback(
     unknown: 'わからない',
   };
 
+  const languageMap: Record<Language, string> = {
+    ja: '',
+    vi: 'ベトナム語',
+    zh: '中国語',
+    my: 'ミャンマー語（ビルマ語）',
+    ne: 'ネパール語',
+  };
+
   const languageNote =
     userLanguage !== 'ja'
-      ? `ユーザーの母語は${
-          userLanguage === 'en'
-            ? '英語'
-            : userLanguage === 'vi'
-              ? 'ベトナム語'
-              : '中国語'
-        }です。必要に応じてその言語での補足を入れてください。`
+      ? `ユーザーの母語は${languageMap[userLanguage]}です。必要に応じてその言語での補足を入れてください。`
       : '';
 
   const prompt = `あなたは日本語学習をサポートする優しい先生です。
