@@ -9,7 +9,7 @@ export type Language = 'ja' | 'en' | 'vi' | 'zh' | 'my' | 'ne';
 export type Level = 'N5' | 'N4';
 
 // レッスンカテゴリー
-export type Category = '挨拶' | '日常' | '買い物' | '食事' | '交通';
+export type Category = '挨拶（あいさつ）' | '日常（にちじょう）' | '買い物（かいもの）' | '食事（しょくじ）' | '交通（こうつう）';
 
 // 自己評価
 export type SelfEvaluation = 'same' | 'close' | 'difficult' | 'unknown';
