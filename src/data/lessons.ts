@@ -15,6 +15,7 @@ export interface Lesson {
     japaneseKanji: string;    // 漢字表記
   };
   translations: {
+    en: string;
     vi: string;
     zh: string;
     my: string;
@@ -22,6 +23,7 @@ export interface Lesson {
   };
   pronunciationTips: {
     ja: string[];
+    en: string[];
     vi: string[];
     zh: string[];
     my: string[];
@@ -31,6 +33,7 @@ export interface Lesson {
     word: string;
     reading: string;
     meaning: {
+      en: string;
       vi: string;
       zh: string;
       my: string;
@@ -56,6 +59,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: 'おはようございます。今日もいい天気ですね。',
     },
     translations: {
+      en: 'Good morning. The weather is nice today too, isn\'t it?',
       vi: 'Chào buổi sáng. Hôm nay thời tiết cũng đẹp nhỉ.',
       zh: '早上好。今天天气也很好呢。',
       my: 'မင်္ဂလာနံနက်ခင်းပါ။ ဒီနေ့လည်း ရာသီဥတုကောင်းတယ်နော်။',
@@ -66,6 +70,11 @@ export const lessons: Lesson[] = [
         '「おはようございます」→ 「おはよー」と伸ばさない',
         '「いいてんき」→ 「い」を2回はっきり言う',
         '「ですね」→ 語尾を少し上げる',
+      ],
+      en: [
+        '"Ohayou gozaimasu" - Don\'t stretch "ohayo"',
+        '"ii tenki" - Pronounce both "i" sounds clearly',
+        '"desu ne" - Raise your tone slightly at the end',
       ],
       vi: [
         '"Ohayou gozaimasu" - Không kéo dài "ohayo"',
@@ -92,12 +101,12 @@ export const lessons: Lesson[] = [
       {
         word: 'おはようございます',
         reading: 'おはようございます',
-        meaning: { vi: 'Chào buổi sáng (lịch sự)', zh: '早上好（礼貌）', my: 'မင်္ဂလာနံနက်ခင်းပါ', ne: 'शुभ प्रभात' },
+        meaning: { en: 'Good morning (polite)', vi: 'Chào buổi sáng (lịch sự)', zh: '早上好（礼貌）', my: 'မင်္ဂလာနံနက်ခင်းပါ', ne: 'शुभ प्रभात' },
       },
       {
         word: '天気',
         reading: 'てんき',
-        meaning: { vi: 'thời tiết', zh: '天气', my: 'ရာသီဥတု', ne: 'मौसम' },
+        meaning: { en: 'weather', vi: 'thời tiết', zh: '天气', my: 'ရာသီဥတု', ne: 'मौसम' },
       },
     ],
     duration: 4,
@@ -114,6 +123,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: '初めまして。私はリンです。ベトナムから来ました。どうぞよろしくお願いします。',
     },
     translations: {
+      en: 'Nice to meet you. I am Linh. I came from Vietnam. Please take care of me.',
       vi: 'Rất vui được gặp bạn. Tôi là Linh. Tôi đến từ Việt Nam. Rất mong được giúp đỡ.',
       zh: '初次见面。我是林。我来自越南。请多关照。',
       my: 'တွေ့ရတာ ဝမ်းသာပါတယ်။ ကျွန်မက လင် ပါ။ ဗီယက်နမ်က လာပါတယ်။ ကျေးဇူးပြု၍ ကူညီပေးပါ။',
@@ -124,6 +134,11 @@ export const lessons: Lesson[] = [
         '「はじめまして」→ 「は」をはっきり発音',
         '「ベトナム」→ 日本語の発音は「べとなむ」',
         '「よろしくおねがいします」→ ゆっくり丁寧に',
+      ],
+      en: [
+        '"Hajimemashite" - Pronounce "ha" clearly',
+        '"Betonamu" - Japanese pronunciation of Vietnam',
+        '"Yoroshiku onegaishimasu" - Speak slowly and politely',
       ],
       vi: [
         '"Hajimemashite" - Phát âm "ha" rõ ràng',
@@ -150,12 +165,12 @@ export const lessons: Lesson[] = [
       {
         word: '初めまして',
         reading: 'はじめまして',
-        meaning: { vi: 'Rất vui được gặp bạn', zh: '初次见面', my: 'တွေ့ရတာ ဝမ်းသာပါတယ်', ne: 'भेटेर खुशी लाग्यो' },
+        meaning: { en: 'Nice to meet you', vi: 'Rất vui được gặp bạn', zh: '初次见面', my: 'တွေ့ရတာ ဝမ်းသာပါတယ်', ne: 'भेटेर खुशी लाग्यो' },
       },
       {
         word: '来ました',
         reading: 'きました',
-        meaning: { vi: 'đến từ', zh: '来自', my: 'လာခဲ့သည်', ne: 'आएको' },
+        meaning: { en: 'came from', vi: 'đến từ', zh: '来自', my: 'လာခဲ့သည်', ne: 'आएको' },
       },
     ],
     duration: 7,
@@ -172,6 +187,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: '昨日、助けてくれてありがとうございました。本当に助かりました。',
     },
     translations: {
+      en: 'Thank you for helping me yesterday. You really saved me.',
       vi: 'Cảm ơn bạn đã giúp đỡ tôi hôm qua. Bạn thực sự đã cứu tôi.',
       zh: '谢谢你昨天帮助我。真的帮了大忙。',
       my: 'မနေ့က ကူညီပေးတဲ့အတွက် ကျေးဇူးတင်ပါတယ်။ တကယ်ကို အကူအညီရခဲ့ပါတယ်။',
@@ -182,6 +198,11 @@ export const lessons: Lesson[] = [
         '「たすけてくれて」→ 「て」を軽く発音',
         '「ありがとうございました」→ 過去形に注意',
         '「たすかりました」→ 「す」が弱くなりすぎないように',
+      ],
+      en: [
+        '"Tasukete kurete" - Pronounce "te" lightly',
+        '"Arigatou gozaimashita" - Note the past tense',
+        '"Tasukarimashita" - Don\'t make "su" too weak',
       ],
       vi: [
         '"Tasukete kurete" - Phát âm nhẹ "te"',
@@ -208,12 +229,12 @@ export const lessons: Lesson[] = [
       {
         word: '助けて',
         reading: 'たすけて',
-        meaning: { vi: 'giúp đỡ', zh: '帮助', my: 'ကူညီပါ', ne: 'मद्दत गर्नुहोस्' },
+        meaning: { en: 'help', vi: 'giúp đỡ', zh: '帮助', my: 'ကူညီပါ', ne: 'मद्दत गर्नुहोस्' },
       },
       {
         word: '助かりました',
         reading: 'たすかりました',
-        meaning: { vi: 'được cứu giúp', zh: '得救了', my: 'အကူအညီရခဲ့သည်', ne: 'मद्दत भयो' },
+        meaning: { en: 'was saved/helped', vi: 'được cứu giúp', zh: '得救了', my: 'အကူအညီရခဲ့သည်', ne: 'मद्दत भयो' },
       },
     ],
     duration: 6,
@@ -234,6 +255,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: '今週末は友達と映画を見に行きます。楽しみです。',
     },
     translations: {
+      en: 'This weekend, I will go see a movie with my friend. I\'m looking forward to it.',
       vi: 'Cuối tuần này, tôi sẽ đi xem phim với bạn. Tôi rất mong chờ.',
       zh: '这个周末我要和朋友去看电影。很期待。',
       my: 'ဒီအပတ်ကုန်မှာ သူငယ်ချင်းနဲ့ ရုပ်ရှင်ကြည့်သွားမယ်။ စောင့်မျှော်နေပါတယ်။',
@@ -244,6 +266,11 @@ export const lessons: Lesson[] = [
         '「えいが」→ 「え」は口を横に広げる',
         '「みにいきます」→ 「に」と「い」をつなげすぎない',
         '「たのしみ」→ 「の」を強調しない',
+      ],
+      en: [
+        '"Eiga" - Spread your mouth sideways for "e"',
+        '"Mini ikimasu" - Don\'t connect "ni" and "i" too much',
+        '"Tanoshimi" - Don\'t emphasize "no"',
       ],
       vi: [
         '"Eiga" - Mở rộng miệng khi phát âm "e"',
@@ -270,17 +297,17 @@ export const lessons: Lesson[] = [
       {
         word: '週末',
         reading: 'しゅうまつ',
-        meaning: { vi: 'cuối tuần', zh: '周末', my: 'အပတ်ကုန်', ne: 'हप्ताअन्त' },
+        meaning: { en: 'weekend', vi: 'cuối tuần', zh: '周末', my: 'အပတ်ကုန်', ne: 'हप्ताअन्त' },
       },
       {
         word: '映画',
         reading: 'えいが',
-        meaning: { vi: 'phim', zh: '电影', my: 'ရုပ်ရှင်', ne: 'सिनेमा' },
+        meaning: { en: 'movie', vi: 'phim', zh: '电影', my: 'ရုပ်ရှင်', ne: 'सिनेमा' },
       },
       {
         word: '楽しみ',
         reading: 'たのしみ',
-        meaning: { vi: 'mong chờ', zh: '期待', my: 'စောင့်မျှော်ခြင်း', ne: 'उत्सुकता' },
+        meaning: { en: 'looking forward to', vi: 'mong chờ', zh: '期待', my: 'စောင့်မျှော်ခြင်း', ne: 'उत्सुकता' },
       },
     ],
     duration: 6,
@@ -297,6 +324,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: '昨日、友達と映画を見ました。とても面白かったです。',
     },
     translations: {
+      en: 'Yesterday, I watched a movie with my friend. It was very interesting.',
       vi: 'Hôm qua, tôi đã xem phim với bạn. Rất thú vị.',
       zh: '昨天我和朋友看了电影。非常有趣。',
       my: 'မနေ့က သူငယ်ချင်းနဲ့ ရုပ်ရှင်ကြည့်ခဲ့တယ်။ အရမ်းစိတ်ဝင်စားစရာကောင်းတယ်။',
@@ -307,6 +335,11 @@ export const lessons: Lesson[] = [
         '「きのう」→ 「き」を強く言わない',
         '「ともだち」→ はっきりと4拍で',
         '「おもしろかった」→ 「しろ」を強調しない',
+      ],
+      en: [
+        '"Kinou" - Don\'t stress "ki" too much',
+        '"Tomodachi" - Pronounce clearly in 4 beats',
+        '"Omoshirokatta" - Don\'t emphasize "shiro"',
       ],
       vi: [
         '"Kinou" - Không nhấn mạnh "ki" quá',
@@ -333,17 +366,17 @@ export const lessons: Lesson[] = [
       {
         word: '昨日',
         reading: 'きのう',
-        meaning: { vi: 'hôm qua', zh: '昨天', my: 'မနေ့က', ne: 'हिजो' },
+        meaning: { en: 'yesterday', vi: 'hôm qua', zh: '昨天', my: 'မနေ့က', ne: 'हिजो' },
       },
       {
         word: '友達',
         reading: 'ともだち',
-        meaning: { vi: 'bạn bè', zh: '朋友', my: 'သူငယ်ချင်း', ne: 'साथी' },
+        meaning: { en: 'friend', vi: 'bạn bè', zh: '朋友', my: 'သူငယ်ချင်း', ne: 'साथी' },
       },
       {
         word: '面白かった',
         reading: 'おもしろかった',
-        meaning: { vi: 'thú vị', zh: '有趣', my: 'စိတ်ဝင်စားစရာကောင်းခဲ့သည်', ne: 'रमाइलो थियो' },
+        meaning: { en: 'was interesting', vi: 'thú vị', zh: '有趣', my: 'စိတ်ဝင်စားစရာကောင်းခဲ့သည်', ne: 'रमाइलो थियो' },
       },
     ],
     duration: 5,
@@ -360,6 +393,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: '私の趣味は音楽を聴くことです。日本の歌が好きです。',
     },
     translations: {
+      en: 'My hobby is listening to music. I like Japanese songs.',
       vi: 'Sở thích của tôi là nghe nhạc. Tôi thích nhạc Nhật.',
       zh: '我的爱好是听音乐。我喜欢日本歌曲。',
       my: 'ကျွန်တော့်ဝါသနာက ဂီတနားထောင်တာပါ။ ဂျပန်သီချင်းတွေကို ကြိုက်တယ်။',
@@ -370,6 +404,11 @@ export const lessons: Lesson[] = [
         '「しゅみ」→ 「しゅ」は唇を丸めて',
         '「おんがく」→ 「ん」をしっかり発音',
         '「すき」→ 「す」は軽く',
+      ],
+      en: [
+        '"Shumi" - Round your lips for "shu"',
+        '"Ongaku" - Pronounce "n" clearly',
+        '"Suki" - Pronounce "su" lightly',
       ],
       vi: [
         '"Shumi" - Làm tròn môi khi phát âm "shu"',
@@ -396,17 +435,17 @@ export const lessons: Lesson[] = [
       {
         word: '趣味',
         reading: 'しゅみ',
-        meaning: { vi: 'sở thích', zh: '爱好', my: 'ဝါသနာ', ne: 'शौक' },
+        meaning: { en: 'hobby', vi: 'sở thích', zh: '爱好', my: 'ဝါသနာ', ne: 'शौक' },
       },
       {
         word: '音楽',
         reading: 'おんがく',
-        meaning: { vi: 'âm nhạc', zh: '音乐', my: 'ဂီတ', ne: 'संगीत' },
+        meaning: { en: 'music', vi: 'âm nhạc', zh: '音乐', my: 'ဂီတ', ne: 'संगीत' },
       },
       {
         word: '歌',
         reading: 'うた',
-        meaning: { vi: 'bài hát', zh: '歌曲', my: 'သီချင်း', ne: 'गीत' },
+        meaning: { en: 'song', vi: 'bài hát', zh: '歌曲', my: 'သီချင်း', ne: 'गीत' },
       },
     ],
     duration: 6,
@@ -427,6 +466,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: 'すみません、このおにぎりをください。あと、お茶もお願いします。',
     },
     translations: {
+      en: 'Excuse me, please give me this onigiri. Also, tea please.',
       vi: 'Xin lỗi, cho tôi cái onigiri này. Và cả trà nữa.',
       zh: '不好意思，请给我这个饭团。还有，请给我茶。',
       my: 'ခွင့်လွှတ်ပါ၊ ဒီအိုနိဂီရိကို ပေးပါ။ နောက်ပြီး လက်ဖက်ရည်လည်း ပေးပါ။',
@@ -437,6 +477,11 @@ export const lessons: Lesson[] = [
         '「すみません」→ 丁寧に、ゆっくり',
         '「おにぎり」→ 4拍で均等に',
         '「おねがいします」→ 「お」をしっかり',
+      ],
+      en: [
+        '"Sumimasen" - Speak politely and slowly',
+        '"Onigiri" - Pronounce evenly in 4 beats',
+        '"Onegaishimasu" - Pronounce "o" clearly',
       ],
       vi: [
         '"Sumimasen" - Lịch sự và chậm',
@@ -463,12 +508,12 @@ export const lessons: Lesson[] = [
       {
         word: 'おにぎり',
         reading: 'おにぎり',
-        meaning: { vi: 'cơm nắm', zh: '饭团', my: 'ထမင်းလုံး', ne: 'चामलको बल' },
+        meaning: { en: 'rice ball', vi: 'cơm nắm', zh: '饭团', my: 'ထမင်းလုံး', ne: 'चामलको बल' },
       },
       {
         word: 'お茶',
         reading: 'おちゃ',
-        meaning: { vi: 'trà', zh: '茶', my: 'လက်ဖက်ရည်', ne: 'चिया' },
+        meaning: { en: 'tea', vi: 'trà', zh: '茶', my: 'လက်ဖက်ရည်', ne: 'चिया' },
       },
     ],
     duration: 5,
@@ -485,6 +530,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: 'すみません、これはいくらですか。',
     },
     translations: {
+      en: 'Excuse me, how much is this?',
       vi: 'Xin lỗi, cái này bao nhiêu tiền?',
       zh: '不好意思，这个多少钱？',
       my: 'ခွင့်လွှတ်ပါ၊ ဒါ ဘယ်လောက်လဲ?',
@@ -494,6 +540,10 @@ export const lessons: Lesson[] = [
       ja: [
         '「いくら」→ 「い」をはっきり',
         '「ですか」→ 語尾を上げて質問調に',
+      ],
+      en: [
+        '"Ikura" - Pronounce "i" clearly',
+        '"Desu ka" - Raise your tone at the end for a question',
       ],
       vi: [
         '"Ikura" - Phát âm "i" rõ ràng',
@@ -516,7 +566,7 @@ export const lessons: Lesson[] = [
       {
         word: 'いくら',
         reading: 'いくら',
-        meaning: { vi: 'bao nhiêu', zh: '多少钱', my: 'ဘယ်လောက်', ne: 'कति' },
+        meaning: { en: 'how much', vi: 'bao nhiêu', zh: '多少钱', my: 'ဘယ်လောက်', ne: 'कति' },
       },
     ],
     duration: 3,
@@ -537,6 +587,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: 'すみません、ラーメンを一つと、餃子をお願いします。',
     },
     translations: {
+      en: 'Excuse me, one ramen and gyoza please.',
       vi: 'Xin lỗi, cho tôi một tô mì ramen và há cảo.',
       zh: '不好意思，请给我一份拉面和饺子。',
       my: 'ခွင့်လွှတ်ပါ၊ ရာမင်တစ်ခွက်နဲ့ ဂျိုဇာ ပေးပါ။',
@@ -547,6 +598,11 @@ export const lessons: Lesson[] = [
         '「ラーメン」→ 「ラー」を伸ばす',
         '「ひとつ」→ 「つ」をしっかり',
         '「ぎょうざ」→ 「ぎょ」は口を丸く',
+      ],
+      en: [
+        '"Raamen" - Stretch "raa"',
+        '"Hitotsu" - Pronounce "tsu" clearly',
+        '"Gyouza" - Round your mouth for "gyo"',
       ],
       vi: [
         '"Raamen" - Kéo dài "raa"',
@@ -573,17 +629,17 @@ export const lessons: Lesson[] = [
       {
         word: 'ラーメン',
         reading: 'らーめん',
-        meaning: { vi: 'mì ramen', zh: '拉面', my: 'ရာမင်', ne: 'रामेन' },
+        meaning: { en: 'ramen', vi: 'mì ramen', zh: '拉面', my: 'ရာမင်', ne: 'रामेन' },
       },
       {
         word: '一つ',
         reading: 'ひとつ',
-        meaning: { vi: 'một cái', zh: '一个', my: 'တစ်ခု', ne: 'एउटा' },
+        meaning: { en: 'one (thing)', vi: 'một cái', zh: '一个', my: 'တစ်ခု', ne: 'एउटा' },
       },
       {
         word: '餃子',
         reading: 'ぎょうざ',
-        meaning: { vi: 'há cảo', zh: '饺子', my: 'ဂျိုဇာ', ne: 'ग्योजा' },
+        meaning: { en: 'gyoza (dumplings)', vi: 'há cảo', zh: '饺子', my: 'ဂျိုဇာ', ne: 'ग्योजा' },
       },
     ],
     duration: 5,
@@ -600,6 +656,7 @@ export const lessons: Lesson[] = [
       japaneseKanji: 'このラーメン、とても美味しいですね。スープが最高です。',
     },
     translations: {
+      en: 'This ramen is very delicious, isn\'t it? The soup is the best.',
       vi: 'Tô mì ramen này rất ngon nhỉ. Nước súp tuyệt vời.',
       zh: '这个拉面非常好吃呢。汤是最棒的。',
       my: 'ဒီရာမင် အရမ်းကောင်းတယ်နော်။ ဟင်းချိုက အကောင်းဆုံးပဲ။',
@@ -610,6 +667,11 @@ export const lessons: Lesson[] = [
         '「おいしい」→ 「い」を2回はっきり',
         '「スープ」→ 「ー」を伸ばす',
         '「さいこう」→ 「こう」を伸ばす',
+      ],
+      en: [
+        '"Oishii" - Pronounce both "i" sounds clearly',
+        '"Suupu" - Stretch "uu"',
+        '"Saikou" - Stretch "kou"',
       ],
       vi: [
         '"Oishii" - Phát âm rõ cả hai âm "i"',
@@ -636,17 +698,17 @@ export const lessons: Lesson[] = [
       {
         word: '美味しい',
         reading: 'おいしい',
-        meaning: { vi: 'ngon', zh: '好吃', my: 'အရသာရှိသည်', ne: 'मिठो' },
+        meaning: { en: 'delicious', vi: 'ngon', zh: '好吃', my: 'အရသာရှိသည်', ne: 'मिठो' },
       },
       {
         word: 'スープ',
         reading: 'すーぷ',
-        meaning: { vi: 'súp', zh: '汤', my: 'ဟင်းချို', ne: 'सूप' },
+        meaning: { en: 'soup', vi: 'súp', zh: '汤', my: 'ဟင်းချို', ne: 'सूप' },
       },
       {
         word: '最高',
         reading: 'さいこう',
-        meaning: { vi: 'tuyệt vời', zh: '最棒', my: 'အကောင်းဆုံး', ne: 'सबैभन्दा राम्रो' },
+        meaning: { en: 'the best', vi: 'tuyệt vời', zh: '最棒', my: 'အကောင်းဆုံး', ne: 'सबैभन्दा राम्रो' },
       },
     ],
     duration: 5,

@@ -6,6 +6,7 @@ import type { Language } from '@/types';
 
 const languages: { value: Language; label: string; flag: string }[] = [
   { value: 'ja', label: '日本語', flag: '🇯🇵' },
+  { value: 'en', label: 'English', flag: '🇺🇸' },
   { value: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
   { value: 'zh', label: '中文', flag: '🇨🇳' },
   { value: 'my', label: 'မြန်မာ', flag: '🇲🇲' },

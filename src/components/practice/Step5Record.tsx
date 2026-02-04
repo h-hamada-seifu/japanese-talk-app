@@ -47,10 +47,13 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       formData.append('selfEvaluation', selfEvaluation);
       formData.append('userLanguage', userLanguage);
 
+      console.log('API呼び出し開始...');
       const response = await fetch('/api/analyze-speech', {
         method: 'POST',
         body: formData,
       });
+
+      console.log('APIレスポンス:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -58,9 +61,16 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       }
 
       const result = await response.json();
+      console.log('解析結果:', result);
+
+      if (!result.feedback) {
+        throw new Error('AIからの応答が不正です');
+      }
+
       setTranscription(result.transcription);
       setFeedback(result.feedback);
     } catch (err) {
+      console.error('解析エラー:', err);
       setError(err instanceof Error ? err.message : 'エラーが発生しました');
     } finally {
       setIsAnalyzing(false);

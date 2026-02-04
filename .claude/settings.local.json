@@ -13,7 +13,14 @@
       "Bash(git init:*)",
       "Bash(git remote add:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 日本語リスニング・発音練習アプリ MVP版\n\n5ステップ学習フロー実装:\n- Step1: 音声を聞く\n- Step2: スクリプトで意味を確認\n- Step3: もう一度聞く（3回）\n- Step4: 声に出して練習（オーバーラッピング/リピーティング）\n- Step5: 録音してAIアドバイス\n\n主な機能:\n- Gemini APIによる音声認識とフィードバック生成\n- 10個のサンプルレッスン（N5レベル）\n- 多言語対応（日本語/英語/ベトナム語/中国語）\n- localStorage による進捗管理\n- モバイルファースト対応\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 日本語リスニング・発音練習アプリ MVP版\n\n5ステップ学習フロー実装:\n- Step1: 音声を聞く\n- Step2: スクリプトで意味を確認\n- Step3: もう一度聞く（3回）\n- Step4: 声に出して練習（オーバーラッピング/リピーティング）\n- Step5: 録音してAIアドバイス\n\n主な機能:\n- Gemini APIによる音声認識とフィードバック生成\n- 10個のサンプルレッスン（N5レベル）\n- 多言語対応（日本語/英語/ベトナム語/中国語）\n- localStorage による進捗管理\n- モバイルファースト対応\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /PID 46764 /F\")",
+      "Bash(powershell -Command \"Stop-Process -Id 46764 -Force\")"
     ]
   }
 }

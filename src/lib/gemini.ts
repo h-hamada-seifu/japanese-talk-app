@@ -52,6 +52,7 @@ export async function generateFeedback(
 
   const languageMap: Record<Language, string> = {
     ja: '',
+    en: '英語',
     vi: 'ベトナム語',
     zh: '中国語',
     my: 'ミャンマー語（ビルマ語）',
