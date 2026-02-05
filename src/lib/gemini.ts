@@ -113,7 +113,7 @@ ${languageNote}
 
     // バリデーション
     if (!feedback.message) {
-      feedback.message = '伝わりましたよ！';
+      feedback.message = '伝（つた）わりましたよ！';
     }
     if (!Array.isArray(feedback.goodPoints)) {
       feedback.goodPoints = [];
@@ -122,17 +122,17 @@ ${languageNote}
       feedback.improvementTip = '';
     }
     if (!feedback.encouragement) {
-      feedback.encouragement = 'この調子で頑張りましょう！';
+      feedback.encouragement = 'この調子（ちょうし）で頑張（がんば）りましょう！';
     }
 
     return feedback;
   } catch {
     // JSONパースに失敗した場合のデフォルト
     return {
-      message: '伝わりましたよ！',
-      goodPoints: ['頑張って発音しましたね'],
-      improvementTip: 'もう少しゆっくり話してみてください',
-      encouragement: 'この調子で練習を続けましょう！',
+      message: '伝（つた）わりましたよ！',
+      goodPoints: ['頑張（がんば）って発音（はつおん）しましたね'],
+      improvementTip: 'もう少（すこ）しゆっくり話（はな）してみてください',
+      encouragement: 'この調子（ちょうし）で練習（れんしゅう）を続（つづ）けましょう！',
     };
   }
 }
