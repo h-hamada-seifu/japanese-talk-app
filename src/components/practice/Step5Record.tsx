@@ -47,38 +47,50 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
 
   // 録音完了時: 両モード共通で正規化済みBlobを生成
   // 評価モードではさらに wav 変換も実行
+  // 低スペック端末（iPod touch等）でタイムアウトした場合は正規化をスキップ
   const handleRecordingComplete = useCallback((blob: Blob, url: string) => {
     setRecordingBlob(blob);
     setRecordingUrl(url);
     setError(null);
     setIsConverting(true);
 
+    // タイムアウト付きPromiseラッパー
+    const withTimeout = <T,>(promise: Promise<T>, ms: number): Promise<T> =>
+      Promise.race([
+        promise,
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('変換タイムアウト')), ms)
+        ),
+      ]);
+
     // 正規化済み wav（プレビュー・聞き比べ再生用、元のサンプルレート維持）
-    const normalizePromise = normalizeForPlayback(blob)
+    const normalizePromise = withTimeout(normalizeForPlayback(blob), 10000)
       .then((normalized) => {
         setNormalizedBlob(normalized);
+      })
+      .catch((err) => {
+        console.error('音声正規化スキップ:', err.message);
+        // 正規化失敗時は元のBlobをそのまま使用（再生は可能）
       });
 
     if (isEvaluationMode) {
       // 評価用 wav（16kHz、SpeechSuper送信用）も並行で生成
-      Promise.all([
-        normalizePromise,
-        convertToWav(blob).then((wav) => {
+      const convertPromise = withTimeout(convertToWav(blob), 15000)
+        .then((wav) => {
           setWavBlob(wav);
-        }),
-      ])
-        .catch((err) => {
-          console.error('音声変換エラー:', err);
-          setError('音声（おんせい）の変換（へんかん）に失敗（しっぱい）しました。もう一度（いちど）録音（ろくおん）してください。');
         })
+        .catch((err) => {
+          console.error('wav変換エラー:', err.message);
+          // wav変換失敗時は元のBlobで代替（SpeechSuperが受け付ける可能性あり）
+          setWavBlob(blob);
+        });
+
+      Promise.all([normalizePromise, convertPromise])
         .finally(() => {
           setIsConverting(false);
         });
     } else {
       normalizePromise
-        .catch((err) => {
-          console.error('音声正規化エラー:', err);
-        })
         .finally(() => {
           setIsConverting(false);
         });
