@@ -1,23 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { analyzeAndFeedback } from '@/lib/gemini';
-import type { SelfEvaluation, Language } from '@/types';
+import { evaluateSpeech } from '@/lib/speechsuper';
 
 // Vercel Serverless Function 設定
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 
 /**
- * POST /api/analyze-speech
- * 音声ファイルを解析し、文字起こしとAIフィードバックを返す
+ * POST /api/evaluate-speech
+ * 音声ファイルをSpeechSuper APIで評価し、スコアと認識結果を返す
  */
 export async function POST(request: NextRequest) {
   try {
+    // 環境変数チェック
+    if (!process.env.SPEECHSUPER_APP_KEY || !process.env.SPEECHSUPER_SECRET_KEY) {
+      return NextResponse.json(
+        { error: '評価モードは現在使えません。SpeechSuper APIキーが設定されていません。' },
+        { status: 503 }
+      );
+    }
+
     // FormDataの取得
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File | null;
     const originalText = formData.get('originalText') as string | null;
-    const selfEvaluation = formData.get('selfEvaluation') as SelfEvaluation | null;
-    const userLanguage = (formData.get('userLanguage') as Language) || 'ja';
 
     // バリデーション
     if (!audioFile) {
@@ -34,22 +39,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!selfEvaluation) {
-      return NextResponse.json(
-        { error: '自己評価が必要です' },
-        { status: 400 }
-      );
-    }
-
-    // 有効な自己評価値かチェック
-    const validEvaluations: SelfEvaluation[] = ['same', 'close', 'difficult', 'unknown'];
-    if (!validEvaluations.includes(selfEvaluation)) {
-      return NextResponse.json(
-        { error: '無効な自己評価値です' },
-        { status: 400 }
-      );
-    }
-
     // 音声ファイルをBufferに変換
     const arrayBuffer = await audioFile.arrayBuffer();
     const audioBuffer = Buffer.from(arrayBuffer);
@@ -62,26 +51,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Gemini APIで解析（音声の実際のMIMEタイプを渡す）
-    const audioMimeType = audioFile.type || 'audio/webm';
-    const result = await analyzeAndFeedback(
-      audioBuffer,
-      originalText,
-      selfEvaluation,
-      userLanguage,
-      audioMimeType
-    );
+    // SpeechSuper APIで評価
+    const { result, transcription } = await evaluateSpeech(audioBuffer, originalText);
 
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json({ result, transcription }, { status: 200 });
   } catch (error) {
-    console.error('Speech analysis error:', error);
+    console.error('Speech evaluation error:', error);
 
-    // エラーメッセージを適切に処理
     const errorMessage =
       error instanceof Error ? error.message : '不明なエラーが発生しました';
 
     return NextResponse.json(
-      { error: `音声解析に失敗しました: ${errorMessage}` },
+      { error: `発音評価に失敗しました: ${errorMessage}` },
       { status: 500 }
     );
   }

@@ -5,6 +5,9 @@
 // 対応言語
 export type Language = 'ja' | 'en' | 'vi' | 'zh' | 'my' | 'ne';
 
+// 練習モード
+export type PracticeMode = 'advice' | 'evaluation';
+
 // レッスンレベル
 export type Level = 'N5' | 'N4';
 
@@ -43,11 +46,48 @@ export interface LessonProgress {
   isCompleted: boolean;
 }
 
+// SpeechSuper 音素スコア
+export interface PhonemeScore {
+  phoneme: string;
+  score: number;
+}
+
+// SpeechSuper 単語スコア
+export interface WordScore {
+  word: string;
+  score: number;
+  phonemes: PhonemeScore[];
+}
+
+// SpeechSuper スコア
+export interface SpeechSuperScore {
+  overall: number;
+  pronunciation: number;
+  fluency: number;
+  completeness: number;
+  tone: number;
+  rhythm: number;
+  speed: number;
+}
+
+// SpeechSuper 評価結果
+export interface SpeechSuperResult {
+  scores: SpeechSuperScore;
+  words: WordScore[];
+}
+
+// 評価モードのフィードバック
+export interface EvaluationFeedback {
+  result: SpeechSuperResult;
+  transcription: string;
+}
+
 // ユーザー設定
 export interface UserSettings {
   userLanguage: Language;
   playbackSpeed: number;
   autoPlayCount: number;
+  practiceMode: PracticeMode;
 }
 
 // ユーザー進捗全体

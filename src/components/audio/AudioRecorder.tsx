@@ -1,16 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 
 interface AudioRecorderProps {
   onRecordingComplete?: (blob: Blob, url: string, duration: number) => void;
   maxDuration?: number;
+  /** 正規化済みBlob（外部から渡された場合、プレビューにこちらを使う） */
+  normalizedBlob?: Blob | null;
 }
 
 export function AudioRecorder({
   onRecordingComplete,
   maxDuration = 60,
+  normalizedBlob,
 }: AudioRecorderProps) {
   const {
     recordingState,
@@ -24,6 +27,20 @@ export function AudioRecorder({
     resumeRecording,
     clearRecording,
   } = useAudioRecorder();
+
+  // 正規化済みBlobからプレビュー用URLを生成
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!normalizedBlob) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(normalizedBlob);
+    setPreviewUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [normalizedBlob]);
 
   // 時間フォーマット
   const formatDuration = (seconds: number): string => {
@@ -233,7 +250,7 @@ export function AudioRecorder({
       {recordingState === 'stopped' && audioURL && (
         <div className="mt-4 p-3 bg-gray-50 rounded-lg">
           <p className="text-sm font-medium text-gray-700 mb-2">録音（ろくおん）プレビュー</p>
-          <audio src={audioURL} controls className="w-full" preload="metadata" />
+          <audio src={previewUrl || audioURL} controls className="w-full" preload="auto" />
         </div>
       )}
     </div>
