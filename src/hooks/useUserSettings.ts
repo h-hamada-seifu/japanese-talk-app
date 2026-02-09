@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { UserSettings, Language } from '@/types';
+import type { UserSettings, Language, PracticeMode } from '@/types';
 
 const STORAGE_KEY = 'japanese-talking-settings';
 
@@ -9,6 +9,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   userLanguage: 'ja',
   playbackSpeed: 1.0,
   autoPlayCount: 3,
+  practiceMode: 'advice',
 };
 
 /**
@@ -81,6 +82,18 @@ export function useUserSettings() {
     [saveToStorage]
   );
 
+  // 練習モードを更新
+  const setPracticeMode = useCallback(
+    (mode: PracticeMode) => {
+      setSettings((prev) => {
+        const updated = { ...prev, practiceMode: mode };
+        saveToStorage(updated);
+        return updated;
+      });
+    },
+    [saveToStorage]
+  );
+
   // 全設定を更新
   const updateSettings = useCallback(
     (newSettings: Partial<UserSettings>) => {
@@ -105,6 +118,7 @@ export function useUserSettings() {
     setUserLanguage,
     setPlaybackSpeed,
     setAutoPlayCount,
+    setPracticeMode,
     updateSettings,
     resetSettings,
   };

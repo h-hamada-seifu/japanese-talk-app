@@ -160,6 +160,7 @@ export default function PracticePage() {
         {currentStep === 3 && (
           <Step3Relisten
             lesson={lesson}
+            autoPlayCount={settings.autoPlayCount}
             onComplete={goToNextStep}
             onBack={goToPrevStep}
           />
@@ -175,6 +176,7 @@ export default function PracticePage() {
           <Step5Record
             lesson={lesson}
             userLanguage={userLanguage}
+            practiceMode={settings.practiceMode}
             onComplete={handleComplete}
             onBack={goToPrevStep}
           />

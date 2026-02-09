@@ -10,6 +10,7 @@ export default function SettingsPage() {
     isLoaded: isSettingsLoaded,
     setPlaybackSpeed,
     setAutoPlayCount,
+    setPracticeMode,
     resetSettings,
   } = useUserSettings();
   const {
@@ -99,6 +100,69 @@ export default function SettingsPage() {
               {totalPracticeCount}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* 練習モード */}
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">練習（れんしゅう）モード</h2>
+        <div className="space-y-3">
+          <button
+            onClick={() => setPracticeMode('advice')}
+            className={`w-full p-4 text-left rounded-lg border-2 transition-colors ${
+              settings.practiceMode === 'advice'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  settings.practiceMode === 'advice'
+                    ? 'border-blue-500'
+                    : 'border-gray-300'
+                }`}
+              >
+                {settings.practiceMode === 'advice' && (
+                  <span className="w-3 h-3 rounded-full bg-blue-500" />
+                )}
+              </span>
+              <div>
+                <p className="font-medium text-gray-900">アドバイスモード</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  採点（さいてん）なし・やさしいアドバイスのみ
+                </p>
+              </div>
+            </div>
+          </button>
+          <button
+            onClick={() => setPracticeMode('evaluation')}
+            className={`w-full p-4 text-left rounded-lg border-2 transition-colors ${
+              settings.practiceMode === 'evaluation'
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  settings.practiceMode === 'evaluation'
+                    ? 'border-green-500'
+                    : 'border-gray-300'
+                }`}
+              >
+                {settings.practiceMode === 'evaluation' && (
+                  <span className="w-3 h-3 rounded-full bg-green-500" />
+                )}
+              </span>
+              <div>
+                <p className="font-medium text-gray-900">評価（ひょうか）モード</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  スコア表示（ひょうじ）あり・詳（くわ）しい発音（はつおん）チェック
+                </p>
+              </div>
+            </div>
+          </button>
         </div>
       </section>
 

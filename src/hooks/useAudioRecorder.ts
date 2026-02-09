@@ -17,6 +17,26 @@ export interface UseAudioRecorderReturn {
   clearRecording: () => void;
 }
 
+/**
+ * ブラウザがサポートするMIMEタイプを取得する
+ * iOS 14.3〜18.3 では audio/webm 非対応のため audio/mp4 にフォールバック
+ */
+function getSupportedMimeType(): string {
+  const types = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus',
+  ];
+  for (const type of types) {
+    if (MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+  // すべて非対応の場合はブラウザのデフォルトに任せる
+  return '';
+}
+
 export function useAudioRecorder(): UseAudioRecorderReturn {
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [audioURL, setAudioURL] = useState<string | null>(null);
@@ -62,12 +82,10 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
 
       streamRef.current = stream;
 
-      // MediaRecorderを作成
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : 'audio/webm';
-
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
+      // MediaRecorderを作成（iOS対応のMIMEタイプ選択）
+      const mimeType = getSupportedMimeType();
+      const options: MediaRecorderOptions = mimeType ? { mimeType } : {};
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
 
       // データが利用可能になったときのハンドラ
@@ -79,8 +97,10 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
 
       // 録音停止時のハンドラ
       mediaRecorder.onstop = () => {
-        const blob = new Blob(audioChunksRef.current, { type: mimeType });
+        const blobType = mediaRecorder.mimeType || mimeType || 'audio/webm';
+        const blob = new Blob(audioChunksRef.current, { type: blobType });
         const url = URL.createObjectURL(blob);
+
         setAudioBlob(blob);
         setAudioURL(url);
         setRecordingState('stopped');

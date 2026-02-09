@@ -6,13 +6,13 @@ import type { Lesson } from '@/types';
 
 interface Step3RelistenProps {
   lesson: Lesson;
+  autoPlayCount: number;
   onComplete: () => void;
   onBack: () => void;
 }
 
-const TARGET_PLAY_COUNT = 3;
-
-export function Step3Relisten({ lesson, onComplete, onBack }: Step3RelistenProps) {
+export function Step3Relisten({ lesson, autoPlayCount, onComplete, onBack }: Step3RelistenProps) {
+  const TARGET_PLAY_COUNT = autoPlayCount;
   const [playCount, setPlayCount] = useState(0);
 
   const handlePlayCountChange = (count: number) => {

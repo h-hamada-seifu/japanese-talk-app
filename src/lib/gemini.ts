@@ -7,7 +7,10 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 /**
  * 音声データを文字起こしする
  */
-export async function transcribeAudio(audioBuffer: Buffer): Promise<string> {
+export async function transcribeAudio(
+  audioBuffer: Buffer,
+  mimeType: string = 'audio/webm'
+): Promise<string> {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   // 音声データをBase64エンコード
@@ -16,7 +19,7 @@ export async function transcribeAudio(audioBuffer: Buffer): Promise<string> {
   const result = await model.generateContent([
     {
       inlineData: {
-        mimeType: 'audio/webm',
+        mimeType,
         data: base64Audio,
       },
     },
@@ -144,10 +147,11 @@ export async function analyzeAndFeedback(
   audioBuffer: Buffer,
   originalText: string,
   selfEvaluation: SelfEvaluation,
-  userLanguage: Language
+  userLanguage: Language,
+  mimeType: string = 'audio/webm'
 ): Promise<{ transcription: string; feedback: AIFeedback }> {
   // 1. 音声を文字起こし
-  const transcription = await transcribeAudio(audioBuffer);
+  const transcription = await transcribeAudio(audioBuffer, mimeType);
 
   // 2. フィードバックを生成
   const feedback = await generateFeedback(

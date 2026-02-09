@@ -1,40 +1,97 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { AudioPlayer } from '@/components/audio';
 import { AudioRecorder } from '@/components/audio';
-import type { Lesson, SelfEvaluation, AIFeedback, Language } from '@/types';
+import { SpeechSuperFeedback } from '@/components/feedback';
+import { convertToWav, normalizeForPlayback } from '@/lib/audioConverter';
+import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult } from '@/types';
 
 interface Step5RecordProps {
   lesson: Lesson;
   userLanguage: Language;
+  practiceMode: PracticeMode;
   onComplete: () => void;
   onBack: () => void;
 }
 
-export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5RecordProps) {
+export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, onBack }: Step5RecordProps) {
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [normalizedBlob, setNormalizedBlob] = useState<Blob | null>(null);
+  const [wavBlob, setWavBlob] = useState<Blob | null>(null);
+  const [isConverting, setIsConverting] = useState(false);
   const [selfEvaluation, setSelfEvaluation] = useState<SelfEvaluation | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AIFeedback | null>(null);
+  const [evaluationResult, setEvaluationResult] = useState<SpeechSuperResult | null>(null);
+  const [evaluationTranscription, setEvaluationTranscription] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // 録音完了時
-  const handleRecordingComplete = (blob: Blob, url: string) => {
+  const isEvaluationMode = practiceMode === 'evaluation';
+
+  // 正規化済みBlobのURLを生成（アドバイスモードの聞き比べ用）
+  const [normalizedUrl, setNormalizedUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!normalizedBlob) {
+      setNormalizedUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(normalizedBlob);
+    setNormalizedUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [normalizedBlob]);
+
+  // 録音完了時: 両モード共通で正規化済みBlobを生成
+  // 評価モードではさらに wav 変換も実行
+  const handleRecordingComplete = useCallback((blob: Blob, url: string) => {
     setRecordingBlob(blob);
     setRecordingUrl(url);
     setError(null);
-  };
+    setIsConverting(true);
+
+    // 正規化済み wav（プレビュー・聞き比べ再生用、元のサンプルレート維持）
+    const normalizePromise = normalizeForPlayback(blob)
+      .then((normalized) => {
+        setNormalizedBlob(normalized);
+      });
+
+    if (isEvaluationMode) {
+      // 評価用 wav（16kHz、SpeechSuper送信用）も並行で生成
+      Promise.all([
+        normalizePromise,
+        convertToWav(blob).then((wav) => {
+          setWavBlob(wav);
+        }),
+      ])
+        .catch((err) => {
+          console.error('音声変換エラー:', err);
+          setError('音声（おんせい）の変換（へんかん）に失敗（しっぱい）しました。もう一度（いちど）録音（ろくおん）してください。');
+        })
+        .finally(() => {
+          setIsConverting(false);
+        });
+    } else {
+      normalizePromise
+        .catch((err) => {
+          console.error('音声正規化エラー:', err);
+        })
+        .finally(() => {
+          setIsConverting(false);
+        });
+    }
+  }, [isEvaluationMode]);
 
   // 自己評価選択
   const handleSelfEvaluation = (evaluation: SelfEvaluation) => {
     setSelfEvaluation(evaluation);
   };
 
-  // AI解析を実行
-  const handleAnalyze = async () => {
+  // AI解析を実行（アドバイスモード）
+  const handleAdviceAnalyze = async () => {
     if (!recordingBlob || !selfEvaluation) return;
 
     setIsAnalyzing(true);
@@ -42,18 +99,16 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
 
     try {
       const formData = new FormData();
-      formData.append('audio', recordingBlob, 'recording.webm');
+      const ext = recordingBlob.type.includes('mp4') ? 'mp4' : 'webm';
+      formData.append('audio', recordingBlob, `recording.${ext}`);
       formData.append('originalText', lesson.script.japanesePlain);
       formData.append('selfEvaluation', selfEvaluation);
       formData.append('userLanguage', userLanguage);
 
-      console.log('API呼び出し開始...');
       const response = await fetch('/api/analyze-speech', {
         method: 'POST',
         body: formData,
       });
-
-      console.log('APIレスポンス:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -61,7 +116,6 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       }
 
       const result = await response.json();
-      console.log('解析結果:', result);
 
       if (!result.feedback) {
         throw new Error('AIからの応答が不正です');
@@ -77,15 +131,65 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
     }
   };
 
+  // 発音評価を実行（評価モード）
+  const handleEvaluationAnalyze = async () => {
+    if (!wavBlob) return;
+
+    setIsAnalyzing(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('audio', wavBlob, 'recording.wav');
+      formData.append('originalText', lesson.script.japanesePlain);
+      formData.append('userLanguage', userLanguage);
+
+      const response = await fetch('/api/evaluate-speech', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || '発音評価に失敗しました');
+      }
+
+      const data = await response.json();
+
+      if (!data.result) {
+        throw new Error('評価結果が不正です');
+      }
+
+      setEvaluationResult(data.result);
+      setEvaluationTranscription(data.transcription);
+    } catch (err) {
+      console.error('評価エラー:', err);
+      setError(err instanceof Error ? err.message : 'エラーが発生しました');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  // モードに応じた解析ハンドラー
+  const handleAnalyze = isEvaluationMode ? handleEvaluationAnalyze : handleAdviceAnalyze;
+
   // やり直し
   const handleRetry = () => {
     setRecordingBlob(null);
     setRecordingUrl(null);
+    setNormalizedBlob(null);
+    setWavBlob(null);
+    setIsConverting(false);
     setSelfEvaluation(null);
     setTranscription(null);
     setFeedback(null);
+    setEvaluationResult(null);
+    setEvaluationTranscription(null);
     setError(null);
   };
+
+  // フィードバックが表示されているかどうか
+  const hasFeedback = isEvaluationMode ? evaluationResult !== null : feedback !== null;
 
   const evaluationOptions: { value: SelfEvaluation; label: string }[] = [
     { value: 'same', label: 'お手本（てほん）と同（おな）じように言（い）えた' },
@@ -99,10 +203,14 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       {/* 説明 */}
       <div className="text-center">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          録音（ろくおん）してAIに聞（き）いてもらいましょう
+          {isEvaluationMode
+            ? '録音（ろくおん）して発音（はつおん）を評価（ひょうか）しましょう'
+            : '録音（ろくおん）してAIに聞（き）いてもらいましょう'}
         </h2>
         <p className="text-gray-600 text-sm">
-          お手本（てほん）を見（み）ながら録音（ろくおん）して、AIからアドバイスをもらいましょう。
+          {isEvaluationMode
+            ? 'お手本（てほん）を見（み）ながら録音（ろくおん）して、発音（はつおん）のスコアを確認（かくにん）しましょう。'
+            : 'お手本（てほん）を見（み）ながら録音（ろくおん）して、AIからアドバイスをもらいましょう。'}
         </p>
       </div>
 
@@ -113,15 +221,16 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
       </div>
 
       {/* 録音コンポーネント */}
-      {!feedback && (
+      {!hasFeedback && (
         <AudioRecorder
           onRecordingComplete={handleRecordingComplete}
           maxDuration={30}
+          normalizedBlob={normalizedBlob}
         />
       )}
 
-      {/* 自己評価（録音完了後、フィードバック前） */}
-      {recordingUrl && !feedback && (
+      {/* 自己評価 + 解析ボタン（アドバイスモード） */}
+      {!isEvaluationMode && recordingUrl && !feedback && (
         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
           <h3 className="font-medium text-gray-900 mb-3">
             自分（じぶん）の発音（はつおん）、どうでしたか？
@@ -190,6 +299,59 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
         </div>
       )}
 
+      {/* 評価ボタン（評価モード：録音完了後に表示、wav変換完了まで無効化） */}
+      {isEvaluationMode && recordingUrl && !evaluationResult && (
+        <button
+          onClick={handleAnalyze}
+          disabled={isAnalyzing || isConverting || !wavBlob}
+          className="w-full py-3 bg-green-500 hover:bg-green-600 active:bg-green-700 disabled:bg-gray-300 text-white font-bold rounded-lg transition-colors"
+        >
+          {isConverting ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              音声（おんせい）を準備中（じゅんびちゅう）...
+            </span>
+          ) : isAnalyzing ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              評価中（ひょうかちゅう）...
+            </span>
+          ) : (
+            '発音（はつおん）を評価（ひょうか）する'
+          )}
+        </button>
+      )}
+
       {/* エラー表示 */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -203,8 +365,19 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
         </div>
       )}
 
-      {/* AI フィードバック表示 */}
-      {feedback && (
+      {/* 評価モード フィードバック表示 */}
+      {isEvaluationMode && evaluationResult && (
+        <SpeechSuperFeedback
+          result={evaluationResult}
+          transcription={evaluationTranscription || ''}
+          lesson={lesson}
+          recordingBlob={normalizedBlob || recordingBlob}
+          onRetry={handleRetry}
+        />
+      )}
+
+      {/* アドバイスモード フィードバック表示 */}
+      {!isEvaluationMode && feedback && (
         <div className="space-y-4">
           {/* AIが聞き取った結果 */}
           {transcription && (
@@ -256,10 +429,10 @@ export function Step5Record({ lesson, userLanguage, onComplete, onBack }: Step5R
                 <p className="text-sm text-gray-600 mb-1">お手本（てほん）</p>
                 <AudioPlayer audioUrl={lesson.audioUrl} showSpeedControl={false} />
               </div>
-              {recordingUrl && (
+              {(normalizedUrl || recordingUrl) && (
                 <div>
                   <p className="text-sm text-gray-600 mb-1">あなたの録音（ろくおん）</p>
-                  <audio src={recordingUrl} controls className="w-full" />
+                  <audio src={normalizedUrl || recordingUrl!} controls className="w-full" />
                 </div>
               )}
             </div>
