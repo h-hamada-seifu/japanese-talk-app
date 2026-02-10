@@ -67,6 +67,14 @@ export default function Home() {
           練習（れんしゅう）をはじめる
         </Link>
 
+        {/* シャドーイング練習ボタン */}
+        <Link
+          href="/shadowing"
+          className="inline-block w-full py-4 px-6 mt-3 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-bold rounded-lg text-lg transition-colors shadow-lg"
+        >
+          シャドーイング練習（れんしゅう）
+        </Link>
+
         {/* 特徴リスト */}
         <div className="mt-10 grid grid-cols-3 gap-4 text-center">
           <div className="p-3">
