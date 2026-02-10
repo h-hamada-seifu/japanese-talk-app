@@ -153,7 +153,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
     try {
       const formData = new FormData();
       formData.append('audio', wavBlob, 'recording.wav');
-      formData.append('originalText', lesson.script.japanesePlain);
+      formData.append('originalText', lesson.script.japanese);
       formData.append('userLanguage', userLanguage);
 
       const response = await fetch('/api/evaluate-speech', {
