@@ -67,6 +67,19 @@ function parseResponse(data: Record<string, unknown>): SpeechSuperResult {
         })
       : [];
 
+    // 単語分割結果のサマリログ（誤分割の調査用）
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[SpeechSuper] 単語分割結果:',
+        words.map(w => `「${w.word}」(スコア:${w.score}) [音素数:${w.phonemes.length}]`)
+      );
+      console.log('[SpeechSuper] 音素詳細:',
+        words.map(w => ({
+          word: w.word,
+          phonemes: w.phonemes.map(p => `${p.phoneme}(${p.score})`).join(' '),
+        }))
+      );
+    }
+
     return {
       scores: {
         overall,
@@ -171,6 +184,8 @@ export async function evaluateSpeech(
   try {
     console.log('[SpeechSuper] API呼び出し開始:', {
       refText,
+      refTextLength: refText.length,
+      refTextBytes: Buffer.byteLength(refText, 'utf-8'),
       audioSize: audioBuffer.length,
       coreType: CORE_TYPE,
     });

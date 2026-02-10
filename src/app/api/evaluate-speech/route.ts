@@ -43,6 +43,15 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await audioFile.arrayBuffer();
     const audioBuffer = Buffer.from(arrayBuffer);
 
+    // リクエスト内容のログ（デバッグ用）
+    console.log('[evaluate-speech] 受信:', {
+      originalText,
+      originalTextLength: originalText.length,
+      audioSize: audioBuffer.length,
+      audioType: audioFile.type,
+      audioName: audioFile.name,
+    });
+
     // ファイルサイズチェック（10MB以下）
     if (audioBuffer.length > 10 * 1024 * 1024) {
       return NextResponse.json(
