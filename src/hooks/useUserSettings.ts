@@ -9,7 +9,8 @@ const DEFAULT_SETTINGS: UserSettings = {
   userLanguage: 'ja',
   playbackSpeed: 1.0,
   autoPlayCount: 3,
-  practiceMode: 'advice',
+  practiceMode: 'evaluation',
+  evaluationTool: 'azure',
 };
 
 /**
@@ -82,11 +83,15 @@ export function useUserSettings() {
     [saveToStorage]
   );
 
-  // 練習モードを更新
+  // 練習モードを更新（評価モード選択時はAzureを自動設定）
   const setPracticeMode = useCallback(
     (mode: PracticeMode) => {
       setSettings((prev) => {
-        const updated = { ...prev, practiceMode: mode };
+        const updated = {
+          ...prev,
+          practiceMode: mode,
+          ...(mode === 'evaluation' ? { evaluationTool: 'azure' as const } : {}),
+        };
         saveToStorage(updated);
         return updated;
       });

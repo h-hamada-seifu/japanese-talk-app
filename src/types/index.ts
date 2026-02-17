@@ -8,6 +8,9 @@ export type Language = 'ja' | 'en' | 'vi' | 'zh' | 'my' | 'ne';
 // 練習モード
 export type PracticeMode = 'advice' | 'evaluation';
 
+// 評価ツール
+export type EvaluationTool = 'speechsuper' | 'azure';
+
 // レッスンレベル
 export type Level = 'N5' | 'N4';
 
@@ -76,7 +79,24 @@ export interface SpeechSuperResult {
   words: WordScore[];
 }
 
-// 評価モードのフィードバック
+// Azure 単語スコア
+export interface AzureWordScore {
+  word: string;
+  accuracyScore: number;
+  errorType: 'None' | 'Mispronunciation' | 'Omission' | 'Insertion';
+}
+
+// Azure 評価結果
+export interface AzureResult {
+  recognizedText: string;
+  pronunciationScore: number;
+  accuracyScore: number;
+  fluencyScore: number;
+  completenessScore: number;
+  words: AzureWordScore[];
+}
+
+// 評価モードのフィードバック（SpeechSuper）
 export interface EvaluationFeedback {
   result: SpeechSuperResult;
   transcription: string;
@@ -88,6 +108,7 @@ export interface UserSettings {
   playbackSpeed: number;
   autoPlayCount: number;
   practiceMode: PracticeMode;
+  evaluationTool: EvaluationTool;
 }
 
 // ユーザー進捗全体
