@@ -177,6 +177,7 @@ export default function PracticePage() {
             lesson={lesson}
             userLanguage={userLanguage}
             practiceMode={settings.practiceMode}
+            evaluationTool={settings.evaluationTool}
             onComplete={handleComplete}
             onBack={goToPrevStep}
           />

@@ -3,19 +3,20 @@
 import { useState, useCallback, useEffect } from 'react';
 import { AudioPlayer } from '@/components/audio';
 import { AudioRecorder } from '@/components/audio';
-import { SpeechSuperFeedback } from '@/components/feedback';
+import { SpeechSuperFeedback, AzureFeedback } from '@/components/feedback';
 import { convertToWav, normalizeForPlayback } from '@/lib/audioConverter';
-import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult } from '@/types';
+import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
 
 interface Step5RecordProps {
   lesson: Lesson;
   userLanguage: Language;
   practiceMode: PracticeMode;
+  evaluationTool: EvaluationTool;
   onComplete: () => void;
   onBack: () => void;
 }
 
-export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, onBack }: Step5RecordProps) {
+export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool, onComplete, onBack }: Step5RecordProps) {
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
   const [normalizedBlob, setNormalizedBlob] = useState<Blob | null>(null);
@@ -27,6 +28,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
   const [feedback, setFeedback] = useState<AIFeedback | null>(null);
   const [evaluationResult, setEvaluationResult] = useState<SpeechSuperResult | null>(null);
   const [evaluationTranscription, setEvaluationTranscription] = useState<string | null>(null);
+  const [azureResult, setAzureResult] = useState<AzureResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isEvaluationMode = practiceMode === 'evaluation';
@@ -74,14 +76,14 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
       });
 
     if (isEvaluationMode) {
-      // 評価用 wav（16kHz、SpeechSuper送信用）も並行で生成
+      // 評価用 wav（16kHz、送信用）も並行で生成
       const convertPromise = withTimeout(convertToWav(blob), 15000)
         .then((wav) => {
           setWavBlob(wav);
         })
         .catch((err) => {
           console.error('wav変換エラー:', err.message);
-          // wav変換失敗時は元のBlobで代替（SpeechSuperが受け付ける可能性あり）
+          // wav変換失敗時は元のBlobで代替
           setWavBlob(blob);
         });
 
@@ -155,6 +157,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
       formData.append('audio', wavBlob, 'recording.wav');
       formData.append('originalText', lesson.script.japanese);
       formData.append('userLanguage', userLanguage);
+      formData.append('evaluationTool', evaluationTool);
 
       const response = await fetch('/api/evaluate-speech', {
         method: 'POST',
@@ -168,12 +171,19 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
 
       const data = await response.json();
 
-      if (!data.result) {
-        throw new Error('評価結果が不正です');
+      if (data.tool === 'azure') {
+        if (!data.azureResult) {
+          throw new Error('Azure評価結果が不正です');
+        }
+        setAzureResult(data.azureResult);
+        setEvaluationTranscription(data.transcription);
+      } else {
+        if (!data.result) {
+          throw new Error('評価結果が不正です');
+        }
+        setEvaluationResult(data.result);
+        setEvaluationTranscription(data.transcription);
       }
-
-      setEvaluationResult(data.result);
-      setEvaluationTranscription(data.transcription);
     } catch (err) {
       console.error('評価エラー:', err);
       setError(err instanceof Error ? err.message : 'エラーが発生しました');
@@ -197,11 +207,14 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
     setFeedback(null);
     setEvaluationResult(null);
     setEvaluationTranscription(null);
+    setAzureResult(null);
     setError(null);
   };
 
   // フィードバックが表示されているかどうか
-  const hasFeedback = isEvaluationMode ? evaluationResult !== null : feedback !== null;
+  const hasFeedback = isEvaluationMode
+    ? (evaluationResult !== null || azureResult !== null)
+    : feedback !== null;
 
   const evaluationOptions: { value: SelfEvaluation; label: string }[] = [
     { value: 'same', label: 'お手本（てほん）と同（おな）じように言（い）えた' },
@@ -312,7 +325,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
       )}
 
       {/* 評価ボタン（評価モード：録音完了後に表示、wav変換完了まで無効化） */}
-      {isEvaluationMode && recordingUrl && !evaluationResult && (
+      {isEvaluationMode && recordingUrl && !evaluationResult && !azureResult && (
         <button
           onClick={handleAnalyze}
           disabled={isAnalyzing || isConverting || !wavBlob}
@@ -377,10 +390,21 @@ export function Step5Record({ lesson, userLanguage, practiceMode, onComplete, on
         </div>
       )}
 
-      {/* 評価モード フィードバック表示 */}
+      {/* 評価モード フィードバック表示（SpeechSuper） */}
       {isEvaluationMode && evaluationResult && (
         <SpeechSuperFeedback
           result={evaluationResult}
+          transcription={evaluationTranscription || ''}
+          lesson={lesson}
+          recordingBlob={normalizedBlob || recordingBlob}
+          onRetry={handleRetry}
+        />
+      )}
+
+      {/* 評価モード フィードバック表示（Azure） */}
+      {isEvaluationMode && azureResult && (
+        <AzureFeedback
+          result={azureResult}
           transcription={evaluationTranscription || ''}
           lesson={lesson}
           recordingBlob={normalizedBlob || recordingBlob}
