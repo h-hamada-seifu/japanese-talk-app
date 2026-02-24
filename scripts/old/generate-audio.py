@@ -1,34 +1,21 @@
 #!/usr/bin/env python3
 """
-音声ファイル生成スクリプト（対話式）
-
-使用するサービスを選択できます:
-  1. ElevenLabs API（推奨）
-  2. VOICEVOX（ローカル）
-
-必要な環境変数（.env または .env.local に設定）:
-  ELLEVENLABS_API_KEY  - ElevenLabs API キー
-  ELLEVENLABS_VOICE_ID - 使用する Voice ID（デフォルト: Yamato）
-  ELLEVENLABS_MODEL_ID - モデルID（デフォルト: eleven_multilingual_v3）
+音声ファイル生成スクリプト
+Google Cloud Text-to-Speech APIを使用してレッスン用音声を生成します。
 
 使用方法:
-  pip install requests python-dotenv
-  python scripts/generate-audio.py
+1. Google Cloud プロジェクトを作成
+2. Text-to-Speech API を有効化
+3. サービスアカウントキーを取得し、環境変数に設定:
+   export GOOGLE_APPLICATION_CREDENTIALS="path/to/key.json"
+4. 必要なパッケージをインストール:
+   pip install google-cloud-texttospeech
+5. スクリプトを実行:
+   python generate-audio.py
 """
 
-import json
 import os
-import sys
-import time
 from pathlib import Path
-
-import requests
-from dotenv import load_dotenv
-
-# .env / .env.local を読み込み（.env.local が優先）
-project_root = Path(__file__).parent.parent
-load_dotenv(project_root / ".env.local")
-load_dotenv(project_root / ".env")
 
 # レッスンデータ
 LESSONS = [
@@ -74,72 +61,61 @@ LESSONS = [
     },
 ]
 
-
-def generate_with_elevenlabs():
-    """ElevenLabs APIで音声生成"""
-    api_key = os.getenv("ELLEVENLABS_API_KEY")
-    voice_id = os.getenv("ELLEVENLABS_VOICE_ID", "bqpOyYNUu11tjjvRUbKn")
-    model_id = os.getenv("ELLEVENLABS_MODEL_ID", "eleven_multilingual_v2")
-
-    if not api_key:
-        print("エラー: ELLEVENLABS_API_KEY が設定されていません。")
-        print(".env.local に以下を追加してください:")
-        print("  ELLEVENLABS_API_KEY=your_api_key_here")
+def generate_with_google_tts():
+    """Google Cloud Text-to-Speech APIで音声生成"""
+    try:
+        from google.cloud import texttospeech
+    except ImportError:
+        print("エラー: google-cloud-texttospeech がインストールされていません")
+        print("インストール: pip install google-cloud-texttospeech")
         return
 
-    print(f"Voice ID : {voice_id}")
-    print(f"Model ID : {model_id}")
-    print()
-
-    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-    headers = {
-        "Accept": "audio/mpeg",
-        "Content-Type": "application/json",
-        "xi-api-key": api_key,
-    }
+    client = texttospeech.TextToSpeechClient()
 
     # 出力ディレクトリ
     output_dir = Path(__file__).parent.parent / "public" / "audio"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    success_count = 0
-    for i, lesson in enumerate(LESSONS):
+    # 音声設定
+    voice = texttospeech.VoiceSelectionParams(
+        language_code="ja-JP",
+        name="ja-JP-Neural2-B",  # 女性の自然な声
+        ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
+    )
+
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.MP3,
+        speaking_rate=0.85,  # ゆっくり（超初級者向け）
+        pitch=0.0,
+    )
+
+    for lesson in LESSONS:
         filename = output_dir / f"{lesson['id']}.mp3"
 
-        # シャドーイング教材向けに最適化したパラメータ
-        data = {
-            "text": lesson["text"],
-            "model_id": model_id,
-            "voice_settings": {
-                "stability": 0.8,
-                "similarity_boost": 0.75,
-                "style": 0.0,
-                "use_speaker_boost": True,
-            },
-        }
+        # SSMLでポーズを追加（文の間に少し間を入れる）
+        ssml_text = f'<speak><prosody rate="slow">{lesson["text"]}</prosody></speak>'
+
+        synthesis_input = texttospeech.SynthesisInput(ssml=ssml_text)
 
         print(f"生成中: {lesson['id']} - {lesson['text'][:20]}...")
 
-        response = requests.post(url, json=data, headers=headers)
+        response = client.synthesize_speech(
+            input=synthesis_input, voice=voice, audio_config=audio_config
+        )
 
-        if response.status_code == 200:
-            with open(filename, "wb") as f:
-                f.write(response.content)
-            file_size = filename.stat().st_size / 1024
-            print(f"  完了: {filename.name} ({file_size:.1f} KB)")
-            success_count += 1
-        else:
-            print(f"  エラー ({response.status_code}): {response.text}")
+        with open(filename, "wb") as out:
+            out.write(response.audio_content)
 
-        # レート制限対策
-        if i < len(LESSONS) - 1:
-            time.sleep(1)
+        print(f"  完了: {filename}")
 
-    print(f"\n生成完了: {success_count}/{len(LESSONS)} ファイル")
+    print(f"\n全{len(LESSONS)}ファイルの生成が完了しました！")
 
 
 def generate_with_voicevox():
     """VOICEVOX APIで音声生成（ローカルでVOICEVOXを起動している場合）"""
+    import requests
+    import json
+
     VOICEVOX_URL = "http://localhost:50021"
     SPEAKER_ID = 2  # ずんだもん（ノーマル）
 
@@ -188,14 +164,14 @@ def main():
     print("=" * 50)
     print()
     print("使用するサービスを選択してください:")
-    print("1. ElevenLabs API（推奨）")
+    print("1. Google Cloud Text-to-Speech API")
     print("2. VOICEVOX（ローカル）")
     print()
 
     choice = input("選択 (1 or 2): ").strip()
 
     if choice == "1":
-        generate_with_elevenlabs()
+        generate_with_google_tts()
     elif choice == "2":
         generate_with_voicevox()
     else:
