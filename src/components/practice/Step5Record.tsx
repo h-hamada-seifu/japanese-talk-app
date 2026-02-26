@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { AudioPlayer } from '@/components/audio';
 import { AudioRecorder } from '@/components/audio';
 import { SpeechSuperFeedback, AzureFeedback } from '@/components/feedback';
+import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { convertToWav, normalizeForPlayback } from '@/lib/audioConverter';
 import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
 
@@ -242,7 +243,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
       {/* お手本スクリプト */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="text-sm font-medium text-blue-900 mb-2">📝 お手本（てほん）</h3>
-        <p className="text-lg text-blue-900">{lesson.script.japanese}</p>
+        <ScriptDisplay lesson={lesson} size="lg" />
       </div>
 
       {/* 録音コンポーネント */}

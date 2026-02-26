@@ -61,3 +61,18 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1;
 }
+
+/* rubyタグ（振り仮名）スタイル */
+.ruby-text ruby {
+  ruby-align: center;
+}
+
+.ruby-text rt {
+  font-size: 0.55em;
+  color: #6b7280;
+  font-weight: normal;
+}
+
+.ruby-text rp {
+  display: none;
+}

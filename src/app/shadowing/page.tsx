@@ -3,8 +3,11 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AudioPlayer } from '@/components/audio';
-import { lessons } from '@/data/lessons';
+import { ScriptDisplay } from '@/components/common/ScriptDisplay';
+import { getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useUserSettings } from '@/hooks';
+import { levelColors } from '@/lib/levelColors';
+import type { Level } from '@/types';
 type ShadowingMode = 'overlapping' | 'repeating';
 
 const TARGET_PRACTICE_COUNT = 3;
@@ -12,14 +15,17 @@ const TARGET_PRACTICE_COUNT = 3;
 export default function ShadowingPage() {
   const router = useRouter();
   const { settings } = useUserSettings();
+  const availableLevels = getLevels();
+  const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
+  const filteredLessons = getLessonsByLevel(selectedLevel);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mode, setMode] = useState<ShadowingMode>('overlapping');
   const [practiceCount, setPracticeCount] = useState(0);
   const [showJapanese, setShowJapanese] = useState(true);
   const [showTranslation, setShowTranslation] = useState(true);
 
-  const lesson = lessons[currentIndex];
-  const isLastLesson = currentIndex === lessons.length - 1;
+  const lesson = filteredLessons[currentIndex];
+  const isLastLesson = currentIndex === filteredLessons.length - 1;
   const isEnoughPractice = practiceCount >= TARGET_PRACTICE_COUNT;
 
   const handlePractice = useCallback(() => {
@@ -35,17 +41,50 @@ export default function ShadowingPage() {
     }
   }, [isLastLesson, router]);
 
+  // レベル切替時にインデックスをリセット
+  const handleLevelChange = useCallback((level: Level) => {
+    setSelectedLevel(level);
+    setCurrentIndex(0);
+    setPracticeCount(0);
+  }, []);
+
   // 母語翻訳を取得
   const userLang = settings.userLanguage;
-  const translation = userLang !== 'ja' ? lesson.translations[userLang] : null;
+  const translation = lesson && userLang !== 'ja' ? lesson.translations[userLang] : null;
+
+  // フィルタ結果が空の場合のガード（全Hooksの後に配置）
+  if (!lesson) {
+    return (
+      <div className="min-h-[calc(100vh-3.5rem)] bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">このレベルにはレッスンがありません</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-gray-50">
       <div className="max-w-lg mx-auto p-4 space-y-5">
+        {/* レベル選択タブ */}
+        <div className="flex gap-2 justify-center">
+          {availableLevels.map((level) => (
+            <button
+              key={level}
+              onClick={() => handleLevelChange(level)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedLevel === level
+                  ? levelColors[level].active
+                  : levelColors[level].inactive
+              }`}
+            >
+              {level}
+            </button>
+          ))}
+        </div>
+
         {/* ヘッダー：レッスン番号とタイトル */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-2">
-            {currentIndex + 1} / {lessons.length}
+            {currentIndex + 1} / {filteredLessons.length}
           </div>
           <h1 className="text-xl font-bold text-gray-900">
             {lesson.title}
@@ -81,9 +120,9 @@ export default function ShadowingPage() {
         {/* スクリプト表示エリア */}
         <div className="bg-white border-2 border-blue-200 rounded-lg p-5 shadow-sm min-h-[80px] flex flex-col items-center justify-center gap-3">
           {showJapanese && (
-            <p className="text-xl text-gray-900 leading-relaxed text-center">
-              {lesson.script.japanese}
-            </p>
+            <div className="text-center">
+              <ScriptDisplay lesson={lesson} size="base" />
+            </div>
           )}
           {showTranslation && translation && (
             <p className="text-base text-gray-500 leading-relaxed text-center">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AudioPlayer } from '@/components/audio';
+import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import type { Lesson, Language } from '@/types';
 
 interface Step2UnderstandProps {
@@ -27,9 +28,10 @@ export function Step2Understand({
 
   const translation = getTranslation();
 
-  // 発音ヒントを取得
+  // 発音ヒントを取得（空配列の場合もjaにフォールバック）
   const getPronunciationTips = () => {
-    return lesson.pronunciationTips[userLanguage] || lesson.pronunciationTips.ja;
+    const tips = lesson.pronunciationTips[userLanguage];
+    return tips && tips.length > 0 ? tips : lesson.pronunciationTips.ja;
   };
 
   return (
@@ -47,14 +49,7 @@ export function Step2Understand({
       {/* スクリプト */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <h3 className="text-sm font-medium text-gray-500 mb-2">📝 日本語（にほんご）スクリプト</h3>
-        <p className="text-lg text-gray-900 leading-relaxed">
-          {lesson.script.japanese}
-        </p>
-        {lesson.script.japaneseKanji !== lesson.script.japanese && (
-          <p className="text-sm text-gray-500 mt-2">
-            （{lesson.script.japaneseKanji}）
-          </p>
-        )}
+        <ScriptDisplay lesson={lesson} size="lg" />
       </div>
 
       {/* 翻訳（日本語以外の場合） */}

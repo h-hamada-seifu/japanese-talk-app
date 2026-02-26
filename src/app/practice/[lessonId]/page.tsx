@@ -12,6 +12,7 @@ import {
   Step5Record,
 } from '@/components/practice';
 import { useLessonProgress, useUserSettings } from '@/hooks';
+import { levelColors } from '@/lib/levelColors';
 import type { PracticeStep, Lesson } from '@/types';
 
 export default function PracticePage() {
@@ -131,10 +132,14 @@ export default function PracticePage() {
         </button>
         <h1 className="text-xl font-bold text-gray-900">{lesson.title}</h1>
         <div className="flex items-center gap-2 mt-1">
-          <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded">
-            {lesson.category}
+          <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[lesson.level].badge}`}>
+            {lesson.level}
           </span>
-          <span className="text-xs text-gray-500">{lesson.level}</span>
+          {lesson.category && (
+            <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded">
+              {lesson.category}
+            </span>
+          )}
           <span className="text-xs text-gray-500">約（やく）{lesson.duration}秒（びょう）</span>
         </div>
       </div>

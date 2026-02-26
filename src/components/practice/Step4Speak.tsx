@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AudioPlayer } from '@/components/audio';
+import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import type { Lesson } from '@/types';
 
 interface Step4SpeakProps {
@@ -67,10 +68,8 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
       </div>
 
       {/* スクリプト表示 */}
-      <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm">
-        <p className="text-xl text-gray-900 leading-relaxed text-center">
-          {lesson.script.japanese}
-        </p>
+      <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm text-center">
+        <ScriptDisplay lesson={lesson} size="lg" />
       </div>
 
       {/* 練習回数表示 */}

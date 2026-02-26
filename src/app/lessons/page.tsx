@@ -2,21 +2,26 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { lessons, getCategories, getLessonsByCategory } from '@/data/lessons';
+import { lessons, getCategories, getLessonsByCategory, getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useLessonProgress } from '@/hooks';
-import type { Category } from '@/types';
+import { levelColors } from '@/lib/levelColors';
+import type { Category, Level } from '@/types';
 
 export default function LessonsPage() {
+  const availableLevels = getLevels();
   const categories = getCategories();
+  const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>(
     'all'
   );
   const { getProgress, getCompletedCount, isLoaded } = useLessonProgress();
 
+  // レベルでフィルタ → さらにカテゴリでフィルタ（N5のみカテゴリあり）
+  const levelLessons = getLessonsByLevel(selectedLevel);
   const filteredLessons =
-    selectedCategory === 'all'
-      ? lessons
-      : getLessonsByCategory(selectedCategory);
+    selectedCategory === 'all' || selectedLevel !== 'N5'
+      ? levelLessons
+      : levelLessons.filter((l) => l.category === selectedCategory);
 
   const completedCount = getCompletedCount();
 
@@ -70,37 +75,65 @@ export default function LessonsPage() {
         </div>
       )}
 
-      {/* カテゴリーフィルター */}
-      <div className="mb-6 overflow-x-auto">
+      {/* レベルタブ */}
+      <div className="mb-4 overflow-x-auto">
         <div className="flex gap-2 pb-2">
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-              selectedCategory === 'all'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            すべて ({lessons.length})
-          </button>
-          {categories.map((category) => {
-            const count = getLessonsByCategory(category).length;
+          {availableLevels.map((level) => {
+            const count = getLessonsByLevel(level).length;
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={level}
+                onClick={() => {
+                  setSelectedLevel(level);
+                  setSelectedCategory('all');
+                }}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  selectedLevel === level
+                    ? levelColors[level].active
+                    : levelColors[level].inactive
                 }`}
               >
-                {category} ({count})
+                {level} ({count})
               </button>
             );
           })}
         </div>
       </div>
+
+      {/* カテゴリーフィルター（N5のみ表示） */}
+      {selectedLevel === 'N5' && (
+        <div className="mb-6 overflow-x-auto">
+          <div className="flex gap-2 pb-2">
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                selectedCategory === 'all'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              すべて ({levelLessons.length})
+            </button>
+            {categories.map((category) => {
+              const count = levelLessons.filter((l) => l.category === category).length;
+              if (count === 0) return null;
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {category} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* レッスンリスト */}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -121,9 +154,16 @@ export default function LessonsPage() {
             >
               {/* ヘッダー */}
               <div className="flex items-start justify-between mb-2">
-                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded">
-                  {lesson.category}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[lesson.level].badge}`}>
+                    {lesson.level}
+                  </span>
+                  {lesson.category && (
+                    <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded">
+                      {lesson.category}
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   {isCompleted && (
                     <span className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded">
@@ -142,7 +182,6 @@ export default function LessonsPage() {
                       完了（かんりょう）
                     </span>
                   )}
-                  <span className="text-xs text-gray-500">{lesson.level}</span>
                 </div>
               </div>
 
