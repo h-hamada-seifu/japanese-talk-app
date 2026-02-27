@@ -6,6 +6,7 @@ import { AudioPlayer } from '@/components/audio';
 import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useUserSettings } from '@/hooks';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import { levelColors } from '@/lib/levelColors';
 import type { Level } from '@/types';
 type ShadowingMode = 'overlapping' | 'repeating';
@@ -15,6 +16,7 @@ const TARGET_PRACTICE_COUNT = 3;
 export default function ShadowingPage() {
   const router = useRouter();
   const { settings } = useUserSettings();
+  const { f } = useFurigana();
   const availableLevels = getLevels();
   const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
   const filteredLessons = getLessonsByLevel(selectedLevel);
@@ -101,7 +103,7 @@ export default function ShadowingPage() {
                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
             }`}
           >
-            日本語（にほんご）{showJapanese ? ' ON' : ' OFF'}
+            {f('日本語（にほんご）')}{showJapanese ? ' ON' : ' OFF'}
           </button>
           {settings.userLanguage !== 'ja' && (
             <button
@@ -112,7 +114,7 @@ export default function ShadowingPage() {
                   : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
               }`}
             >
-              母語（ぼご）{showTranslation ? ' ON' : ' OFF'}
+              {f('母語（ぼご）')}{showTranslation ? ' ON' : ' OFF'}
             </button>
           )}
         </div>
@@ -131,7 +133,7 @@ export default function ShadowingPage() {
           )}
           {!showJapanese && !(showTranslation && translation) && (
             <p className="text-gray-400 text-sm">
-              テキストは非表示（ひひょうじ）です
+              {f('テキストは非表示（ひひょうじ）です')}
             </p>
           )}
         </div>
@@ -148,7 +150,7 @@ export default function ShadowingPage() {
           >
             <span className="block font-bold">オーバーラッピング</span>
             <span className="block text-xs mt-1 opacity-80">
-              音声（おんせい）と同時（どうじ）に読（よ）む
+              {f('音声（おんせい）と同時（どうじ）に読（よ）む')}
             </span>
           </button>
           <button
@@ -161,7 +163,7 @@ export default function ShadowingPage() {
           >
             <span className="block font-bold">リピーティング</span>
             <span className="block text-xs mt-1 opacity-80">
-              一文（いちぶん）ずつ真似（まね）する
+              {f('一文（いちぶん）ずつ真似（まね）する')}
             </span>
           </button>
         </div>
@@ -173,7 +175,7 @@ export default function ShadowingPage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full">
             <span className="text-green-600 font-medium">
-              練習回数（れんしゅうかいすう）: {practiceCount} / {TARGET_PRACTICE_COUNT}
+              {f('練習回数（れんしゅうかいすう）')}: {practiceCount} / {TARGET_PRACTICE_COUNT}
             </span>
             {isEnoughPractice && (
               <svg
@@ -198,7 +200,7 @@ export default function ShadowingPage() {
             onClick={handlePractice}
             className="w-full py-3 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-bold rounded-lg transition-colors"
           >
-            {mode === 'overlapping' ? '一緒（いっしょ）に読（よ）めた！' : '真似（まね）できた！'}
+            {mode === 'overlapping' ? f('一緒（いっしょ）に読（よ）めた！') : f('真似（まね）できた！')}
           </button>
         )}
 
@@ -209,15 +211,15 @@ export default function ShadowingPage() {
             className="w-full py-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-lg transition-colors shadow-md"
           >
             {isLastLesson
-              ? '終了（しゅうりょう）'
-              : '次（つぎ）へ →'}
+              ? f('終了（しゅうりょう）')
+              : f('次（つぎ）へ →')}
           </button>
         )}
 
         {/* 補足メッセージ */}
         {!isEnoughPractice && (
           <p className="text-center text-sm text-gray-500">
-            あと{TARGET_PRACTICE_COUNT - practiceCount}回（かい）練習（れんしゅう）すると次（つぎ）に進（すす）めます
+            {f('あと')}{TARGET_PRACTICE_COUNT - practiceCount}{f('回（かい）練習（れんしゅう）すると次（つぎ）に進（すす）めます')}
           </p>
         )}
       </div>

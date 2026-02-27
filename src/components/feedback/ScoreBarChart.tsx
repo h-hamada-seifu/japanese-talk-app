@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { SpeechSuperScore } from '@/types';
 
 interface ScoreBarChartProps {
@@ -34,12 +35,14 @@ function getScoreColor(score: number): string {
 }
 
 export function ScoreBarChart({ scores }: ScoreBarChartProps) {
+  const { f } = useFurigana();
+
   const data = [
-    { name: LABELS.pronunciation, score: scores.pronunciation },
-    { name: LABELS.fluency, score: scores.fluency },
-    { name: LABELS.completeness, score: scores.completeness },
-    { name: LABELS.tone, score: scores.tone },
-    { name: LABELS.rhythm, score: scores.rhythm },
+    { name: f(LABELS.pronunciation), score: scores.pronunciation },
+    { name: f(LABELS.fluency), score: scores.fluency },
+    { name: f(LABELS.completeness), score: scores.completeness },
+    { name: f(LABELS.tone), score: scores.tone },
+    { name: f(LABELS.rhythm), score: scores.rhythm },
   ];
 
   return (

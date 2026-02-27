@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AudioPlayer } from '@/components/audio';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { AzureResult, Lesson } from '@/types';
 
 interface AzureFeedbackProps {
@@ -43,16 +44,16 @@ function getErrorTypeClass(errorType: string): string {
 }
 
 /** ErrorTypeの日本語ラベル */
-function getErrorTypeLabel(errorType: string): string {
+function getErrorTypeLabel(errorType: string, f: (text: string) => string): string {
   switch (errorType) {
     case 'None':
-      return '正確（せいかく）';
+      return f('正確（せいかく）');
     case 'Mispronunciation':
-      return '発音（はつおん）ミス';
+      return f('発音（はつおん）ミス');
     case 'Omission':
-      return '省略（しょうりゃく）';
+      return f('省略（しょうりゃく）');
     case 'Insertion':
-      return '余分（よぶん）';
+      return f('余分（よぶん）');
     default:
       return errorType;
   }
@@ -61,6 +62,7 @@ function getErrorTypeLabel(errorType: string): string {
 /** 単語別フィードバック（エラーのみハイライト + 正確は折りたたみ） */
 function WordFeedback({ words }: { words: AzureResult['words'] }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { f } = useFurigana();
 
   const correctWords = words.filter((w) => w.errorType === 'None');
   const errorWords = words.filter((w) => w.errorType !== 'None');
@@ -78,7 +80,7 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
           <span className={correctCount === totalCount ? 'text-green-700' : 'text-blue-700'}>
             {correctCount}/{totalCount}
           </span>
-          {' '}正確（せいかく）に言（い）えました
+          {' '}{f('正確（せいかく）に言（い）えました')}
         </p>
       </div>
 
@@ -86,7 +88,7 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
       {errorWords.length > 0 && (
         <div className="mb-3">
           <p className="text-sm text-gray-600 mb-2">
-            注意（ちゅうい）が必要（ひつよう）な単語（たんご）:
+            {f('注意（ちゅうい）が必要（ひつよう）な単語（たんご）')}:
           </p>
           <div className="space-y-2">
             {errorWords.map((w, i) => (
@@ -108,7 +110,7 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
                   <span
                     className={`rounded px-2 py-0.5 text-xs font-medium ${getErrorTypeClass(w.errorType)}`}
                   >
-                    {getErrorTypeLabel(w.errorType)}
+                    {getErrorTypeLabel(w.errorType, f)}
                   </span>
                 </div>
               </div>
@@ -132,16 +134,16 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-            すべての単語（たんご）を見（み）る（{totalCount}個（こ））
+            {f('すべての単語（たんご）を見（み）る')}（{totalCount}{f('個（こ）')}）
           </button>
           {isExpanded && (
             <div className="mt-2 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-200 text-left">
-                    <th className="px-3 py-2 font-medium text-gray-600">単語（たんご）</th>
+                    <th className="px-3 py-2 font-medium text-gray-600">{f('単語（たんご）')}</th>
                     <th className="px-3 py-2 font-medium text-gray-600">スコア</th>
-                    <th className="px-3 py-2 font-medium text-gray-600">結果（けっか）</th>
+                    <th className="px-3 py-2 font-medium text-gray-600">{f('結果（けっか）')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,7 +160,7 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
                         <span
                           className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${getErrorTypeClass(w.errorType)}`}
                         >
-                          {getErrorTypeLabel(w.errorType)}
+                          {getErrorTypeLabel(w.errorType, f)}
                         </span>
                       </td>
                     </tr>
@@ -180,6 +182,8 @@ export function AzureFeedback({
   recordingBlob,
   onRetry,
 }: AzureFeedbackProps) {
+  const { f } = useFurigana();
+
   // Blob から再生用URLを生成し、アンマウント時にクリーンアップ
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
   useEffect(() => {
@@ -195,16 +199,16 @@ export function AzureFeedback({
   }, [recordingBlob]);
 
   const scoreCards = [
-    { label: '正確性（せいかくせい）', score: result.accuracyScore },
-    { label: '流暢性（りゅうちょうせい）', score: result.fluencyScore },
-    { label: '完全性（かんぜんせい）', score: result.completenessScore },
+    { label: f('正確性（せいかくせい）'), score: result.accuracyScore },
+    { label: f('流暢性（りゅうちょうせい）'), score: result.fluencyScore },
+    { label: f('完全性（かんぜんせい）'), score: result.completenessScore },
   ];
 
   return (
     <div className="space-y-4">
       {/* 総合発音スコア */}
       <div className={`border rounded-lg p-6 text-center ${getScoreBgClass(result.pronunciationScore)}`}>
-        <p className="text-sm text-gray-600 mb-1">総合（そうごう）発音（はつおん）スコア</p>
+        <p className="text-sm text-gray-600 mb-1">{f('総合（そうごう）発音（はつおん）スコア')}</p>
         <p className={`text-5xl font-bold ${getScoreTextClass(result.pronunciationScore)}`}>
           {Math.round(result.pronunciationScore)}
         </p>
@@ -215,7 +219,7 @@ export function AzureFeedback({
       {transcription && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <h3 className="text-sm font-medium text-gray-700 mb-2">
-            認識（にんしき）結果（けっか）
+            {f('認識（にんしき）結果（けっか）')}
           </h3>
           <p className="text-gray-900">{transcription}</p>
         </div>
@@ -243,15 +247,15 @@ export function AzureFeedback({
 
       {/* 聞き比べ */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-        <h3 className="font-medium text-gray-900 mb-3">聞（き）き比（くら）べ</h3>
+        <h3 className="font-medium text-gray-900 mb-3">{f('聞（き）き比（くら）べ')}</h3>
         <div className="space-y-3">
           <div>
-            <p className="text-sm text-gray-600 mb-1">お手本（てほん）</p>
+            <p className="text-sm text-gray-600 mb-1">{f('お手本（てほん）')}</p>
             <AudioPlayer audioUrl={lesson.audioUrl} showSpeedControl={false} />
           </div>
           {recordingUrl && (
             <div>
-              <p className="text-sm text-gray-600 mb-1">あなたの録音（ろくおん）</p>
+              <p className="text-sm text-gray-600 mb-1">{f('あなたの録音（ろくおん）')}</p>
               <audio
                 src={recordingUrl}
                 controls
@@ -267,7 +271,7 @@ export function AzureFeedback({
         onClick={onRetry}
         className="w-full py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
       >
-        もう一度（いちど）録音（ろくおん）する
+        {f('もう一度（いちど）録音（ろくおん）する')}
       </button>
     </div>
   );

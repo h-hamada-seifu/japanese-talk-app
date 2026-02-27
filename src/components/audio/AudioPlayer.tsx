@@ -1,6 +1,7 @@
 'use client';
 
 import { useAudioPlayer, PlaybackSpeed } from '@/hooks/useAudioPlayer';
+import { useFurigana } from '@/contexts/FuriganaContext';
 
 interface AudioPlayerProps {
   audioUrl: string;
@@ -29,6 +30,8 @@ export function AudioPlayer({
     seek,
     setSpeed,
   } = useAudioPlayer(audioUrl);
+
+  const { f } = useFurigana();
 
   // 再生回数変更時のコールバック
   if (onPlayCountChange && playCount > 0) {
@@ -69,7 +72,7 @@ export function AudioPlayer({
         <button
           onClick={isPlaying ? pause : play}
           className={`${buttonSize} flex items-center justify-center bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-full transition-colors shadow-md`}
-          aria-label={isPlaying ? '一時停止（いちじていし）' : '再生（さいせい）'}
+          aria-label={isPlaying ? f('一時停止（いちじていし）') : f('再生（さいせい）')}
         >
           {isPlaying ? (
             <svg
@@ -129,7 +132,7 @@ export function AudioPlayer({
           {/* 再生速度 */}
           {showSpeedControl && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">速度（そくど）:</span>
+              <span className="text-xs text-gray-500">{f('速度（そくど）')}:</span>
               <div className="flex gap-1">
                 {speedOptions.map((speed) => (
                   <button
@@ -151,7 +154,7 @@ export function AudioPlayer({
           {/* 再生回数 */}
           {showPlayCount && (
             <div className="text-xs text-gray-500">
-              再生回数（さいせいかいすう）: <span className="font-medium">{playCount}</span>回（かい）
+              {f('再生回数（さいせいかいすう）')}: <span className="font-medium">{playCount}</span>{f('回（かい）')}
             </div>
           )}
         </div>

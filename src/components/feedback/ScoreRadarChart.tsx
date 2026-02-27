@@ -8,6 +8,7 @@ import {
   Radar,
   ResponsiveContainer,
 } from 'recharts';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { SpeechSuperScore } from '@/types';
 
 interface ScoreRadarChartProps {
@@ -23,13 +24,15 @@ const LABELS: Record<string, string> = {
 };
 
 export function ScoreRadarChart({ scores }: ScoreRadarChartProps) {
+  const { f } = useFurigana();
+
   // speedはWPM値で0-100スケールでないため除外
   const data = [
-    { subject: LABELS.pronunciation, value: scores.pronunciation },
-    { subject: LABELS.fluency, value: scores.fluency },
-    { subject: LABELS.completeness, value: scores.completeness },
-    { subject: LABELS.tone, value: scores.tone },
-    { subject: LABELS.rhythm, value: scores.rhythm },
+    { subject: f(LABELS.pronunciation), value: scores.pronunciation },
+    { subject: f(LABELS.fluency), value: scores.fluency },
+    { subject: f(LABELS.completeness), value: scores.completeness },
+    { subject: f(LABELS.tone), value: scores.tone },
+    { subject: f(LABELS.rhythm), value: scores.rhythm },
   ];
 
   return (
