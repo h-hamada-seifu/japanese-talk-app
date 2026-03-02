@@ -721,7 +721,7 @@ export const lessons: Lesson[] = [
   // ============================================
   {
     id: 'lesson-011',
-    title: 'でんわで やくそく',
+    title: '電話（でんわ）で約束（やくそく）',
     level: 'N4',
     audioUrl: '/audio/lesson-011.wav',
     script: {
@@ -764,7 +764,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-012',
-    title: 'みちを きく',
+    title: '道（みち）を聞（き）く',
     level: 'N4',
     audioUrl: '/audio/lesson-012.wav',
     script: {
@@ -812,7 +812,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-013',
-    title: 'びょういんで',
+    title: '病院（びょういん）で',
     level: 'N4',
     audioUrl: '/audio/lesson-013.wav',
     script: {
@@ -855,7 +855,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-014',
-    title: 'アルバイトの めんせつ',
+    title: 'アルバイトの面接（めんせつ）',
     level: 'N4',
     audioUrl: '/audio/lesson-014.wav',
     script: {
@@ -898,7 +898,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-015',
-    title: 'でんしゃの アナウンス',
+    title: '電車（でんしゃ）のアナウンス',
     level: 'N4',
     audioUrl: '/audio/lesson-015.wav',
     script: {

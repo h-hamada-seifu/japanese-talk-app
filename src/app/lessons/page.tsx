@@ -192,7 +192,9 @@ export default function LessonsPage() {
 
               {/* スクリプト（一部） */}
               <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {lesson.script.japanese}
+                {lesson.level === 'N5' || lesson.level === 'N4'
+                  ? lesson.script.japanese
+                  : lesson.script.japaneseKanji}
               </p>
 
               {/* フッター */}
