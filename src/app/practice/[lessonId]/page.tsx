@@ -13,11 +13,17 @@ import {
 } from '@/components/practice';
 import { useLessonProgress, useUserSettings } from '@/hooks';
 import { useFurigana } from '@/contexts/FuriganaContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { levelColors } from '@/lib/levelColors';
 import type { PracticeStep, Lesson, Level } from '@/types';
 
 /** レベルに応じたふりがなのデフォルト値を算出 */
 function getDefaultFurigana(level: Level): boolean {
+  return level === 'N5' || level === 'N4';
+}
+
+/** レベルに応じた翻訳表示のデフォルト値を算出 */
+function getDefaultTranslation(level: Level): boolean {
   return level === 'N5' || level === 'N4';
 }
 
@@ -35,6 +41,7 @@ export default function PracticePage() {
   const { startLesson, completeStep, completeLesson } = useLessonProgress();
   const { settings } = useUserSettings();
   const { showFurigana, setShowFurigana, f } = useFurigana();
+  const { showTranslation, setShowTranslation } = useTranslation();
   const userLanguage = settings.userLanguage;
 
   // レッスンデータを取得
@@ -44,13 +51,14 @@ export default function PracticePage() {
       setLesson(lessonData);
       // レベルに応じたデフォルト値を設定
       setShowFurigana(getDefaultFurigana(lessonData.level));
+      setShowTranslation(getDefaultTranslation(lessonData.level));
       // レッスン開始を記録
       startLesson(lessonId);
     } else {
       setError('レッスンが見（み）つかりませんでした');
     }
     setLoading(false);
-  }, [lessonId, startLesson]);
+  }, [lessonId, startLesson, setShowFurigana, setShowTranslation]);
 
   // ステップを進める
   const goToNextStep = () => {
@@ -142,14 +150,14 @@ export default function PracticePage() {
           </svg>
           {f('レッスン一覧（いちらん）')}
         </button>
-        <h1 className="text-xl font-bold text-gray-900">{lesson.title}</h1>
+        <h1 className="text-xl font-bold text-gray-900">{f(lesson.title)}</h1>
         <div className="flex items-center gap-2 mt-1">
           <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[lesson.level].badge}`}>
             {lesson.level}
           </span>
           {lesson.category && (
             <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded">
-              {lesson.category}
+              {f(lesson.category)}
             </span>
           )}
           <span className="text-xs text-gray-500">{f('約（やく）')}{lesson.duration}{f('秒（びょう）')}</span>
@@ -161,20 +169,37 @@ export default function PracticePage() {
         <StepIndicator currentStep={currentStep} onStepClick={goToStep} />
       </div>
 
-      {/* ふりがなトグル（Step2/4/5で表示、N2は元々漢字のみなので非表示） */}
-      {showFuriganaToggle && lesson.level !== 'N2' && (
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setShowFurigana(!showFurigana)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              showFurigana
-                ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <span className="text-base">{showFurigana ? 'あ' : '漢'}</span>
-            <span>ふりがな {showFurigana ? 'ON' : 'OFF'}</span>
-          </button>
+      {/* トグルボタン群（Step2/4/5で表示） */}
+      {showFuriganaToggle && (
+        <div className="flex justify-end gap-2 mb-4">
+          {/* ふりがなトグル（N2は元々漢字のみなので非表示） */}
+          {lesson.level !== 'N2' && (
+            <button
+              onClick={() => setShowFurigana(!showFurigana)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                showFurigana
+                  ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <span className="text-base">{showFurigana ? 'あ' : '漢'}</span>
+              <span>{f('ふりがな')} {showFurigana ? 'ON' : 'OFF'}</span>
+            </button>
+          )}
+          {/* 翻訳トグル（母語が日本語以外の場合に表示） */}
+          {userLanguage !== 'ja' && (
+            <button
+              onClick={() => setShowTranslation(!showTranslation)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                showTranslation
+                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <span className="text-base">🌏</span>
+              <span>{f('翻訳（ほんやく）')} {showTranslation ? 'ON' : 'OFF'}</span>
+            </button>
+          )}
         </div>
       )}
 

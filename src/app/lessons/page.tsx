@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { lessons, getCategories, getLessonsByCategory, getLessonsByLevel, getLevels } from '@/data/lessons';
+import { lessons, getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useLessonProgress } from '@/hooks';
 import { useFurigana } from '@/contexts/FuriganaContext';
 import { levelColors } from '@/lib/levelColors';
@@ -10,7 +10,6 @@ import type { Category, Level } from '@/types';
 
 export default function LessonsPage() {
   const availableLevels = getLevels();
-  const categories = getCategories();
   const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>(
     'all'
@@ -18,10 +17,14 @@ export default function LessonsPage() {
   const { getProgress, getCompletedCount, isLoaded } = useLessonProgress();
   const { f } = useFurigana();
 
-  // レベルでフィルタ → さらにカテゴリでフィルタ（N5のみカテゴリあり）
+  // レベルでフィルタ → さらにカテゴリでフィルタ
   const levelLessons = getLessonsByLevel(selectedLevel);
+  // 選択中レベルのカテゴリを動的に取得
+  const levelCategories = Array.from(
+    new Set(levelLessons.map((l) => l.category).filter((c): c is string => c !== undefined))
+  );
   const filteredLessons =
-    selectedCategory === 'all' || selectedLevel !== 'N5'
+    selectedCategory === 'all'
       ? levelLessons
       : levelLessons.filter((l) => l.category === selectedCategory);
 
@@ -102,8 +105,8 @@ export default function LessonsPage() {
         </div>
       </div>
 
-      {/* カテゴリーフィルター（N5のみ表示） */}
-      {selectedLevel === 'N5' && (
+      {/* カテゴリーフィルター */}
+      {levelLessons.some((l) => l.category) && (
         <div className="mb-6 overflow-x-auto">
           <div className="flex gap-2 pb-2">
             <button
@@ -114,11 +117,10 @@ export default function LessonsPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              すべて ({levelLessons.length})
+              {f('すべて')} ({levelLessons.length})
             </button>
-            {categories.map((category) => {
+            {levelCategories.map((category) => {
               const count = levelLessons.filter((l) => l.category === category).length;
-              if (count === 0) return null;
               return (
                 <button
                   key={category}
@@ -129,7 +131,7 @@ export default function LessonsPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {category} ({count})
+                  {f(category)} ({count})
                 </button>
               );
             })}
@@ -162,7 +164,7 @@ export default function LessonsPage() {
                   </span>
                   {lesson.category && (
                     <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded">
-                      {lesson.category}
+                      {f(lesson.category)}
                     </span>
                   )}
                 </div>
@@ -188,7 +190,7 @@ export default function LessonsPage() {
               </div>
 
               {/* タイトル */}
-              <h2 className="font-bold text-gray-900 mb-2">{lesson.title}</h2>
+              <h2 className="font-bold text-gray-900 mb-2">{f(lesson.title)}</h2>
 
               {/* スクリプト（一部） */}
               <p className="text-sm text-gray-600 mb-3 line-clamp-2">
@@ -235,7 +237,7 @@ export default function LessonsPage() {
       {/* レッスンが0件の場合 */}
       {filteredLessons.length === 0 && (
         <div className="text-center py-12 text-gray-500">
-          <p>このカテゴリーにはレッスンがありません</p>
+          <p>{f('このカテゴリーにはレッスンがありません')}</p>
         </div>
       )}
     </div>

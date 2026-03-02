@@ -142,7 +142,7 @@ function WordFeedback({ words }: { words: AzureResult['words'] }) {
                 <thead>
                   <tr className="border-b border-gray-200 text-left">
                     <th className="px-3 py-2 font-medium text-gray-600">{f('単語（たんご）')}</th>
-                    <th className="px-3 py-2 font-medium text-gray-600">スコア</th>
+                    <th className="px-3 py-2 font-medium text-gray-600">{f('スコア')}</th>
                     <th className="px-3 py-2 font-medium text-gray-600">{f('結果（けっか）')}</th>
                   </tr>
                 </thead>

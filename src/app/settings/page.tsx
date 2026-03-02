@@ -130,7 +130,7 @@ export default function SettingsPage() {
                 )}
               </span>
               <div>
-                <p className="font-medium text-gray-900">アドバイスモード</p>
+                <p className="font-medium text-gray-900">{f('アドバイスモード')}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {f('採点（さいてん）なし・やさしいアドバイスのみ')}
                 </p>
@@ -241,7 +241,7 @@ export default function SettingsPage() {
               onClick={handleResetProgress}
               className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
             >
-              リセット
+              {f('リセット')}
             </button>
           </div>
           <div className="border-t border-gray-100" />

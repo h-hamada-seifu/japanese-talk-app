@@ -7,6 +7,7 @@ import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useUserSettings } from '@/hooks';
 import { useFurigana } from '@/contexts/FuriganaContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { levelColors } from '@/lib/levelColors';
 import type { Level } from '@/types';
 type ShadowingMode = 'overlapping' | 'repeating';
@@ -17,6 +18,7 @@ export default function ShadowingPage() {
   const router = useRouter();
   const { settings } = useUserSettings();
   const { f } = useFurigana();
+  const { showTranslation, setShowTranslation } = useTranslation();
   const availableLevels = getLevels();
   const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
   const filteredLessons = getLessonsByLevel(selectedLevel);
@@ -24,7 +26,6 @@ export default function ShadowingPage() {
   const [mode, setMode] = useState<ShadowingMode>('overlapping');
   const [practiceCount, setPracticeCount] = useState(0);
   const [showJapanese, setShowJapanese] = useState(true);
-  const [showTranslation, setShowTranslation] = useState(true);
 
   const lesson = filteredLessons[currentIndex];
   const isLastLesson = currentIndex === filteredLessons.length - 1;
@@ -43,12 +44,13 @@ export default function ShadowingPage() {
     }
   }, [isLastLesson, router]);
 
-  // レベル切替時にインデックスをリセット
+  // レベル切替時にインデックスとデフォルト設定をリセット
   const handleLevelChange = useCallback((level: Level) => {
     setSelectedLevel(level);
     setCurrentIndex(0);
     setPracticeCount(0);
-  }, []);
+    setShowTranslation(level === 'N5' || level === 'N4');
+  }, [setShowTranslation]);
 
   // 母語翻訳を取得
   const userLang = settings.userLanguage;
@@ -58,7 +60,7 @@ export default function ShadowingPage() {
   if (!lesson) {
     return (
       <div className="min-h-[calc(100vh-3.5rem)] bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">このレベルにはレッスンがありません</p>
+        <p className="text-gray-500">{f('このレベルにはレッスンがありません')}</p>
       </div>
     );
   }
@@ -89,7 +91,7 @@ export default function ShadowingPage() {
             {currentIndex + 1} / {filteredLessons.length}
           </div>
           <h1 className="text-xl font-bold text-gray-900">
-            {lesson.title}
+            {f(lesson.title)}
           </h1>
         </div>
 
@@ -107,7 +109,7 @@ export default function ShadowingPage() {
           </button>
           {settings.userLanguage !== 'ja' && (
             <button
-              onClick={() => setShowTranslation((prev) => !prev)}
+              onClick={() => setShowTranslation(!showTranslation)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 showTranslation
                   ? 'bg-green-500 text-white'
@@ -123,7 +125,7 @@ export default function ShadowingPage() {
         <div className="bg-white border-2 border-blue-200 rounded-lg p-5 shadow-sm min-h-[80px] flex flex-col items-center justify-center gap-3">
           {showJapanese && (
             <div className="text-center">
-              <ScriptDisplay lesson={lesson} size="base" />
+              <ScriptDisplay lesson={lesson} size="lg" />
             </div>
           )}
           {showTranslation && translation && (

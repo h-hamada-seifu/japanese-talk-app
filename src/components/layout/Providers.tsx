@@ -1,6 +1,7 @@
 'use client';
 
 import { FuriganaProvider } from '@/contexts/FuriganaContext';
+import { TranslationProvider } from '@/contexts/TranslationContext';
 import type { ReactNode } from 'react';
 
 /**
@@ -9,5 +10,9 @@ import type { ReactNode } from 'react';
  * このコンポーネントでラップする
  */
 export function Providers({ children }: { children: ReactNode }) {
-  return <FuriganaProvider>{children}</FuriganaProvider>;
+  return (
+    <FuriganaProvider>
+      <TranslationProvider>{children}</TranslationProvider>
+    </FuriganaProvider>
+  );
 }

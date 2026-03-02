@@ -26,10 +26,10 @@ function stripRubyAnnotations(html: string): string {
  * | N3     | rubyタグ（ふりがな付き）        | 漢字のみ（rtを除去）          |
  * | N2     | 漢字のみ（変更なし）            | 漢字のみ（変更なし）          |
  */
-export function ScriptDisplay({ lesson, size = 'lg', className = '' }: ScriptDisplayProps) {
+export function ScriptDisplay({ lesson, size = 'base', className = '' }: ScriptDisplayProps) {
   const { showFurigana } = useFurigana();
   const level = lesson.level;
-  const textSize = size === 'lg' ? 'text-lg' : 'text-xl';
+  const textSize = size === 'lg' ? 'text-xl' : 'text-lg';
 
   // N5/N4: ひらがなメイン + 漢字補足（showFurigana=falseなら漢字補足を非表示）
   if (level === 'N5' || level === 'N4') {

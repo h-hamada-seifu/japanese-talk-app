@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { AudioPlayer } from '@/components/audio';
 import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { useFurigana } from '@/contexts/FuriganaContext';
-import type { Lesson, Language, Level } from '@/types';
+import { useTranslation } from '@/contexts/TranslationContext';
+import type { Lesson, Language } from '@/types';
 
 interface Step2UnderstandProps {
   lesson: Lesson;
@@ -13,19 +14,15 @@ interface Step2UnderstandProps {
   onBack: () => void;
 }
 
-/** N3/N2では母国語翻訳を非表示にする */
-function shouldShowTranslation(level: Level): boolean {
-  return level === 'N5' || level === 'N4';
-}
-
 export function Step2Understand({
   lesson,
   userLanguage,
   onComplete,
   onBack,
 }: Step2UnderstandProps) {
-  const [showTranslation, setShowTranslation] = useState(false);
+  const [isTranslationExpanded, setIsTranslationExpanded] = useState(false);
   const { f } = useFurigana();
+  const { showTranslation } = useTranslation();
 
   // 翻訳テキストを取得
   const getTranslation = () => {
@@ -56,20 +53,20 @@ export function Step2Understand({
       {/* スクリプト */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <h3 className="text-sm font-medium text-gray-500 mb-2">📝 {f('日本語（にほんご）スクリプト')}</h3>
-        <ScriptDisplay lesson={lesson} size="lg" />
+        <ScriptDisplay lesson={lesson} size="base" />
       </div>
 
-      {/* 翻訳（日本語以外かつN5/N4の場合） */}
-      {translation && shouldShowTranslation(lesson.level) && (
+      {/* 翻訳（日本語以外かつ翻訳ON） */}
+      {translation && showTranslation && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <button
-            onClick={() => setShowTranslation(!showTranslation)}
+            onClick={() => setIsTranslationExpanded(!isTranslationExpanded)}
             className="w-full flex items-center justify-between text-sm font-medium text-gray-700"
           >
-            <span>🌏 {f('翻訳（ほんやく）')}{showTranslation ? f('を隠（かく）す') : f('を見（み）る')}</span>
+            <span>🌏 {f('翻訳（ほんやく）')}{isTranslationExpanded ? f('を隠（かく）す') : f('を見（み）る')}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-5 w-5 transition-transform ${showTranslation ? 'rotate-180' : ''}`}
+              className={`h-5 w-5 transition-transform ${isTranslationExpanded ? 'rotate-180' : ''}`}
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -80,7 +77,7 @@ export function Step2Understand({
               />
             </svg>
           </button>
-          {showTranslation && (
+          {isTranslationExpanded && (
             <p className="mt-3 text-gray-700">{translation}</p>
           )}
         </div>
@@ -98,7 +95,7 @@ export function Step2Understand({
               >
                 <span className="font-bold text-gray-900">{keyword.word}</span>
                 <span className="text-gray-500">({keyword.reading})</span>
-                {userLanguage !== 'ja' && shouldShowTranslation(lesson.level) && (
+                {userLanguage !== 'ja' && showTranslation && (
                   <span className="text-gray-600 ml-auto">
                     {keyword.meaning[userLanguage]}
                   </span>

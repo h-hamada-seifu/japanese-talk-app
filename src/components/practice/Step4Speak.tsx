@@ -71,7 +71,7 @@ export function Step4Speak({ lesson, onComplete, onBack }: Step4SpeakProps) {
 
       {/* スクリプト表示 */}
       <div className="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm text-center">
-        <ScriptDisplay lesson={lesson} size="lg" />
+        <ScriptDisplay lesson={lesson} size="base" />
       </div>
 
       {/* 練習回数表示 */}

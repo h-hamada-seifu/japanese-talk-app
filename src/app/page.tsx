@@ -74,7 +74,7 @@ export default function Home() {
           href="/shadowing"
           className="inline-block w-full py-4 px-6 mt-3 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-bold rounded-lg text-lg transition-colors shadow-lg"
         >
-          まとめてシャドーイング
+          {f('まとめてシャドーイング')}
         </Link>
 
         {/* 特徴リスト */}
@@ -89,7 +89,7 @@ export default function Home() {
           </div>
           <div className="p-3">
             <div className="text-3xl mb-2">🤖</div>
-            <p className="text-xs text-gray-600">AIがアドバイス</p>
+            <p className="text-xs text-gray-600">{f('AIがアドバイス')}</p>
           </div>
         </div>
 

@@ -7,7 +7,7 @@ export interface Lesson {
   id: string;
   title: string;
   level: 'N5' | 'N4' | 'N3' | 'N2';
-  category?: '挨拶（あいさつ）' | '日常（にちじょう）' | '買い物（かいもの）' | '食事（しょくじ）' | '交通（こうつう）';
+  category?: string;
   audioUrl: string;
   script: {
     japanese: string;              // ひらがな表記（ふりがな付き）
@@ -53,7 +53,7 @@ export const lessons: Lesson[] = [
     title: '朝（あさ）の挨拶（あいさつ）',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-001.wav',
+    audioUrl: '/audio/N5/lesson-001.wav',
     script: {
       japanese: 'おはようございます。きょうも いいてんきですね。',
       japanesePlain: 'おはようございますきょうもいいてんきですね',
@@ -117,7 +117,7 @@ export const lessons: Lesson[] = [
     title: '自己紹介（じこしょうかい）',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-002.wav',
+    audioUrl: '/audio/N5/lesson-002.wav',
     script: {
       japanese: 'はじめまして。わたしは リンです。ベトナムから きました。どうぞ よろしく おねがいします。',
       japanesePlain: 'はじめましてわたしはりんですべとなむからきましたどうぞよろしくおねがいします',
@@ -181,7 +181,7 @@ export const lessons: Lesson[] = [
     title: 'お礼（れい）を言（い）う',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-003.wav',
+    audioUrl: '/audio/N5/lesson-003.wav',
     script: {
       japanese: 'きのう、たすけてくれて ありがとうございました。ほんとうに たすかりました。',
       japanesePlain: 'きのうたすけてくれてありがとうございましたほんとうにたすかりました',
@@ -249,7 +249,7 @@ export const lessons: Lesson[] = [
     title: '週末（しゅうまつ）の予定（よてい）',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-004.wav',
+    audioUrl: '/audio/N5/lesson-004.wav',
     script: {
       japanese: 'こんしゅうまつは ともだちと えいがを みに いきます。たのしみです。',
       japanesePlain: 'こんしゅうまつはともだちとえいがをみにいきますたのしみです',
@@ -318,7 +318,7 @@ export const lessons: Lesson[] = [
     title: '昨日（きのう）の出来事（できごと）',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-005.wav',
+    audioUrl: '/audio/N5/lesson-005.wav',
     script: {
       japanese: 'きのう、ともだちと えいがを みました。とても おもしろかったです。',
       japanesePlain: 'きのうともだちとえいがをみましたとてもおもしろかったです',
@@ -387,7 +387,7 @@ export const lessons: Lesson[] = [
     title: '趣味（しゅみ）について',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-006.wav',
+    audioUrl: '/audio/N5/lesson-006.wav',
     script: {
       japanese: 'わたしの しゅみは おんがくを きくことです。にほんの うたが すきです。',
       japanesePlain: 'わたしのしゅみはおんがくをきくことですにほんのうたがすきです',
@@ -460,7 +460,7 @@ export const lessons: Lesson[] = [
     title: 'コンビニで',
     level: 'N5',
     category: '買い物（かいもの）',
-    audioUrl: '/audio/lesson-007.wav',
+    audioUrl: '/audio/N5/lesson-007.wav',
     script: {
       japanese: 'すみません、この おにぎりを ください。あと、おちゃも おねがいします。',
       japanesePlain: 'すみませんこのおにぎりをくださいあとおちゃもおねがいします',
@@ -524,7 +524,7 @@ export const lessons: Lesson[] = [
     title: '値段（ねだん）を聞（き）く',
     level: 'N5',
     category: '買い物（かいもの）',
-    audioUrl: '/audio/lesson-008.wav',
+    audioUrl: '/audio/N5/lesson-008.wav',
     script: {
       japanese: 'すみません、これは いくらですか。',
       japanesePlain: 'すみませんこれはいくらですか',
@@ -581,7 +581,7 @@ export const lessons: Lesson[] = [
     title: 'レストランで注文（ちゅうもん）',
     level: 'N5',
     category: '食事（しょくじ）',
-    audioUrl: '/audio/lesson-009.wav',
+    audioUrl: '/audio/N5/lesson-009.wav',
     script: {
       japanese: 'すみません、ラーメンを ひとつと、ぎょうざを おねがいします。',
       japanesePlain: 'すみませんらーめんをひとつとぎょうざをおねがいします',
@@ -650,7 +650,7 @@ export const lessons: Lesson[] = [
     title: '食事（しょくじ）の感想（かんそう）',
     level: 'N5',
     category: '食事（しょくじ）',
-    audioUrl: '/audio/lesson-010.wav',
+    audioUrl: '/audio/N5/lesson-010.wav',
     script: {
       japanese: 'このラーメン、とても おいしいですね。スープが さいこうです。',
       japanesePlain: 'このらーめんとてもおいしいですねすーぷがさいこうです',
@@ -723,7 +723,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-011',
     title: '電話（でんわ）で約束（やくそく）',
     level: 'N4',
-    audioUrl: '/audio/lesson-011.wav',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N4/lesson-011.wav',
     script: {
       japanese: 'もしもし、あしたの ごご さんじに えきまえで あいませんか。いっしょに かいものに いきたいんですが。じかんが あったら、れんらく ください。',
       japanesePlain: 'もしもしあしたのごごさんじにえきまえであいませんかいっしょにかいものにいきたいんですがじかんがあったられんらくください',
@@ -766,7 +767,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-012',
     title: '道（みち）を聞（き）く',
     level: 'N4',
-    audioUrl: '/audio/lesson-012.wav',
+    category: '交通（こうつう）',
+    audioUrl: '/audio/N4/lesson-012.wav',
     script: {
       japanese: 'すみません、ゆうびんきょくは どこですか。まっすぐ いって、ふたつめの しんごうを みぎに まがると、ひだりがわに あります。',
       japanesePlain: 'すみませんゆうびんきょくはどこですかまっすぐいってふたつめのしんごうをみぎにまがるとひだりがわにあります',
@@ -814,7 +816,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-013',
     title: '病院（びょういん）で',
     level: 'N4',
-    audioUrl: '/audio/lesson-013.wav',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N4/lesson-013.wav',
     script: {
       japanese: 'きのうから あたまが いたくて、ねつも あります。くすりを のみましたが、まだ よくなりません。せんせい、どうしたら いいですか。',
       japanesePlain: 'きのうからあたまがいたくてねつもありますくすりをのみましたがまだよくなりませんせんせいどうしたらいいですか',
@@ -857,7 +860,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-014',
     title: 'アルバイトの面接（めんせつ）',
     level: 'N4',
-    audioUrl: '/audio/lesson-014.wav',
+    category: '仕事（しごと）',
+    audioUrl: '/audio/N4/lesson-014.wav',
     script: {
       japanese: 'がっこうが おわってから、まいにち ごごろくじまで はたらくことが できます。にほんごは まだ じょうずでは ありませんが、がんばります。どうぞ よろしく おねがいします。',
       japanesePlain: 'がっこうがおわってからまいにちごごろくじまではたらくことができますにほんごはまだじょうずではありませんががんばりますどうぞよろしくおねがいします',
@@ -900,7 +904,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-015',
     title: '電車（でんしゃ）のアナウンス',
     level: 'N4',
-    audioUrl: '/audio/lesson-015.wav',
+    category: '交通（こうつう）',
+    audioUrl: '/audio/N4/lesson-015.wav',
     script: {
       japanese: 'つぎは しんじゅくえきです。おのりかえの おきゃくさまは こちらで おおりください。でぐちは みぎがわです。おわすれものに ごちゅうい ください。',
       japanesePlain: 'つぎはしんじゅくえきですおのりかえのおきゃくさまはこちらでおおりくださいでぐちはみぎがわですおわすれものにごちゅういください',
@@ -946,9 +951,10 @@ export const lessons: Lesson[] = [
   // ============================================
   {
     id: 'lesson-016',
-    title: '旅行の計画',
+    title: '旅行（りょこう）の計画（けいかく）',
     level: 'N3',
-    audioUrl: '/audio/lesson-016.wav',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-016.wav',
     script: {
       japanese: 'らいげつ きょうとに りょこうに いく よていです。きょうとには おてらや じんじゃが たくさん あって、とくに あきは こうようが きれいだそうです。ともだちに すすめられて、きめました。にはくみっかの よていで、りょかんに とまる つもりです。たのしみに しています。',
       japanesePlain: 'らいげつきょうとにりょこうにいくよていですきょうとにはおてらやじんじゃがたくさんあってとくにあきはこうようがきれいだそうですともだちにすすめられてきめましたにはくみっかのよていでりょかんにとまるつもりですたのしみにしています',
@@ -995,9 +1001,10 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-017',
-    title: '先生への相談',
+    title: '先生（せんせい）への相談（そうだん）',
     level: 'N3',
-    audioUrl: '/audio/lesson-017.wav',
+    category: '学校（がっこう）',
+    audioUrl: '/audio/N3/lesson-017.wav',
     script: {
       japanese: 'せんせい、すこし そうだんが あるんですが。じつは さいきん じゅぎょうの ないようが むずかしくなってきて、ついていけなくなっています。とくに かんじの よみかたが わかりません。なにか いいほうほうは ありませんか。べんきょうの しかたを おしえていただけませんか。',
       japanesePlain: 'せんせいすこしそうだんがあるんですがじつはさいきんじゅぎょうのないようがむずかしくなってきてついていけなくなっていますとくにかんじのよみかたがわかりませんなにかいいほうほうはありませんかべんきょうのしかたをおしえていただけませんか',
@@ -1044,9 +1051,10 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-018',
-    title: 'アルバイト先での会話',
+    title: 'アルバイト先（さき）での会話（かいわ）',
     level: 'N3',
-    audioUrl: '/audio/lesson-018.wav',
+    category: '仕事（しごと）',
+    audioUrl: '/audio/N3/lesson-018.wav',
     script: {
       japanese: 'てんちょう、らいしゅうの きんようびは がっこうの ぎょうじが あるので、おやすみを いただきたいんですが。かわりに どようびに はいることが できます。シフトを かえていただけると たすかります。ごめいわくを おかけしますが、よろしく おねがいします。',
       japanesePlain: 'てんちょうらいしゅうのきんようびはがっこうのぎょうじがあるのでおやすみをいただきたいんですがかわりにどようびにはいることができますしふとをかえていただけるとたすかりますごめいわくをおかけしますがよろしくおねがいします',
@@ -1088,9 +1096,10 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-019',
-    title: '日本の季節',
+    title: '日本（にほん）の季節（きせつ）',
     level: 'N3',
-    audioUrl: '/audio/lesson-019.wav',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-019.wav',
     script: {
       japanese: 'にほんには しきが あります。はるは さくらが さいて、おはなみを します。なつは あつくて、はなびたいかいが にんきです。あきは こうようが うつくしく、やまに いくひとが おおいです。ふゆは ゆきが ふって、おんせんに はいるのが きもちいいです。どのきせつが いちばん すきですか。',
       japanesePlain: 'にほんにはしきがありますはるはさくらがさいておはなみをしますなつはあつくてはなびたいかいがにんきですあきはこうようがうつくしくやまにいくひとがおおいですふゆはゆきがふっておんせんにはいるのがきもちいいですどのきせつがいちばんすきですか',
@@ -1137,9 +1146,10 @@ export const lessons: Lesson[] = [
   },
   {
     id: 'lesson-020',
-    title: '友達への手紙',
+    title: '友達（ともだち）への手紙（てがみ）',
     level: 'N3',
-    audioUrl: '/audio/lesson-020.wav',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-020.wav',
     script: {
       japanese: 'おげんきですか。にほんに きてから もう はんとしに なりました。さいしょは ことばが つうじなくて たいへんでしたが、いまは すこしずつ にほんごが わかるように なってきました。らいねん、くにに かえったら、あいに いきますね。からだに きをつけてください。では、また。',
       japanesePlain: 'おげんきですかにほんにきてからもうはんとしになりましたさいしょはことばがつうじなくてたいへんでしたがいまはすこしずつにほんごがわかるようになってきましたらいねんくににかえったらあいにいきますねからだにきをつけてくださいではまた',
@@ -1188,7 +1198,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-021',
     title: '環境問題について',
     level: 'N2',
-    audioUrl: '/audio/lesson-021.wav',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-021.wav',
     script: {
       japanese: 'さいきん かんきょうもんだいに かんする ニュースを よく みみにします。とくに ちきゅうおんだんかの えいきょうで、いじょうきしょうが ふえていると いわれています。わたしたちに できることは かぎられていますが、まいにちの せいかつの なかで、しょうエネルギーや リサイクルを いしきすることが たいせつです。みらいの ために、ひとりひとりが こうどうする ひつようが あるのでは ないでしょうか。',
       japanesePlain: 'さいきんかんきょうもんだいにかんするにゅーすをよくみみにしますとくにちきゅうおんだんかのえいきょうでいじょうきしょうがふえているといわれていますわたしたちにできることはかぎられていますがまいにちのせいかつのなかでしょうえねるぎーやりさいくるをいしきすることがたいせつですみらいのためにひとりひとりがこうどうするひつようがあるのではないでしょうか',
@@ -1236,7 +1247,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-022',
     title: '就職活動の経験',
     level: 'N2',
-    audioUrl: '/audio/lesson-022.wav',
+    category: '仕事',
+    audioUrl: '/audio/N2/lesson-022.wav',
     script: {
       japanese: 'しゅうしょくかつどうは ほんとうに たいへんでした。なんじゅっしゃも おうぼして、めんせつも なんどもうけました。さいしょは じしんが なくて、きんちょうして うまくはなせませんでした。しかし、せんぱいに アドバイスを もらったり、じぶんの つよみを さいかくにんしたりするうちに、すこしずつ じしんが ついてきました。さいしゅうてきに、じぶんに あったかいしゃに ないていを もらうことが できました。あきらめずに つづけることが だいじだと おもいます。',
       japanesePlain: 'しゅうしょくかつどうはほんとうにたいへんでしたなんじゅっしゃもおうぼしてめんせつもなんどもうけましたさいしょはじしんがなくてきんちょうしてうまくはなせませんでしたしかしせんぱいにあどばいすをもらったりじぶんのつよみをさいかくにんしたりするうちにすこしずつじしんがついてきましたさいしゅうてきにじぶんにあったかいしゃにないていをもらうことができましたあきらめずにつづけることがだいじだとおもいます',
@@ -1284,7 +1296,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-023',
     title: 'テクノロジーと社会',
     level: 'N2',
-    audioUrl: '/audio/lesson-023.wav',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-023.wav',
     script: {
       japanese: 'テクノロジーの はったつによって、わたしたちの せいかつは おおきく かわりました。スマートフォンの ふきゅうで、いつでも どこでも じょうほうを えられるように なりました。いっぽうで、SNSの つかいすぎが もんだいに なっている めんも あります。べんりさを きょうじゅしながらも、テクノロジーとの つきあいかたを かんがえていく ひつようが あると おもいます。だいじなのは、どうぐに つかわれるのではなく、じぶんで つかいこなすことでは ないでしょうか。',
       japanesePlain: 'てくのろじーのはったつによってわたしたちのせいかつはおおきくかわりましたすまーとふぉんのふきゅうでいつでもどこでもじょうほうをえられるようになりましたいっぽうでえすえぬえすのつかいすぎがもんだいになっているめんもありますべんりさをきょうじゅしながらもてくのろじーとのつきあいかたをかんがえていくひつようがあるとおもいますだいじなのはどうぐにつかわれるのではなくじぶんでつかいこなすことではないでしょうか',
@@ -1332,7 +1345,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-024',
     title: '日本での留学生活を振り返って',
     level: 'N2',
-    audioUrl: '/audio/lesson-024.wav',
+    category: '学校',
+    audioUrl: '/audio/N2/lesson-024.wav',
     script: {
       japanese: 'にほんに りゅうがくして にねんが たちました。ふりかえってみると、くろうも おおかったですが、それいじょうに えたものが おおきかったと かんじています。にほんごの のうりょくは もちろん、いぶんかを りかいするちからや、こまったときに じぶんで かいけつするちからも みにつきました。くにでは たいけんできなかったことを たくさん けいけんし、じんせいかんが おおきく かわりました。このけいけんを いかして、しょうらいは にほんと ぼこくの かけはしに なりたいと おもっています。',
       japanesePlain: 'にほんにりゅうがくしてにねんがたちましたふりかえってみるとくろうもおおかったですがそれいじょうにえたものがおおきかったとかんじていますにほんごののうりょくはもちろんいぶんかをりかいするちからやこまったときにじぶんでかいけつするちからもみにつきましたくにではたいけんできなかったことをたくさんけいけんしじんせいかんがおおきくかわりましたこのけいけんをいかしてしょうらいはにほんとぼこくのかけはしになりたいとおもっています',
@@ -1380,7 +1394,8 @@ export const lessons: Lesson[] = [
     id: 'lesson-025',
     title: '日本の働き方改革',
     level: 'N2',
-    audioUrl: '/audio/lesson-025.wav',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-025.wav',
     script: {
       japanese: 'にほんでは「はたらきかたかいかく」が すすめられています。いぜんは ながいじかん はたらくことが びとくと される ふうちょうが ありましたが、さいきんでは ワークライフバランスの じゅうようせいが にんしきされるように なってきました。リモートワークや フレックスタイムの どうにゅうにより、はたらきかたの せんたくしが ひろがっています。しかし、せいどが あっても、じっさいに りようしやすい かんきょうが ととのっているかどうかが かだいです。だれもが じぶんらしく はたらける しゃかいの じつげんに むけて、さらなる とりくみが ひつようです。',
       japanesePlain: 'にほんではたらきかたかいかくがすすめられていますいぜんはながいじかんはたらくことがびとくとされるふうちょうがありましたがさいきんではわーくらいふばらんすのじゅうようせいがにんしきされるようになってきましたりもーとわーくやふれっくすたいむのどうにゅうによりはたらきかたのせんたくしがひろがっていますしかしせいどがあってもじっさいにりようしやすいかんきょうがととのっているかどうかがかだいですだれもがじぶんらしくはたらけるしゃかいのじつげんにむけてさらなるとりくみがひつようです',
