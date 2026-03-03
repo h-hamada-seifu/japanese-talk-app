@@ -7,7 +7,15 @@ import { SpeechSuperFeedback, AzureFeedback } from '@/components/feedback';
 import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { useFurigana } from '@/contexts/FuriganaContext';
 import { convertBoth, normalizeForPlayback } from '@/lib/audioConverter';
-import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
+import type { Lesson, Level, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
+
+/** レベル別の最大録音時間（秒） */
+const MAX_RECORDING_DURATION: Record<Level, number> = {
+  N5: 30,
+  N4: 45,
+  N3: 60,
+  N2: 90,
+};
 
 interface Step5RecordProps {
   lesson: Lesson;
@@ -249,7 +257,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
       {!hasFeedback && (
         <AudioRecorder
           onRecordingComplete={handleRecordingComplete}
-          maxDuration={30}
+          maxDuration={MAX_RECORDING_DURATION[lesson.level]}
           normalizedBlob={normalizedBlob}
         />
       )}
