@@ -2,21 +2,31 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { lessons, getCategories, getLessonsByCategory } from '@/data/lessons';
+import { lessons, getLessonsByLevel, getLevels } from '@/data/lessons';
 import { useLessonProgress } from '@/hooks';
-import type { Category } from '@/types';
+import { useFurigana } from '@/contexts/FuriganaContext';
+import { levelColors } from '@/lib/levelColors';
+import type { Category, Level } from '@/types';
 
 export default function LessonsPage() {
-  const categories = getCategories();
+  const availableLevels = getLevels();
+  const [selectedLevel, setSelectedLevel] = useState<Level>('N5');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>(
     'all'
   );
   const { getProgress, getCompletedCount, isLoaded } = useLessonProgress();
+  const { f } = useFurigana();
 
+  // レベルでフィルタ → さらにカテゴリでフィルタ
+  const levelLessons = getLessonsByLevel(selectedLevel);
+  // 選択中レベルのカテゴリを動的に取得
+  const levelCategories = Array.from(
+    new Set(levelLessons.map((l) => l.category).filter((c): c is string => c !== undefined))
+  );
   const filteredLessons =
     selectedCategory === 'all'
-      ? lessons
-      : getLessonsByCategory(selectedCategory);
+      ? levelLessons
+      : levelLessons.filter((l) => l.category === selectedCategory);
 
   const completedCount = getCompletedCount();
 
@@ -24,11 +34,11 @@ export default function LessonsPage() {
     <div className="max-w-4xl mx-auto px-4 py-6">
       {/* ページヘッダー */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">レッスン一覧（いちらん）</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{f('レッスン一覧（いちらん）')}</h1>
         <Link
           href="/settings"
           className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="設定（せってい）"
+          aria-label={f('設定（せってい）')}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +71,7 @@ export default function LessonsPage() {
               <span className="text-2xl">🎯</span>
             </div>
             <div>
-              <p className="text-sm text-gray-600">完了（かんりょう）したレッスン</p>
+              <p className="text-sm text-gray-600">{f('完了（かんりょう）したレッスン')}</p>
               <p className="text-xl font-bold text-gray-900">
                 {completedCount} / {lessons.length}
               </p>
@@ -70,37 +80,64 @@ export default function LessonsPage() {
         </div>
       )}
 
-      {/* カテゴリーフィルター */}
-      <div className="mb-6 overflow-x-auto">
+      {/* レベルタブ */}
+      <div className="mb-4 overflow-x-auto">
         <div className="flex gap-2 pb-2">
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-              selectedCategory === 'all'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            すべて ({lessons.length})
-          </button>
-          {categories.map((category) => {
-            const count = getLessonsByCategory(category).length;
+          {availableLevels.map((level) => {
+            const count = getLessonsByLevel(level).length;
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={level}
+                onClick={() => {
+                  setSelectedLevel(level);
+                  setSelectedCategory('all');
+                }}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  selectedLevel === level
+                    ? levelColors[level].active
+                    : levelColors[level].inactive
                 }`}
               >
-                {category} ({count})
+                {level} ({count})
               </button>
             );
           })}
         </div>
       </div>
+
+      {/* カテゴリーフィルター */}
+      {levelLessons.some((l) => l.category) && (
+        <div className="mb-6 overflow-x-auto">
+          <div className="flex gap-2 pb-2">
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                selectedCategory === 'all'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {f('すべて')} ({levelLessons.length})
+            </button>
+            {levelCategories.map((category) => {
+              const count = levelLessons.filter((l) => l.category === category).length;
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {f(category)} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* レッスンリスト */}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -121,9 +158,16 @@ export default function LessonsPage() {
             >
               {/* ヘッダー */}
               <div className="flex items-start justify-between mb-2">
-                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded">
-                  {lesson.category}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[lesson.level].badge}`}>
+                    {lesson.level}
+                  </span>
+                  {lesson.category && (
+                    <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded">
+                      {f(lesson.category)}
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   {isCompleted && (
                     <span className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded">
@@ -139,28 +183,29 @@ export default function LessonsPage() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      完了（かんりょう）
+                      {f('完了（かんりょう）')}
                     </span>
                   )}
-                  <span className="text-xs text-gray-500">{lesson.level}</span>
                 </div>
               </div>
 
               {/* タイトル */}
-              <h2 className="font-bold text-gray-900 mb-2">{lesson.title}</h2>
+              <h2 className="font-bold text-gray-900 mb-2">{f(lesson.title)}</h2>
 
               {/* スクリプト（一部） */}
               <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {lesson.script.japanese}
+                {lesson.level === 'N5' || lesson.level === 'N4'
+                  ? lesson.script.japanese
+                  : lesson.script.japaneseKanji}
               </p>
 
               {/* フッター */}
               <div className="flex items-center justify-between text-xs text-gray-500">
                 <div className="flex items-center gap-2">
-                  <span>約（やく）{lesson.duration}秒（びょう）</span>
+                  <span>{f('約（やく）')}{lesson.duration}{f('秒（びょう）')}</span>
                   {practiceCount > 0 && (
                     <span className="px-2 py-0.5 bg-gray-100 rounded">
-                      {practiceCount}回（かい）練習（れんしゅう）
+                      {practiceCount}{f('回（かい）練習（れんしゅう）')}
                     </span>
                   )}
                 </div>
@@ -169,7 +214,7 @@ export default function LessonsPage() {
                     isCompleted ? 'text-green-500' : 'text-blue-500'
                   }`}
                 >
-                  {isCompleted ? 'もう一度（いちど）' : '練習（れんしゅう）する'}
+                  {isCompleted ? f('もう一度（いちど）') : f('練習（れんしゅう）する')}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -192,7 +237,7 @@ export default function LessonsPage() {
       {/* レッスンが0件の場合 */}
       {filteredLessons.length === 0 && (
         <div className="text-center py-12 text-gray-500">
-          <p>このカテゴリーにはレッスンがありません</p>
+          <p>{f('このカテゴリーにはレッスンがありません')}</p>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { PracticeStep } from '@/types';
 
 interface StepIndicatorProps {
@@ -16,6 +17,8 @@ const STEPS: { step: PracticeStep; label: string; shortLabel: string }[] = [
 ];
 
 export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) {
+  const { f } = useFurigana();
+
   return (
     <div className="w-full">
       {/* ステップインジケーター */}
@@ -83,7 +86,7 @@ export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) 
                   : 'text-gray-400'
             }`}
           >
-            {label}
+            {f(label)}
           </div>
         ))}
       </div>
@@ -91,7 +94,7 @@ export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) 
       {/* 現在のステップ名（モバイル表示） */}
       <div className="sm:hidden text-center mt-3">
         <span className="text-sm font-medium text-blue-600">
-          Step {currentStep}: {STEPS[currentStep - 1].label}
+          Step {currentStep}: {f(STEPS[currentStep - 1].label)}
         </span>
       </div>
     </div>

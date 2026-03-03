@@ -6,13 +6,14 @@
 export interface Lesson {
   id: string;
   title: string;
-  level: 'N5' | 'N4';
-  category: '挨拶（あいさつ）' | '日常（にちじょう）' | '買い物（かいもの）' | '食事（しょくじ）' | '交通（こうつう）';
+  level: 'N5' | 'N4' | 'N3' | 'N2';
+  category?: string;
   audioUrl: string;
   script: {
-    japanese: string;         // ひらがな表記（ふりがな付き）
-    japanesePlain: string;    // プレーンテキスト（音声認識比較用）
-    japaneseKanji: string;    // 漢字表記
+    japanese: string;              // ひらがな表記（ふりがな付き）
+    japanesePlain: string;         // プレーンテキスト（音声認識比較用）
+    japaneseKanji: string;         // 漢字表記
+    japaneseWithRuby?: string;     // rubyタグ付きHTML文字列（N3用）
   };
   translations: {
     en: string;
@@ -52,7 +53,7 @@ export const lessons: Lesson[] = [
     title: '朝（あさ）の挨拶（あいさつ）',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-001.wav',
+    audioUrl: '/audio/N5/lesson-001.wav',
     script: {
       japanese: 'おはようございます。きょうも いいてんきですね。',
       japanesePlain: 'おはようございますきょうもいいてんきですね',
@@ -116,7 +117,7 @@ export const lessons: Lesson[] = [
     title: '自己紹介（じこしょうかい）',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-002.wav',
+    audioUrl: '/audio/N5/lesson-002.wav',
     script: {
       japanese: 'はじめまして。わたしは リンです。ベトナムから きました。どうぞ よろしく おねがいします。',
       japanesePlain: 'はじめましてわたしはりんですべとなむからきましたどうぞよろしくおねがいします',
@@ -180,7 +181,7 @@ export const lessons: Lesson[] = [
     title: 'お礼（れい）を言（い）う',
     level: 'N5',
     category: '挨拶（あいさつ）',
-    audioUrl: '/audio/lesson-003.wav',
+    audioUrl: '/audio/N5/lesson-003.wav',
     script: {
       japanese: 'きのう、たすけてくれて ありがとうございました。ほんとうに たすかりました。',
       japanesePlain: 'きのうたすけてくれてありがとうございましたほんとうにたすかりました',
@@ -248,7 +249,7 @@ export const lessons: Lesson[] = [
     title: '週末（しゅうまつ）の予定（よてい）',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-004.wav',
+    audioUrl: '/audio/N5/lesson-004.wav',
     script: {
       japanese: 'こんしゅうまつは ともだちと えいがを みに いきます。たのしみです。',
       japanesePlain: 'こんしゅうまつはともだちとえいがをみにいきますたのしみです',
@@ -317,7 +318,7 @@ export const lessons: Lesson[] = [
     title: '昨日（きのう）の出来事（できごと）',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-005.wav',
+    audioUrl: '/audio/N5/lesson-005.wav',
     script: {
       japanese: 'きのう、ともだちと えいがを みました。とても おもしろかったです。',
       japanesePlain: 'きのうともだちとえいがをみましたとてもおもしろかったです',
@@ -386,7 +387,7 @@ export const lessons: Lesson[] = [
     title: '趣味（しゅみ）について',
     level: 'N5',
     category: '日常（にちじょう）',
-    audioUrl: '/audio/lesson-006.wav',
+    audioUrl: '/audio/N5/lesson-006.wav',
     script: {
       japanese: 'わたしの しゅみは おんがくを きくことです。にほんの うたが すきです。',
       japanesePlain: 'わたしのしゅみはおんがくをきくことですにほんのうたがすきです',
@@ -459,7 +460,7 @@ export const lessons: Lesson[] = [
     title: 'コンビニで',
     level: 'N5',
     category: '買い物（かいもの）',
-    audioUrl: '/audio/lesson-007.wav',
+    audioUrl: '/audio/N5/lesson-007.wav',
     script: {
       japanese: 'すみません、この おにぎりを ください。あと、おちゃも おねがいします。',
       japanesePlain: 'すみませんこのおにぎりをくださいあとおちゃもおねがいします',
@@ -523,7 +524,7 @@ export const lessons: Lesson[] = [
     title: '値段（ねだん）を聞（き）く',
     level: 'N5',
     category: '買い物（かいもの）',
-    audioUrl: '/audio/lesson-008.wav',
+    audioUrl: '/audio/N5/lesson-008.wav',
     script: {
       japanese: 'すみません、これは いくらですか。',
       japanesePlain: 'すみませんこれはいくらですか',
@@ -580,7 +581,7 @@ export const lessons: Lesson[] = [
     title: 'レストランで注文（ちゅうもん）',
     level: 'N5',
     category: '食事（しょくじ）',
-    audioUrl: '/audio/lesson-009.wav',
+    audioUrl: '/audio/N5/lesson-009.wav',
     script: {
       japanese: 'すみません、ラーメンを ひとつと、ぎょうざを おねがいします。',
       japanesePlain: 'すみませんらーめんをひとつとぎょうざをおねがいします',
@@ -649,7 +650,7 @@ export const lessons: Lesson[] = [
     title: '食事（しょくじ）の感想（かんそう）',
     level: 'N5',
     category: '食事（しょくじ）',
-    audioUrl: '/audio/lesson-010.wav',
+    audioUrl: '/audio/N5/lesson-010.wav',
     script: {
       japanese: 'このラーメン、とても おいしいですね。スープが さいこうです。',
       japanesePlain: 'このらーめんとてもおいしいですねすーぷがさいこうです',
@@ -713,12 +714,737 @@ export const lessons: Lesson[] = [
     ],
     duration: 5,
   },
+
+  // ============================================
+  // N4レベル（5レッスン）
+  // やや長い文・て形・理由表現など
+  // ============================================
+  {
+    id: 'lesson-011',
+    title: '電話（でんわ）で約束（やくそく）',
+    level: 'N4',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N4/lesson-011.wav',
+    script: {
+      japanese: 'もしもし、あしたの ごご さんじに えきまえで あいませんか。いっしょに かいものに いきたいんですが。じかんが あったら、れんらく ください。',
+      japanesePlain: 'もしもしあしたのごごさんじにえきまえであいませんかいっしょにかいものにいきたいんですがじかんがあったられんらくください',
+      japaneseKanji: 'もしもし、明日の午後3時に駅前で会いませんか。一緒に買い物に行きたいんですが。時間があったら、連絡ください。',
+    },
+    translations: {
+      en: 'Hello? Shall we meet at 3 PM tomorrow in front of the station? I\'d like to go shopping together. Please contact me if you have time.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「あいませんか」→ 語尾を上げて誘いの気持ちを出す',
+        '「いきたいんですが」→ 「んです」で理由を伝える',
+        '「れんらく」→ 「ん」をしっかり2回発音',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '駅前',
+        reading: 'えきまえ',
+        meaning: { en: 'in front of the station', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '連絡',
+        reading: 'れんらく',
+        meaning: { en: 'contact', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 8,
+  },
+  {
+    id: 'lesson-012',
+    title: '道（みち）を聞（き）く',
+    level: 'N4',
+    category: '交通（こうつう）',
+    audioUrl: '/audio/N4/lesson-012.wav',
+    script: {
+      japanese: 'すみません、ゆうびんきょくは どこですか。まっすぐ いって、ふたつめの しんごうを みぎに まがると、ひだりがわに あります。',
+      japanesePlain: 'すみませんゆうびんきょくはどこですかまっすぐいってふたつめのしんごうをみぎにまがるとひだりがわにあります',
+      japaneseKanji: 'すみません、郵便局はどこですか。まっすぐ行って、2つ目の信号を右に曲がると、左側にあります。',
+    },
+    translations: {
+      en: 'Excuse me, where is the post office? Go straight ahead, turn right at the second traffic light, and it will be on the left side.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「ゆうびんきょく」→ 「きょ」は口を丸めて',
+        '「まっすぐ」→ 「っ」の前で一瞬止まる',
+        '「ひだりがわ」→ 5拍で均等に',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '郵便局',
+        reading: 'ゆうびんきょく',
+        meaning: { en: 'post office', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '信号',
+        reading: 'しんごう',
+        meaning: { en: 'traffic light', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '曲がる',
+        reading: 'まがる',
+        meaning: { en: 'to turn', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 9,
+  },
+  {
+    id: 'lesson-013',
+    title: '病院（びょういん）で',
+    level: 'N4',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N4/lesson-013.wav',
+    script: {
+      japanese: 'きのうから あたまが いたくて、ねつも あります。くすりを のみましたが、まだ よくなりません。せんせい、どうしたら いいですか。',
+      japanesePlain: 'きのうからあたまがいたくてねつもありますくすりをのみましたがまだよくなりませんせんせいどうしたらいいですか',
+      japaneseKanji: '昨日から頭が痛くて、熱もあります。薬を飲みましたが、まだよくなりません。先生、どうしたらいいですか。',
+    },
+    translations: {
+      en: 'I\'ve had a headache since yesterday, and I also have a fever. I took medicine, but I haven\'t gotten better yet. Doctor, what should I do?',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「いたくて」→ て形で理由をつなげる表現',
+        '「よくなりません」→ 否定の「ません」をはっきり',
+        '「どうしたら」→ 「した」にアクセントを置く',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '熱',
+        reading: 'ねつ',
+        meaning: { en: 'fever', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '薬',
+        reading: 'くすり',
+        meaning: { en: 'medicine', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 10,
+  },
+  {
+    id: 'lesson-014',
+    title: 'アルバイトの面接（めんせつ）',
+    level: 'N4',
+    category: '仕事（しごと）',
+    audioUrl: '/audio/N4/lesson-014.wav',
+    script: {
+      japanese: 'がっこうが おわってから、まいにち ごごろくじまで はたらくことが できます。にほんごは まだ じょうずでは ありませんが、がんばります。どうぞ よろしく おねがいします。',
+      japanesePlain: 'がっこうがおわってからまいにちごごろくじまではたらくことができますにほんごはまだじょうずではありませんががんばりますどうぞよろしくおねがいします',
+      japaneseKanji: '学校が終わってから、毎日午後6時まで働くことができます。日本語はまだ上手ではありませんが、頑張ります。どうぞよろしくお願いします。',
+    },
+    translations: {
+      en: 'After school finishes, I can work every day until 6 PM. My Japanese is not very good yet, but I will do my best. Thank you for your consideration.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「おわってから」→ 「って」で強く、「から」で理由を示す',
+        '「じょうず」→ 「じょ」は口を丸めて',
+        '「がんばります」→ 最後まではっきり言い切る',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '働く',
+        reading: 'はたらく',
+        meaning: { en: 'to work', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '頑張る',
+        reading: 'がんばる',
+        meaning: { en: 'to do one\'s best', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 11,
+  },
+  {
+    id: 'lesson-015',
+    title: '電車（でんしゃ）のアナウンス',
+    level: 'N4',
+    category: '交通（こうつう）',
+    audioUrl: '/audio/N4/lesson-015.wav',
+    script: {
+      japanese: 'つぎは しんじゅくえきです。おのりかえの おきゃくさまは こちらで おおりください。でぐちは みぎがわです。おわすれものに ごちゅうい ください。',
+      japanesePlain: 'つぎはしんじゅくえきですおのりかえのおきゃくさまはこちらでおおりくださいでぐちはみぎがわですおわすれものにごちゅういください',
+      japaneseKanji: '次は新宿駅です。お乗り換えのお客様はこちらでお降りください。出口は右側です。お忘れ物にご注意ください。',
+    },
+    translations: {
+      en: 'The next station is Shinjuku. Passengers transferring, please get off here. The exit is on the right side. Please be careful not to leave your belongings behind.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「しんじゅく」→ 「ん」と「じゅ」をはっきり区別',
+        '「おのりかえ」→ 丁寧語の「お」を忘れない',
+        '「ごちゅうい」→ 「ちゅう」は口を丸めて',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '乗り換え',
+        reading: 'のりかえ',
+        meaning: { en: 'transfer (train)', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '忘れ物',
+        reading: 'わすれもの',
+        meaning: { en: 'lost item / forgotten belongings', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 10,
+  },
+
+  // ============================================
+  // N3レベル（5レッスン）
+  // 複合文・敬語・意見表明など
+  // ============================================
+  {
+    id: 'lesson-016',
+    title: '旅行（りょこう）の計画（けいかく）',
+    level: 'N3',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-016.wav',
+    script: {
+      japanese: 'らいげつ きょうとに りょこうに いく よていです。きょうとには おてらや じんじゃが たくさん あって、とくに あきは こうようが きれいだそうです。ともだちに すすめられて、きめました。にはくみっかの よていで、りょかんに とまる つもりです。たのしみに しています。',
+      japanesePlain: 'らいげつきょうとにりょこうにいくよていですきょうとにはおてらやじんじゃがたくさんあってとくにあきはこうようがきれいだそうですともだちにすすめられてきめましたにはくみっかのよていでりょかんにとまるつもりですたのしみにしています',
+      japaneseKanji: '来月京都に旅行に行く予定です。京都にはお寺や神社がたくさんあって、特に秋は紅葉がきれいだそうです。友達に勧められて、決めました。2泊3日の予定で、旅館に泊まるつもりです。楽しみにしています。',
+      japaneseWithRuby: '<ruby>来月<rp>(</rp><rt>らいげつ</rt><rp>)</rp></ruby><ruby>京都<rp>(</rp><rt>きょうと</rt><rp>)</rp></ruby>に<ruby>旅行<rp>(</rp><rt>りょこう</rt><rp>)</rp></ruby>に<ruby>行<rp>(</rp><rt>い</rt><rp>)</rp></ruby>く<ruby>予定<rp>(</rp><rt>よてい</rt><rp>)</rp></ruby>です。<ruby>京都<rp>(</rp><rt>きょうと</rt><rp>)</rp></ruby>にはお<ruby>寺<rp>(</rp><rt>てら</rt><rp>)</rp></ruby>や<ruby>神社<rp>(</rp><rt>じんじゃ</rt><rp>)</rp></ruby>がたくさんあって、<ruby>特<rp>(</rp><rt>とく</rt><rp>)</rp></ruby>に<ruby>秋<rp>(</rp><rt>あき</rt><rp>)</rp></ruby>は<ruby>紅葉<rp>(</rp><rt>こうよう</rt><rp>)</rp></ruby>がきれいだそうです。<ruby>友達<rp>(</rp><rt>ともだち</rt><rp>)</rp></ruby>に<ruby>勧<rp>(</rp><rt>すす</rt><rp>)</rp></ruby>められて、<ruby>決<rp>(</rp><rt>き</rt><rp>)</rp></ruby>めました。2<ruby>泊<rp>(</rp><rt>はく</rt><rp>)</rp></ruby>3<ruby>日<rp>(</rp><rt>か</rt><rp>)</rp></ruby>の<ruby>予定<rp>(</rp><rt>よてい</rt><rp>)</rp></ruby>で、<ruby>旅館<rp>(</rp><rt>りょかん</rt><rp>)</rp></ruby>に<ruby>泊<rp>(</rp><rt>と</rt><rp>)</rp></ruby>まるつもりです。<ruby>楽<rp>(</rp><rt>たの</rt><rp>)</rp></ruby>しみにしています。',
+    },
+    translations: {
+      en: 'I\'m planning to travel to Kyoto next month. Kyoto has many temples and shrines, and I\'ve heard the autumn leaves are especially beautiful. A friend recommended it, so I decided to go. I plan to stay for two nights and three days at a ryokan. I\'m looking forward to it.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「だそうです」→ 伝聞の「そう」を自然に',
+        '「すすめられて」→ 受身形の「られて」をなめらかに',
+        '「にはくみっか」→ 「っ」で一瞬止まる',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '紅葉',
+        reading: 'こうよう',
+        meaning: { en: 'autumn leaves', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '旅館',
+        reading: 'りょかん',
+        meaning: { en: 'Japanese inn', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '予定',
+        reading: 'よてい',
+        meaning: { en: 'plan / schedule', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 15,
+  },
+  {
+    id: 'lesson-017',
+    title: '先生（せんせい）への相談（そうだん）',
+    level: 'N3',
+    category: '学校（がっこう）',
+    audioUrl: '/audio/N3/lesson-017.wav',
+    script: {
+      japanese: 'せんせい、すこし そうだんが あるんですが。じつは さいきん じゅぎょうの ないようが むずかしくなってきて、ついていけなくなっています。とくに かんじの よみかたが わかりません。なにか いいほうほうは ありませんか。べんきょうの しかたを おしえていただけませんか。',
+      japanesePlain: 'せんせいすこしそうだんがあるんですがじつはさいきんじゅぎょうのないようがむずかしくなってきてついていけなくなっていますとくにかんじのよみかたがわかりませんなにかいいほうほうはありませんかべんきょうのしかたをおしえていただけませんか',
+      japaneseKanji: '先生、少し相談があるんですが。実は最近授業の内容が難しくなってきて、ついていけなくなっています。特に漢字の読み方が分かりません。何かいい方法はありませんか。勉強の仕方を教えていただけませんか。',
+      japaneseWithRuby: '<ruby>先生<rp>(</rp><rt>せんせい</rt><rp>)</rp></ruby>、<ruby>少<rp>(</rp><rt>すこ</rt><rp>)</rp></ruby>し<ruby>相談<rp>(</rp><rt>そうだん</rt><rp>)</rp></ruby>があるんですが。<ruby>実<rp>(</rp><rt>じつ</rt><rp>)</rp></ruby>は<ruby>最近<rp>(</rp><rt>さいきん</rt><rp>)</rp></ruby><ruby>授業<rp>(</rp><rt>じゅぎょう</rt><rp>)</rp></ruby>の<ruby>内容<rp>(</rp><rt>ないよう</rt><rp>)</rp></ruby>が<ruby>難<rp>(</rp><rt>むずか</rt><rp>)</rp></ruby>しくなってきて、ついていけなくなっています。<ruby>特<rp>(</rp><rt>とく</rt><rp>)</rp></ruby>に<ruby>漢字<rp>(</rp><rt>かんじ</rt><rp>)</rp></ruby>の<ruby>読<rp>(</rp><rt>よ</rt><rp>)</rp></ruby>み<ruby>方<rp>(</rp><rt>かた</rt><rp>)</rp></ruby>が<ruby>分<rp>(</rp><rt>わ</rt><rp>)</rp></ruby>かりません。<ruby>何<rp>(</rp><rt>なに</rt><rp>)</rp></ruby>かいい<ruby>方法<rp>(</rp><rt>ほうほう</rt><rp>)</rp></ruby>はありませんか。<ruby>勉強<rp>(</rp><rt>べんきょう</rt><rp>)</rp></ruby>の<ruby>仕方<rp>(</rp><rt>しかた</rt><rp>)</rp></ruby>を<ruby>教<rp>(</rp><rt>おし</rt><rp>)</rp></ruby>えていただけませんか。',
+    },
+    translations: {
+      en: 'Teacher, I have something I\'d like to discuss. Actually, the class content has been getting harder recently, and I\'m having trouble keeping up. I especially don\'t understand how to read kanji. Is there a good method? Could you teach me how to study?',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「あるんですが」→ 「んです」で切り出しの柔らかさ',
+        '「ついていけなくなっています」→ 長い動詞を区切って練習',
+        '「いただけませんか」→ 丁寧な依頼表現、語尾を上げる',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '相談',
+        reading: 'そうだん',
+        meaning: { en: 'consultation', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '授業',
+        reading: 'じゅぎょう',
+        meaning: { en: 'class / lesson', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '方法',
+        reading: 'ほうほう',
+        meaning: { en: 'method', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 16,
+  },
+  {
+    id: 'lesson-018',
+    title: 'アルバイト先（さき）での会話（かいわ）',
+    level: 'N3',
+    category: '仕事（しごと）',
+    audioUrl: '/audio/N3/lesson-018.wav',
+    script: {
+      japanese: 'てんちょう、らいしゅうの きんようびは がっこうの ぎょうじが あるので、おやすみを いただきたいんですが。かわりに どようびに はいることが できます。シフトを かえていただけると たすかります。ごめいわくを おかけしますが、よろしく おねがいします。',
+      japanesePlain: 'てんちょうらいしゅうのきんようびはがっこうのぎょうじがあるのでおやすみをいただきたいんですがかわりにどようびにはいることができますしふとをかえていただけるとたすかりますごめいわくをおかけしますがよろしくおねがいします',
+      japaneseKanji: '店長、来週の金曜日は学校の行事があるので、お休みをいただきたいんですが。代わりに土曜日に入ることができます。シフトを変えていただけると助かります。ご迷惑をおかけしますが、よろしくお願いします。',
+      japaneseWithRuby: '<ruby>店長<rp>(</rp><rt>てんちょう</rt><rp>)</rp></ruby>、<ruby>来週<rp>(</rp><rt>らいしゅう</rt><rp>)</rp></ruby>の<ruby>金曜日<rp>(</rp><rt>きんようび</rt><rp>)</rp></ruby>は<ruby>学校<rp>(</rp><rt>がっこう</rt><rp>)</rp></ruby>の<ruby>行事<rp>(</rp><rt>ぎょうじ</rt><rp>)</rp></ruby>があるので、お<ruby>休<rp>(</rp><rt>やす</rt><rp>)</rp></ruby>みをいただきたいんですが。<ruby>代<rp>(</rp><rt>か</rt><rp>)</rp></ruby>わりに<ruby>土曜日<rp>(</rp><rt>どようび</rt><rp>)</rp></ruby>に<ruby>入<rp>(</rp><rt>はい</rt><rp>)</rp></ruby>ることができます。シフトを<ruby>変<rp>(</rp><rt>か</rt><rp>)</rp></ruby>えていただけると<ruby>助<rp>(</rp><rt>たす</rt><rp>)</rp></ruby>かります。ご<ruby>迷惑<rp>(</rp><rt>めいわく</rt><rp>)</rp></ruby>をおかけしますが、よろしくお<ruby>願<rp>(</rp><rt>ねが</rt><rp>)</rp></ruby>いします。',
+    },
+    translations: {
+      en: 'Manager, I\'d like to take Friday off next week because I have a school event. Instead, I can come in on Saturday. It would really help if you could change the shift. I\'m sorry for the inconvenience, and thank you for your understanding.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「いただきたいんですが」→ 丁寧な希望表現',
+        '「いただけると たすかります」→ 依頼の定型表現を覚える',
+        '「ごめいわくを おかけします」→ ビジネス定型、なめらかに',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '行事',
+        reading: 'ぎょうじ',
+        meaning: { en: 'event', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '迷惑',
+        reading: 'めいわく',
+        meaning: { en: 'inconvenience / trouble', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 14,
+  },
+  {
+    id: 'lesson-019',
+    title: '日本（にほん）の季節（きせつ）',
+    level: 'N3',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-019.wav',
+    script: {
+      japanese: 'にほんには しきが あります。はるは さくらが さいて、おはなみを します。なつは あつくて、はなびたいかいが にんきです。あきは こうようが うつくしく、やまに いくひとが おおいです。ふゆは ゆきが ふって、おんせんに はいるのが きもちいいです。どのきせつが いちばん すきですか。',
+      japanesePlain: 'にほんにはしきがありますはるはさくらがさいておはなみをしますなつはあつくてはなびたいかいがにんきですあきはこうようがうつくしくやまにいくひとがおおいですふゆはゆきがふっておんせんにはいるのがきもちいいですどのきせつがいちばんすきですか',
+      japaneseKanji: '日本には四季があります。春は桜が咲いて、お花見をします。夏は暑くて、花火大会が人気です。秋は紅葉が美しく、山に行く人が多いです。冬は雪が降って、温泉に入るのが気持ちいいです。どの季節が一番好きですか。',
+      japaneseWithRuby: '<ruby>日本<rp>(</rp><rt>にほん</rt><rp>)</rp></ruby>には<ruby>四季<rp>(</rp><rt>しき</rt><rp>)</rp></ruby>があります。<ruby>春<rp>(</rp><rt>はる</rt><rp>)</rp></ruby>は<ruby>桜<rp>(</rp><rt>さくら</rt><rp>)</rp></ruby>が<ruby>咲<rp>(</rp><rt>さ</rt><rp>)</rp></ruby>いて、お<ruby>花見<rp>(</rp><rt>はなみ</rt><rp>)</rp></ruby>をします。<ruby>夏<rp>(</rp><rt>なつ</rt><rp>)</rp></ruby>は<ruby>暑<rp>(</rp><rt>あつ</rt><rp>)</rp></ruby>くて、<ruby>花火<rp>(</rp><rt>はなび</rt><rp>)</rp></ruby><ruby>大会<rp>(</rp><rt>たいかい</rt><rp>)</rp></ruby>が<ruby>人気<rp>(</rp><rt>にんき</rt><rp>)</rp></ruby>です。<ruby>秋<rp>(</rp><rt>あき</rt><rp>)</rp></ruby>は<ruby>紅葉<rp>(</rp><rt>こうよう</rt><rp>)</rp></ruby>が<ruby>美<rp>(</rp><rt>うつく</rt><rp>)</rp></ruby>しく、<ruby>山<rp>(</rp><rt>やま</rt><rp>)</rp></ruby>に<ruby>行<rp>(</rp><rt>い</rt><rp>)</rp></ruby>く<ruby>人<rp>(</rp><rt>ひと</rt><rp>)</rp></ruby>が<ruby>多<rp>(</rp><rt>おお</rt><rp>)</rp></ruby>いです。<ruby>冬<rp>(</rp><rt>ふゆ</rt><rp>)</rp></ruby>は<ruby>雪<rp>(</rp><rt>ゆき</rt><rp>)</rp></ruby>が<ruby>降<rp>(</rp><rt>ふ</rt><rp>)</rp></ruby>って、<ruby>温泉<rp>(</rp><rt>おんせん</rt><rp>)</rp></ruby>に<ruby>入<rp>(</rp><rt>はい</rt><rp>)</rp></ruby>るのが<ruby>気持<rp>(</rp><rt>きも</rt><rp>)</rp></ruby>ちいいです。どの<ruby>季節<rp>(</rp><rt>きせつ</rt><rp>)</rp></ruby>が<ruby>一番<rp>(</rp><rt>いちばん</rt><rp>)</rp></ruby><ruby>好<rp>(</rp><rt>す</rt><rp>)</rp></ruby>きですか。',
+    },
+    translations: {
+      en: 'Japan has four seasons. In spring, cherry blossoms bloom and people have flower viewing parties. Summer is hot, and fireworks festivals are popular. In autumn, the colored leaves are beautiful, and many people go to the mountains. In winter, it snows, and it feels great to soak in hot springs. Which season do you like the most?',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「しき」→ 「し」と「き」を明確に分ける',
+        '「はなびたいかい」→ 「たいかい」の「い」を伸ばす',
+        '「きもちいい」→ 「もち」にアクセント',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '四季',
+        reading: 'しき',
+        meaning: { en: 'four seasons', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '花火大会',
+        reading: 'はなびたいかい',
+        meaning: { en: 'fireworks festival', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '温泉',
+        reading: 'おんせん',
+        meaning: { en: 'hot spring', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 18,
+  },
+  {
+    id: 'lesson-020',
+    title: '友達（ともだち）への手紙（てがみ）',
+    level: 'N3',
+    category: '日常（にちじょう）',
+    audioUrl: '/audio/N3/lesson-020.wav',
+    script: {
+      japanese: 'おげんきですか。にほんに きてから もう はんとしに なりました。さいしょは ことばが つうじなくて たいへんでしたが、いまは すこしずつ にほんごが わかるように なってきました。らいねん、くにに かえったら、あいに いきますね。からだに きをつけてください。では、また。',
+      japanesePlain: 'おげんきですかにほんにきてからもうはんとしになりましたさいしょはことばがつうじなくてたいへんでしたがいまはすこしずつにほんごがわかるようになってきましたらいねんくににかえったらあいにいきますねからだにきをつけてくださいではまた',
+      japaneseKanji: 'お元気ですか。日本に来てからもう半年になりました。最初は言葉が通じなくて大変でしたが、今は少しずつ日本語が分かるようになってきました。来年、国に帰ったら、会いに行きますね。体に気をつけてください。では、また。',
+      japaneseWithRuby: 'お<ruby>元気<rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>ですか。<ruby>日本<rp>(</rp><rt>にほん</rt><rp>)</rp></ruby>に<ruby>来<rp>(</rp><rt>き</rt><rp>)</rp></ruby>てからもう<ruby>半年<rp>(</rp><rt>はんとし</rt><rp>)</rp></ruby>になりました。<ruby>最初<rp>(</rp><rt>さいしょ</rt><rp>)</rp></ruby>は<ruby>言葉<rp>(</rp><rt>ことば</rt><rp>)</rp></ruby>が<ruby>通<rp>(</rp><rt>つう</rt><rp>)</rp></ruby>じなくて<ruby>大変<rp>(</rp><rt>たいへん</rt><rp>)</rp></ruby>でしたが、<ruby>今<rp>(</rp><rt>いま</rt><rp>)</rp></ruby>は<ruby>少<rp>(</rp><rt>すこ</rt><rp>)</rp></ruby>しずつ<ruby>日本語<rp>(</rp><rt>にほんご</rt><rp>)</rp></ruby>が<ruby>分<rp>(</rp><rt>わ</rt><rp>)</rp></ruby>かるようになってきました。<ruby>来年<rp>(</rp><rt>らいねん</rt><rp>)</rp></ruby>、<ruby>国<rp>(</rp><rt>くに</rt><rp>)</rp></ruby>に<ruby>帰<rp>(</rp><rt>かえ</rt><rp>)</rp></ruby>ったら、<ruby>会<rp>(</rp><rt>あ</rt><rp>)</rp></ruby>いに<ruby>行<rp>(</rp><rt>い</rt><rp>)</rp></ruby>きますね。<ruby>体<rp>(</rp><rt>からだ</rt><rp>)</rp></ruby>に<ruby>気<rp>(</rp><rt>き</rt><rp>)</rp></ruby>をつけてください。では、また。',
+    },
+    translations: {
+      en: 'How are you? It\'s already been half a year since I came to Japan. At first, it was hard because I couldn\'t communicate, but now I\'m gradually understanding Japanese. Next year, when I go back to my country, I\'ll come visit you. Please take care of yourself. Well then, see you.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「つうじなくて」→ 「つう」を伸ばして「じ」をはっきり',
+        '「わかるように なってきました」→ 変化の表現を自然に',
+        '「きをつけて」→ 「き」にアクセント',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '半年',
+        reading: 'はんとし',
+        meaning: { en: 'half a year', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '通じる',
+        reading: 'つうじる',
+        meaning: { en: 'to be understood / communicate', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 17,
+  },
+
+  // ============================================
+  // N2レベル（5レッスン）
+  // 長文・ニュース調・抽象的表現など
+  // ============================================
+  {
+    id: 'lesson-021',
+    title: '環境問題について',
+    level: 'N2',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-021.wav',
+    script: {
+      japanese: 'さいきん かんきょうもんだいに かんする ニュースを よく みみにします。とくに ちきゅうおんだんかの えいきょうで、いじょうきしょうが ふえていると いわれています。わたしたちに できることは かぎられていますが、まいにちの せいかつの なかで、しょうエネルギーや リサイクルを いしきすることが たいせつです。みらいの ために、ひとりひとりが こうどうする ひつようが あるのでは ないでしょうか。',
+      japanesePlain: 'さいきんかんきょうもんだいにかんするにゅーすをよくみみにしますとくにちきゅうおんだんかのえいきょうでいじょうきしょうがふえているといわれていますわたしたちにできることはかぎられていますがまいにちのせいかつのなかでしょうえねるぎーやりさいくるをいしきすることがたいせつですみらいのためにひとりひとりがこうどうするひつようがあるのではないでしょうか',
+      japaneseKanji: '最近、環境問題に関するニュースをよく耳にします。特に地球温暖化の影響で、異常気象が増えていると言われています。私たちにできることは限られていますが、毎日の生活の中で、省エネルギーやリサイクルを意識することが大切です。未来のために、一人一人が行動する必要があるのではないでしょうか。',
+    },
+    translations: {
+      en: 'Recently, I often hear news about environmental issues. It is said that extreme weather events are increasing, especially due to the effects of global warming. While what we can do is limited, it is important to be conscious of energy saving and recycling in our daily lives. For the sake of the future, each and every one of us needs to take action, don\'t you think?',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「かんきょうもんだい」→ 複合語を途切れずに',
+        '「いわれています」→ 受身+進行の自然な発音',
+        '「ないでしょうか」→ 提案の語尾を柔らかく',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '環境問題',
+        reading: 'かんきょうもんだい',
+        meaning: { en: 'environmental issues', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '地球温暖化',
+        reading: 'ちきゅうおんだんか',
+        meaning: { en: 'global warming', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '異常気象',
+        reading: 'いじょうきしょう',
+        meaning: { en: 'extreme weather', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 20,
+  },
+  {
+    id: 'lesson-022',
+    title: '就職活動の経験',
+    level: 'N2',
+    category: '仕事',
+    audioUrl: '/audio/N2/lesson-022.wav',
+    script: {
+      japanese: 'しゅうしょくかつどうは ほんとうに たいへんでした。なんじゅっしゃも おうぼして、めんせつも なんどもうけました。さいしょは じしんが なくて、きんちょうして うまくはなせませんでした。しかし、せんぱいに アドバイスを もらったり、じぶんの つよみを さいかくにんしたりするうちに、すこしずつ じしんが ついてきました。さいしゅうてきに、じぶんに あったかいしゃに ないていを もらうことが できました。あきらめずに つづけることが だいじだと おもいます。',
+      japanesePlain: 'しゅうしょくかつどうはほんとうにたいへんでしたなんじゅっしゃもおうぼしてめんせつもなんどもうけましたさいしょはじしんがなくてきんちょうしてうまくはなせませんでしたしかしせんぱいにあどばいすをもらったりじぶんのつよみをさいかくにんしたりするうちにすこしずつじしんがついてきましたさいしゅうてきにじぶんにあったかいしゃにないていをもらうことができましたあきらめずにつづけることがだいじだとおもいます',
+      japaneseKanji: '就職活動は本当に大変でした。何十社も応募して、面接も何度も受けました。最初は自信がなくて、緊張してうまく話せませんでした。しかし、先輩にアドバイスをもらったり、自分の強みを再確認したりするうちに、少しずつ自信がついてきました。最終的に、自分に合った会社に内定をもらうことができました。諦めずに続けることが大事だと思います。',
+    },
+    translations: {
+      en: 'Job hunting was really tough. I applied to dozens of companies and went through many interviews. At first, I had no confidence and was too nervous to speak well. However, as I received advice from seniors and reconfirmed my strengths, I gradually gained confidence. In the end, I was able to receive a job offer from a company that suited me. I believe it\'s important not to give up and keep going.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「しゅうしょくかつどう」→ 長い複合語を一息で',
+        '「〜たり〜たりするうちに」→ 列挙の表現をリズムよく',
+        '「あきらめずに」→ 「ず」は「す」に近い発音',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '就職活動',
+        reading: 'しゅうしょくかつどう',
+        meaning: { en: 'job hunting', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '内定',
+        reading: 'ないてい',
+        meaning: { en: 'job offer', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '強み',
+        reading: 'つよみ',
+        meaning: { en: 'strength / advantage', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 22,
+  },
+  {
+    id: 'lesson-023',
+    title: 'テクノロジーと社会',
+    level: 'N2',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-023.wav',
+    script: {
+      japanese: 'テクノロジーの はったつによって、わたしたちの せいかつは おおきく かわりました。スマートフォンの ふきゅうで、いつでも どこでも じょうほうを えられるように なりました。いっぽうで、SNSの つかいすぎが もんだいに なっている めんも あります。べんりさを きょうじゅしながらも、テクノロジーとの つきあいかたを かんがえていく ひつようが あると おもいます。だいじなのは、どうぐに つかわれるのではなく、じぶんで つかいこなすことでは ないでしょうか。',
+      japanesePlain: 'てくのろじーのはったつによってわたしたちのせいかつはおおきくかわりましたすまーとふぉんのふきゅうでいつでもどこでもじょうほうをえられるようになりましたいっぽうでえすえぬえすのつかいすぎがもんだいになっているめんもありますべんりさをきょうじゅしながらもてくのろじーとのつきあいかたをかんがえていくひつようがあるとおもいますだいじなのはどうぐにつかわれるのではなくじぶんでつかいこなすことではないでしょうか',
+      japaneseKanji: 'テクノロジーの発達によって、私たちの生活は大きく変わりました。スマートフォンの普及で、いつでもどこでも情報を得られるようになりました。一方で、SNSの使いすぎが問題になっている面もあります。便利さを享受しながらも、テクノロジーとの付き合い方を考えていく必要があると思います。大事なのは、道具に使われるのではなく、自分で使いこなすことではないでしょうか。',
+    },
+    translations: {
+      en: 'Our lives have changed significantly due to the advancement of technology. With the spread of smartphones, we can now access information anytime, anywhere. On the other hand, there are also issues with excessive use of social media. While enjoying the convenience, I think we need to consider how we interact with technology. What\'s important is not being controlled by the tool, but mastering it ourselves, isn\'t it?',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「はったつによって」→ 「によって」は原因・理由を表す',
+        '「いっぽうで」→ 対比を示す接続表現',
+        '「つかいこなす」→ 複合動詞を一語として発音',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '発達',
+        reading: 'はったつ',
+        meaning: { en: 'development / advancement', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '普及',
+        reading: 'ふきゅう',
+        meaning: { en: 'spread / popularization', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '享受',
+        reading: 'きょうじゅ',
+        meaning: { en: 'to enjoy (benefits)', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 22,
+  },
+  {
+    id: 'lesson-024',
+    title: '日本での留学生活を振り返って',
+    level: 'N2',
+    category: '学校',
+    audioUrl: '/audio/N2/lesson-024.wav',
+    script: {
+      japanese: 'にほんに りゅうがくして にねんが たちました。ふりかえってみると、くろうも おおかったですが、それいじょうに えたものが おおきかったと かんじています。にほんごの のうりょくは もちろん、いぶんかを りかいするちからや、こまったときに じぶんで かいけつするちからも みにつきました。くにでは たいけんできなかったことを たくさん けいけんし、じんせいかんが おおきく かわりました。このけいけんを いかして、しょうらいは にほんと ぼこくの かけはしに なりたいと おもっています。',
+      japanesePlain: 'にほんにりゅうがくしてにねんがたちましたふりかえってみるとくろうもおおかったですがそれいじょうにえたものがおおきかったとかんじていますにほんごののうりょくはもちろんいぶんかをりかいするちからやこまったときにじぶんでかいけつするちからもみにつきましたくにではたいけんできなかったことをたくさんけいけんしじんせいかんがおおきくかわりましたこのけいけんをいかしてしょうらいはにほんとぼこくのかけはしになりたいとおもっています',
+      japaneseKanji: '日本に留学して2年が経ちました。振り返ってみると、苦労も多かったですが、それ以上に得たものが大きかったと感じています。日本語の能力はもちろん、異文化を理解する力や、困った時に自分で解決する力も身につきました。国では体験できなかったことをたくさん経験し、人生観が大きく変わりました。この経験を活かして、将来は日本と母国の架け橋になりたいと思っています。',
+    },
+    translations: {
+      en: 'It\'s been two years since I started studying abroad in Japan. Looking back, there were many hardships, but I feel that what I gained was even greater. Not only my Japanese ability, but also the ability to understand different cultures and solve problems on my own. I experienced many things I couldn\'t have in my home country, and my outlook on life changed greatly. I want to use this experience and become a bridge between Japan and my home country in the future.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「ふりかえってみると」→ 回想の表現を自然に',
+        '「みにつきました」→ 「身につく」を一語として',
+        '「かけはし」→ 比喩表現を感情込めて',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '留学',
+        reading: 'りゅうがく',
+        meaning: { en: 'studying abroad', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '異文化',
+        reading: 'いぶんか',
+        meaning: { en: 'different culture', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '架け橋',
+        reading: 'かけはし',
+        meaning: { en: 'bridge (figurative)', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 25,
+  },
+  {
+    id: 'lesson-025',
+    title: '日本の働き方改革',
+    level: 'N2',
+    category: '社会',
+    audioUrl: '/audio/N2/lesson-025.wav',
+    script: {
+      japanese: 'にほんでは「はたらきかたかいかく」が すすめられています。いぜんは ながいじかん はたらくことが びとくと される ふうちょうが ありましたが、さいきんでは ワークライフバランスの じゅうようせいが にんしきされるように なってきました。リモートワークや フレックスタイムの どうにゅうにより、はたらきかたの せんたくしが ひろがっています。しかし、せいどが あっても、じっさいに りようしやすい かんきょうが ととのっているかどうかが かだいです。だれもが じぶんらしく はたらける しゃかいの じつげんに むけて、さらなる とりくみが ひつようです。',
+      japanesePlain: 'にほんではたらきかたかいかくがすすめられていますいぜんはながいじかんはたらくことがびとくとされるふうちょうがありましたがさいきんではわーくらいふばらんすのじゅうようせいがにんしきされるようになってきましたりもーとわーくやふれっくすたいむのどうにゅうによりはたらきかたのせんたくしがひろがっていますしかしせいどがあってもじっさいにりようしやすいかんきょうがととのっているかどうかがかだいですだれもがじぶんらしくはたらけるしゃかいのじつげんにむけてさらなるとりくみがひつようです',
+      japaneseKanji: '日本では「働き方改革」が進められています。以前は長い時間働くことが美徳とされる風潮がありましたが、最近ではワークライフバランスの重要性が認識されるようになってきました。リモートワークやフレックスタイムの導入により、働き方の選択肢が広がっています。しかし、制度があっても、実際に利用しやすい環境が整っているかどうかが課題です。誰もが自分らしく働ける社会の実現に向けて、さらなる取り組みが必要です。',
+    },
+    translations: {
+      en: 'In Japan, "work style reform" is being promoted. Previously, there was a tendency to consider long working hours as a virtue, but recently the importance of work-life balance has come to be recognized. With the introduction of remote work and flextime, options for how to work have expanded. However, even if systems exist, whether the environment makes them easy to actually use remains a challenge. Further efforts are needed toward realizing a society where everyone can work in their own way.',
+      vi: '(翻訳準備中)',
+      zh: '(翻訳準備中)',
+      my: '(翻訳準備中)',
+      ne: '(翻訳準備中)',
+    },
+    pronunciationTips: {
+      ja: [
+        '「はたらきかたかいかく」→ 複合語を区切りすぎない',
+        '「にんしきされるように」→ 受身+変化の表現',
+        '「じつげんにむけて」→ 「向けて」で目標を示す',
+      ],
+      en: [],
+      vi: [],
+      zh: [],
+      my: [],
+      ne: [],
+    },
+    keywords: [
+      {
+        word: '働き方改革',
+        reading: 'はたらきかたかいかく',
+        meaning: { en: 'work style reform', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '風潮',
+        reading: 'ふうちょう',
+        meaning: { en: 'trend / tendency', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+      {
+        word: '実現',
+        reading: 'じつげん',
+        meaning: { en: 'realization', vi: '(準備中)', zh: '(准备中)', my: '(準備中)', ne: '(準備中)' },
+      },
+    ],
+    duration: 25,
+  },
 ];
 
 /**
  * カテゴリー別にレッスンを取得
  */
-export const getLessonsByCategory = (category: Lesson['category']): Lesson[] => {
+export const getLessonsByCategory = (category: NonNullable<Lesson['category']>): Lesson[] => {
   return lessons.filter((lesson) => lesson.category === category);
 };
 
@@ -737,8 +1463,18 @@ export const getLessonById = (id: string): Lesson | undefined => {
 };
 
 /**
- * カテゴリー一覧を取得
+ * カテゴリー一覧を取得（undefinedを除外）
  */
-export const getCategories = (): Lesson['category'][] => {
-  return Array.from(new Set(lessons.map((lesson) => lesson.category)));
+export const getCategories = (): NonNullable<Lesson['category']>[] => {
+  const categories = lessons
+    .map((lesson) => lesson.category)
+    .filter((c): c is NonNullable<Lesson['category']> => c !== undefined);
+  return Array.from(new Set(categories));
+};
+
+/**
+ * レベル一覧を取得
+ */
+export const getLevels = (): Lesson['level'][] => {
+  return Array.from(new Set(lessons.map((lesson) => lesson.level)));
 };

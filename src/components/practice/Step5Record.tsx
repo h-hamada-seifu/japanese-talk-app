@@ -4,8 +4,18 @@ import { useState, useCallback, useEffect } from 'react';
 import { AudioPlayer } from '@/components/audio';
 import { AudioRecorder } from '@/components/audio';
 import { SpeechSuperFeedback, AzureFeedback } from '@/components/feedback';
-import { convertToWav, normalizeForPlayback } from '@/lib/audioConverter';
-import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
+import { ScriptDisplay } from '@/components/common/ScriptDisplay';
+import { useFurigana } from '@/contexts/FuriganaContext';
+import { convertBoth, normalizeForPlayback } from '@/lib/audioConverter';
+import type { Lesson, Level, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
+
+/** レベル別の最大録音時間（秒） */
+const MAX_RECORDING_DURATION: Record<Level, number> = {
+  N5: 30,
+  N4: 45,
+  N3: 60,
+  N2: 90,
+};
 
 interface Step5RecordProps {
   lesson: Lesson;
@@ -31,6 +41,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
   const [azureResult, setAzureResult] = useState<AzureResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const { f } = useFurigana();
   const isEvaluationMode = practiceMode === 'evaluation';
 
   // 正規化済みBlobのURLを生成（アドバイスモードの聞き比べ用）
@@ -65,34 +76,31 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
         ),
       ]);
 
-    // 正規化済み wav（プレビュー・聞き比べ再生用、元のサンプルレート維持）
-    const normalizePromise = withTimeout(normalizeForPlayback(blob), 10000)
-      .then((normalized) => {
-        setNormalizedBlob(normalized);
-      })
-      .catch((err) => {
-        console.error('音声正規化スキップ:', err.message);
-        // 正規化失敗時は元のBlobをそのまま使用（再生は可能）
-      });
-
     if (isEvaluationMode) {
-      // 評価用 wav（16kHz、送信用）も並行で生成
-      const convertPromise = withTimeout(convertToWav(blob), 15000)
-        .then((wav) => {
-          setWavBlob(wav);
+      // 評価モード: デコード1回で プレビュー用 + API送信用 の両方を生成（高速化）
+      withTimeout(convertBoth(blob), 20000)
+        .then(({ playbackBlob, apiBlob }) => {
+          setNormalizedBlob(playbackBlob);
+          setWavBlob(apiBlob);
         })
         .catch((err) => {
           console.error('wav変換エラー:', err.message);
-          // wav変換失敗時は元のBlobで代替
+          // 変換失敗時は元のBlobで代替
           setWavBlob(blob);
-        });
-
-      Promise.all([normalizePromise, convertPromise])
+        })
         .finally(() => {
           setIsConverting(false);
         });
     } else {
-      normalizePromise
+      // アドバイスモード: プレビュー用の正規化のみ
+      withTimeout(normalizeForPlayback(blob), 10000)
+        .then((normalized) => {
+          setNormalizedBlob(normalized);
+        })
+        .catch((err) => {
+          console.error('音声正規化スキップ:', err.message);
+          // 正規化失敗時は元のBlobをそのまま使用（再生は可能）
+        })
         .finally(() => {
           setIsConverting(false);
         });
@@ -217,9 +225,9 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
     : feedback !== null;
 
   const evaluationOptions: { value: SelfEvaluation; label: string }[] = [
-    { value: 'same', label: 'お手本（てほん）と同（おな）じように言（い）えた' },
-    { value: 'close', label: 'だいたい言（い）えたけど、少（すこ）し違（ちが）った' },
-    { value: 'difficult', label: '難（むずか）しかった' },
+    { value: 'same', label: f('お手本（てほん）と同（おな）じように言（い）えた') },
+    { value: 'close', label: f('だいたい言（い）えたけど、少（すこ）し違（ちが）った') },
+    { value: 'difficult', label: f('難（むずか）しかった') },
     { value: 'unknown', label: 'わからない' },
   ];
 
@@ -229,27 +237,27 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
       <div className="text-center">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           {isEvaluationMode
-            ? '録音（ろくおん）して発音（はつおん）を評価（ひょうか）しましょう'
-            : '録音（ろくおん）してAIに聞（き）いてもらいましょう'}
+            ? f('録音（ろくおん）して発音（はつおん）を評価（ひょうか）しましょう')
+            : f('録音（ろくおん）してAIに聞（き）いてもらいましょう')}
         </h2>
         <p className="text-gray-600 text-sm">
           {isEvaluationMode
-            ? 'お手本（てほん）を見（み）ながら録音（ろくおん）して、発音（はつおん）のスコアを確認（かくにん）しましょう。'
-            : 'お手本（てほん）を見（み）ながら録音（ろくおん）して、AIからアドバイスをもらいましょう。'}
+            ? f('お手本（てほん）を見（み）ながら録音（ろくおん）して、発音（はつおん）のスコアを確認（かくにん）しましょう。')
+            : f('お手本（てほん）を見（み）ながら録音（ろくおん）して、AIからアドバイスをもらいましょう。')}
         </p>
       </div>
 
       {/* お手本スクリプト */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-900 mb-2">📝 お手本（てほん）</h3>
-        <p className="text-lg text-blue-900">{lesson.script.japanese}</p>
+        <h3 className="text-sm font-medium text-blue-900 mb-2">📝 {f('お手本（てほん）')}</h3>
+        <ScriptDisplay lesson={lesson} size="base" />
       </div>
 
       {/* 録音コンポーネント */}
       {!hasFeedback && (
         <AudioRecorder
           onRecordingComplete={handleRecordingComplete}
-          maxDuration={30}
+          maxDuration={MAX_RECORDING_DURATION[lesson.level]}
           normalizedBlob={normalizedBlob}
         />
       )}
@@ -258,7 +266,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
       {!isEvaluationMode && recordingUrl && !feedback && (
         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
           <h3 className="font-medium text-gray-900 mb-3">
-            自分（じぶん）の発音（はつおん）、どうでしたか？
+            {f('自分（じぶん）の発音（はつおん）、どうでしたか？')}
           </h3>
           <div className="space-y-2">
             {evaluationOptions.map((option) => (
@@ -314,10 +322,10 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  AIが解析中（かいせきちゅう）...
+                  {f('AIが解析中（かいせきちゅう）...')}
                 </span>
               ) : (
-                'AIにアドバイスをもらう'
+                f('AIにアドバイスをもらう')
               )}
             </button>
           )}
@@ -349,7 +357,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              音声（おんせい）を準備中（じゅんびちゅう）...
+              {f('音声（おんせい）を準備中（じゅんびちゅう）...')}
             </span>
           ) : isAnalyzing ? (
             <span className="flex items-center justify-center gap-2">
@@ -369,10 +377,10 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              評価中（ひょうかちゅう）...
+              {f('評価中（ひょうかちゅう）...')}
             </span>
           ) : (
-            '発音（はつおん）を評価（ひょうか）する'
+            f('発音（はつおん）を評価（ひょうか）する')
           )}
         </button>
       )}
@@ -385,7 +393,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
             onClick={handleRetry}
             className="mt-2 text-red-600 underline text-sm"
           >
-            やり直（なお）す
+            {f('やり直（なお）す')}
           </button>
         </div>
       )}
@@ -419,7 +427,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
           {transcription && (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-700 mb-2">
-                🤖 AIが聞（き）き取（と）った結果（けっか）
+                🤖 {f('AIが聞（き）き取（と）った結果（けっか）')}
               </h3>
               <p className="text-gray-900">{transcription}</p>
             </div>
@@ -433,7 +441,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
           {/* 良かった点 */}
           {feedback.goodPoints.length > 0 && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-medium text-blue-900 mb-2">👍 良（よ）かったところ</h3>
+              <h3 className="font-medium text-blue-900 mb-2">👍 {f('良（よ）かったところ')}</h3>
               <ul className="text-blue-800 space-y-1">
                 {feedback.goodPoints.map((point, index) => (
                   <li key={index}>• {point}</li>
@@ -446,7 +454,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
           {feedback.improvementTip && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <h3 className="font-medium text-yellow-900 mb-2">
-                💡 もっと良（よ）くなるヒント
+                💡 {f('もっと良（よ）くなるヒント')}
               </h3>
               <p className="text-yellow-800">{feedback.improvementTip}</p>
             </div>
@@ -459,15 +467,15 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
 
           {/* 聞き比べ */}
           <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium text-gray-900 mb-3">🎧 聞（き）き比（くら）べ</h3>
+            <h3 className="font-medium text-gray-900 mb-3">🎧 {f('聞（き）き比（くら）べ')}</h3>
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-gray-600 mb-1">お手本（てほん）</p>
+                <p className="text-sm text-gray-600 mb-1">{f('お手本（てほん）')}</p>
                 <AudioPlayer audioUrl={lesson.audioUrl} showSpeedControl={false} />
               </div>
               {(normalizedUrl || recordingUrl) && (
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">あなたの録音（ろくおん）</p>
+                  <p className="text-sm text-gray-600 mb-1">{f('あなたの録音（ろくおん）')}</p>
                   <audio src={normalizedUrl || recordingUrl!} controls className="w-full" />
                 </div>
               )}
@@ -479,7 +487,7 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
             onClick={handleRetry}
             className="w-full py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
           >
-            もう一度（いちど）録音（ろくおん）する
+            {f('もう一度（いちど）録音（ろくおん）する')}
           </button>
         </div>
       )}
@@ -490,13 +498,13 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
           onClick={onBack}
           className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
         >
-          ← 戻（もど）る
+          {f('← 戻（もど）る')}
         </button>
         <button
           onClick={onComplete}
           className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-lg transition-colors shadow-md"
         >
-          練習完了（れんしゅうかんりょう） ✓
+          {f('練習完了（れんしゅうかんりょう）')} ✓
         </button>
       </div>
     </div>

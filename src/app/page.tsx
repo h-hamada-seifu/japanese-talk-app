@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useUserSettings } from '@/hooks';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { Language } from '@/types';
 
 const languages: { value: Language; label: string; flag: string }[] = [
@@ -15,6 +16,7 @@ const languages: { value: Language; label: string; flag: string }[] = [
 
 export default function Home() {
   const { settings, setUserLanguage, isLoaded } = useUserSettings();
+  const { f } = useFurigana();
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setUserLanguage(e.target.value as Language);
@@ -28,20 +30,20 @@ export default function Home() {
 
         {/* タイトル */}
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          日本語（にほんご）リスニング・発音（はつおん）練習（れんしゅう）
+          {f('日本語（にほんご）リスニング・発音（はつおん）練習（れんしゅう）')}
         </h1>
 
         {/* 説明 */}
         <p className="text-gray-600 mb-6">
-          スマートフォンで隙間時間（すきまじかん）に
+          {f('スマートフォンで隙間時間（すきまじかん）に')}
           <br />
-          日本語（にほんご）の聞（き）く力（ちから）・話（はな）す力（ちから）を伸（の）ばそう
+          {f('日本語（にほんご）の聞（き）く力（ちから）・話（はな）す力（ちから）を伸（の）ばそう')}
         </p>
 
         {/* 言語選択 */}
         <div className="mb-8 bg-white rounded-lg p-4 shadow-sm border border-gray-200">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            あなたの母語（ぼご）を選（えら）んでください
+            {f('あなたの母語（ぼご）を選（えら）んでください')}
           </label>
           <select
             value={isLoaded ? settings.userLanguage : 'ja'}
@@ -55,7 +57,7 @@ export default function Home() {
             ))}
           </select>
           <p className="text-xs text-gray-500 mt-2">
-            翻訳（ほんやく）や発音（はつおん）ヒント、AIアドバイスに使用（しよう）されます
+            {f('翻訳（ほんやく）や発音（はつおん）ヒント、AIアドバイスに使用（しよう）されます')}
           </p>
         </div>
 
@@ -64,7 +66,7 @@ export default function Home() {
           href="/lessons"
           className="inline-block w-full py-4 px-6 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-lg text-lg transition-colors shadow-lg"
         >
-          練習（れんしゅう）をはじめる
+          {f('練習（れんしゅう）をはじめる')}
         </Link>
 
         {/* シャドーイング練習ボタン */}
@@ -72,48 +74,48 @@ export default function Home() {
           href="/shadowing"
           className="inline-block w-full py-4 px-6 mt-3 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-bold rounded-lg text-lg transition-colors shadow-lg"
         >
-          まとめてシャドーイング
+          {f('まとめてシャドーイング')}
         </Link>
 
         {/* 特徴リスト */}
         <div className="mt-10 grid grid-cols-3 gap-4 text-center">
           <div className="p-3">
             <div className="text-3xl mb-2">⏱️</div>
-            <p className="text-xs text-gray-600">1回（かい）15〜20分（ふん）</p>
+            <p className="text-xs text-gray-600">{f('1回（かい）15〜20分（ふん）')}</p>
           </div>
           <div className="p-3">
             <div className="text-3xl mb-2">📱</div>
-            <p className="text-xs text-gray-600">スマホで簡単（かんたん）</p>
+            <p className="text-xs text-gray-600">{f('スマホで簡単（かんたん）')}</p>
           </div>
           <div className="p-3">
             <div className="text-3xl mb-2">🤖</div>
-            <p className="text-xs text-gray-600">AIがアドバイス</p>
+            <p className="text-xs text-gray-600">{f('AIがアドバイス')}</p>
           </div>
         </div>
 
         {/* 学習フロー説明 */}
         <div className="mt-8 p-4 bg-white rounded-lg shadow-sm text-left">
-          <h2 className="font-bold text-gray-900 mb-3 text-sm">5ステップで学（まな）ぶ</h2>
+          <h2 className="font-bold text-gray-900 mb-3 text-sm">{f('5ステップで学（まな）ぶ')}</h2>
           <ol className="text-sm text-gray-600 space-y-2">
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-              音声（おんせい）を聞（き）く
+              {f('音声（おんせい）を聞（き）く')}
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-              スクリプトで意味（いみ）を確認（かくにん）
+              {f('スクリプトで意味（いみ）を確認（かくにん）')}
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
-              もう一度（いちど）聞（き）く
+              {f('もう一度（いちど）聞（き）く')}
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">4</span>
-              声（こえ）に出（だ）して練習（れんしゅう）
+              {f('声（こえ）に出（だ）して練習（れんしゅう）')}
             </li>
             <li className="flex items-center gap-2">
               <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">5</span>
-              録音（ろくおん）してAIアドバイス
+              {f('録音（ろくおん）してAIアドバイス')}
             </li>
           </ol>
         </div>
@@ -143,7 +145,7 @@ export default function Home() {
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          設定（せってい）
+          {f('設定（せってい）')}
         </Link>
       </div>
     </div>

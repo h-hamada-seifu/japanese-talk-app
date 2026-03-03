@@ -12,10 +12,10 @@ export type PracticeMode = 'advice' | 'evaluation';
 export type EvaluationTool = 'speechsuper' | 'azure';
 
 // レッスンレベル
-export type Level = 'N5' | 'N4';
+export type Level = 'N5' | 'N4' | 'N3' | 'N2';
 
-// レッスンカテゴリー
-export type Category = '挨拶（あいさつ）' | '日常（にちじょう）' | '買い物（かいもの）' | '食事（しょくじ）' | '交通（こうつう）';
+// レッスンカテゴリー（データ駆動: lessons.tsから動的に取得）
+export type Category = string;
 
 // 自己評価
 export type SelfEvaluation = 'same' | 'close' | 'difficult' | 'unknown';

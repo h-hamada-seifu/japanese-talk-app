@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Header } from '@/components/layout';
+import { Header, Providers } from '@/components/layout';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="min-h-screen bg-gray-50 antialiased">
-        <Header />
-        <main className="pb-8">{children}</main>
+        <Providers>
+          <Header />
+          <main className="pb-8">{children}</main>
+        </Providers>
       </body>
     </html>
   );

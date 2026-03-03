@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ScoreRadarChart } from './ScoreRadarChart';
 import { ScoreBarChart } from './ScoreBarChart';
 import { AudioPlayer } from '@/components/audio';
+import { useFurigana } from '@/contexts/FuriganaContext';
 import type { SpeechSuperResult, Lesson } from '@/types';
 
 interface SpeechSuperFeedbackProps {
@@ -49,6 +50,7 @@ export function SpeechSuperFeedback({
   onRetry,
 }: SpeechSuperFeedbackProps) {
   const { scores, words } = result;
+  const { f } = useFurigana();
 
   // Blob から再生用URLを生成し、アンマウント時にクリーンアップ
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export function SpeechSuperFeedback({
     <div className="space-y-4">
       {/* 総合スコア */}
       <div className={`border rounded-lg p-6 text-center ${getScoreBgClass(scores.overall)}`}>
-        <p className="text-sm text-gray-600 mb-1">総合（そうごう）スコア</p>
+        <p className="text-sm text-gray-600 mb-1">{f('総合（そうごう）スコア')}</p>
         <p className={`text-5xl font-bold ${getScoreTextClass(scores.overall)}`}>
           {scores.overall}
         </p>
@@ -79,7 +81,7 @@ export function SpeechSuperFeedback({
       {transcription && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <h3 className="text-sm font-medium text-gray-700 mb-2">
-            認識（にんしき）結果（けっか）
+            {f('認識（にんしき）結果（けっか）')}
           </h3>
           <p className="text-gray-900">{transcription}</p>
         </div>
@@ -88,7 +90,7 @@ export function SpeechSuperFeedback({
       {/* レーダーチャート */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <h3 className="font-medium text-gray-900 mb-2">
-          詳細（しょうさい）スコア
+          {f('詳細（しょうさい）スコア')}
         </h3>
         <ScoreRadarChart scores={scores} />
       </div>
@@ -96,7 +98,7 @@ export function SpeechSuperFeedback({
       {/* 棒グラフ */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <h3 className="font-medium text-gray-900 mb-2">
-          項目別（こうもくべつ）スコア
+          {f('項目別（こうもくべつ）スコア')}
         </h3>
         <ScoreBarChart scores={scores} />
       </div>
@@ -105,7 +107,7 @@ export function SpeechSuperFeedback({
       {words.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
           <h3 className="font-medium text-gray-900 mb-3">
-            単語別（たんごべつ）スコア
+            {f('単語別（たんごべつ）スコア')}
           </h3>
           <div className="space-y-3">
             {words.map((word, index) => (
@@ -136,15 +138,15 @@ export function SpeechSuperFeedback({
 
       {/* 聞き比べ */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-        <h3 className="font-medium text-gray-900 mb-3">聞（き）き比（くら）べ</h3>
+        <h3 className="font-medium text-gray-900 mb-3">{f('聞（き）き比（くら）べ')}</h3>
         <div className="space-y-3">
           <div>
-            <p className="text-sm text-gray-600 mb-1">お手本（てほん）</p>
+            <p className="text-sm text-gray-600 mb-1">{f('お手本（てほん）')}</p>
             <AudioPlayer audioUrl={lesson.audioUrl} showSpeedControl={false} />
           </div>
           {recordingUrl && (
             <div>
-              <p className="text-sm text-gray-600 mb-1">あなたの録音（ろくおん）</p>
+              <p className="text-sm text-gray-600 mb-1">{f('あなたの録音（ろくおん）')}</p>
               <audio
                 src={recordingUrl}
                 controls
@@ -160,7 +162,7 @@ export function SpeechSuperFeedback({
         onClick={onRetry}
         className="w-full py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
       >
-        もう一度（いちど）録音（ろくおん）する
+        {f('もう一度（いちど）録音（ろくおん）する')}
       </button>
     </div>
   );
