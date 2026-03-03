@@ -38,27 +38,42 @@ export default function PracticePage() {
   const [error, setError] = useState<string | null>(null);
 
   // 進捗管理とユーザー設定を取得
-  const { startLesson, completeStep, completeLesson } = useLessonProgress();
+  const { isLoaded, getProgress, startLesson, completeStep, completeLesson } = useLessonProgress();
   const { settings } = useUserSettings();
   const { showFurigana, setShowFurigana, f } = useFurigana();
   const { showTranslation, setShowTranslation } = useTranslation();
   const userLanguage = settings.userLanguage;
 
-  // レッスンデータを取得
+  // レッスンデータを取得し、進捗があれば途中から再開
+  // isLoaded を待つことで localStorage の読み込み完了後に再開判定を行う
   useEffect(() => {
+    if (!isLoaded) return;
+
     const lessonData = getLessonById(lessonId);
     if (lessonData) {
       setLesson(lessonData);
       // レベルに応じたデフォルト値を設定
       setShowFurigana(getDefaultFurigana(lessonData.level));
       setShowTranslation(getDefaultTranslation(lessonData.level));
+
+      // 保存済みの進捗から再開ステップを算出
+      const saved = getProgress(lessonId);
+      if (saved && !saved.isCompleted && saved.completedSteps.length > 0) {
+        const maxCompleted = Math.max(...saved.completedSteps) as PracticeStep;
+        const resumeStep = Math.min(maxCompleted + 1, 5) as PracticeStep;
+        setCurrentStep(resumeStep);
+      }
+
       // レッスン開始を記録
       startLesson(lessonId);
     } else {
       setError('レッスンが見（み）つかりませんでした');
     }
     setLoading(false);
-  }, [lessonId, startLesson, setShowFurigana, setShowTranslation]);
+    // getProgress は progress 状態に依存するため依存配列に含めない
+    // （startLesson が progress を更新 → getProgress の参照変化 → 無限ループ防止）
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId, isLoaded, startLesson, setShowFurigana, setShowTranslation]);
 
   // ステップを進める
   const goToNextStep = () => {
