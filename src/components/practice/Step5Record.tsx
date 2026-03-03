@@ -6,7 +6,7 @@ import { AudioRecorder } from '@/components/audio';
 import { SpeechSuperFeedback, AzureFeedback } from '@/components/feedback';
 import { ScriptDisplay } from '@/components/common/ScriptDisplay';
 import { useFurigana } from '@/contexts/FuriganaContext';
-import { convertToWav, normalizeForPlayback } from '@/lib/audioConverter';
+import { convertBoth, normalizeForPlayback } from '@/lib/audioConverter';
 import type { Lesson, SelfEvaluation, AIFeedback, Language, PracticeMode, SpeechSuperResult, EvaluationTool, AzureResult } from '@/types';
 
 interface Step5RecordProps {
@@ -68,34 +68,31 @@ export function Step5Record({ lesson, userLanguage, practiceMode, evaluationTool
         ),
       ]);
 
-    // 正規化済み wav（プレビュー・聞き比べ再生用、元のサンプルレート維持）
-    const normalizePromise = withTimeout(normalizeForPlayback(blob), 10000)
-      .then((normalized) => {
-        setNormalizedBlob(normalized);
-      })
-      .catch((err) => {
-        console.error('音声正規化スキップ:', err.message);
-        // 正規化失敗時は元のBlobをそのまま使用（再生は可能）
-      });
-
     if (isEvaluationMode) {
-      // 評価用 wav（16kHz、送信用）も並行で生成
-      const convertPromise = withTimeout(convertToWav(blob), 15000)
-        .then((wav) => {
-          setWavBlob(wav);
+      // 評価モード: デコード1回で プレビュー用 + API送信用 の両方を生成（高速化）
+      withTimeout(convertBoth(blob), 20000)
+        .then(({ playbackBlob, apiBlob }) => {
+          setNormalizedBlob(playbackBlob);
+          setWavBlob(apiBlob);
         })
         .catch((err) => {
           console.error('wav変換エラー:', err.message);
-          // wav変換失敗時は元のBlobで代替
+          // 変換失敗時は元のBlobで代替
           setWavBlob(blob);
-        });
-
-      Promise.all([normalizePromise, convertPromise])
+        })
         .finally(() => {
           setIsConverting(false);
         });
     } else {
-      normalizePromise
+      // アドバイスモード: プレビュー用の正規化のみ
+      withTimeout(normalizeForPlayback(blob), 10000)
+        .then((normalized) => {
+          setNormalizedBlob(normalized);
+        })
+        .catch((err) => {
+          console.error('音声正規化スキップ:', err.message);
+          // 正規化失敗時は元のBlobをそのまま使用（再生は可能）
+        })
         .finally(() => {
           setIsConverting(false);
         });

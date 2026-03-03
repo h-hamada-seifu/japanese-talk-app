@@ -1,10 +1,10 @@
 /**
  * Web Audio API を使用した音声フォーマット変換ユーティリティ
  * ブラウザの MediaRecorder が出力する音声（webm/mp4 等）を
- * SpeechSuper API が受け付ける wav フォーマットに変換する
+ * Azure Speech / SpeechSuper API が受け付ける wav フォーマットに変換する
  */
 
-/** SpeechSuper 推奨設定 */
+/** Azure Speech / SpeechSuper 推奨設定 */
 const TARGET_SAMPLE_RATE = 16000;
 const TARGET_CHANNELS = 1;
 const BITS_PER_SAMPLE = 16;
@@ -15,19 +15,63 @@ const NORMALIZE_TARGET_PEAK = 0.7;
 /** ノーマライゼーションの最小ピーク閾値（これ以下は無音とみなす） */
 const NORMALIZE_MIN_THRESHOLD = 0.001;
 
+/** convertBoth の戻り値 */
+export interface ConvertBothResult {
+  /** プレビュー再生用 wav Blob（元のサンプルレート/モノラル/正規化済み） */
+  playbackBlob: Blob;
+  /** API送信用 wav Blob（16kHz/モノラル/正規化済み） */
+  apiBlob: Blob;
+}
+
+/**
+ * 録音 Blob をデコード1回で、プレビュー用 wav と API送信用 wav の両方を生成する
+ * - デコード（重い処理）を1回に集約して高速化
+ * - リサンプリングに OfflineAudioContext を使用（ネイティブ処理で高速）
+ *
+ * @param blob - MediaRecorder が出力した音声 Blob（webm/mp4 等）
+ * @returns プレビュー用と API送信用の wav Blob
+ */
+export async function convertBoth(blob: Blob): Promise<ConvertBothResult> {
+  const arrayBuffer = await blob.arrayBuffer();
+
+  // デコードは1回だけ（iOS では suspend 状態の場合があるため resume() を呼ぶ）
+  const audioContext = new AudioContext();
+  try {
+    if (audioContext.state === 'suspended') {
+      await audioContext.resume();
+    }
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    const monoData = mixdownToMono(audioBuffer);
+    const originalSampleRate = audioBuffer.sampleRate;
+
+    // プレビュー用: サンプルレートそのまま、音量のみ正規化
+    const playbackNormalized = normalize(monoData, NORMALIZE_TARGET_PEAK);
+    const playbackPcm = float32ToInt16(playbackNormalized);
+    const playbackWav = createWavFile(playbackPcm, originalSampleRate, TARGET_CHANNELS, BITS_PER_SAMPLE);
+    const playbackBlob = new Blob([playbackWav], { type: 'audio/wav' });
+
+    // API送信用: OfflineAudioContext でネイティブリサンプリング（16kHz）
+    const resampledData = await resampleWithOfflineContext(monoData, originalSampleRate, TARGET_SAMPLE_RATE);
+    const apiNormalized = normalize(resampledData, NORMALIZE_TARGET_PEAK);
+    const apiPcm = float32ToInt16(apiNormalized);
+    const apiWav = createWavFile(apiPcm, TARGET_SAMPLE_RATE, TARGET_CHANNELS, BITS_PER_SAMPLE);
+    const apiBlob = new Blob([apiWav], { type: 'audio/wav' });
+
+    return { playbackBlob, apiBlob };
+  } finally {
+    await audioContext.close();
+  }
+}
+
 /**
  * 音声 Blob を wav フォーマットに変換する（正規化付き）
+ * 単独で API送信用 wav のみが必要な場合に使用（アドバイスモード等）
  *
  * @param blob - MediaRecorder が出力した音声 Blob（webm/mp4 等）
  * @returns wav フォーマットの Blob（16kHz/モノラル/16bit PCM、正規化済み）
- * @throws 変換に失敗した場合
  */
 export async function convertToWav(blob: Blob): Promise<Blob> {
-  // 1. Blob → ArrayBuffer
   const arrayBuffer = await blob.arrayBuffer();
-
-  // 2. AudioContext でデコード → PCM データ（AudioBuffer）
-  //    iOS では AudioContext が suspend 状態の場合があるため resume() を呼ぶ
   const audioContext = new AudioContext();
   try {
     if (audioContext.state === 'suspended') {
@@ -35,18 +79,12 @@ export async function convertToWav(blob: Blob): Promise<Blob> {
     }
 
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-    // 3. モノラルにミックスダウン + 16kHz にリサンプリング
     const monoData = mixdownToMono(audioBuffer);
-    const resampledData = resample(monoData, audioBuffer.sampleRate, TARGET_SAMPLE_RATE);
 
-    // 4. ノーマライゼーション（マイク入力が小さい場合でも適正音量に増幅）
+    // OfflineAudioContext でネイティブリサンプリング
+    const resampledData = await resampleWithOfflineContext(monoData, audioBuffer.sampleRate, TARGET_SAMPLE_RATE);
     const normalizedData = normalize(resampledData, NORMALIZE_TARGET_PEAK);
-
-    // 5. Float32 → Int16 PCM に変換
     const pcmData = float32ToInt16(normalizedData);
-
-    // 6. WAV ヘッダーを構築して結合
     const wavBuffer = createWavFile(pcmData, TARGET_SAMPLE_RATE, TARGET_CHANNELS, BITS_PER_SAMPLE);
 
     return new Blob([wavBuffer], { type: 'audio/wav' });
@@ -57,7 +95,7 @@ export async function convertToWav(blob: Blob): Promise<Blob> {
 
 /**
  * 録音 Blob を正規化した wav に変換する（プレビュー再生用）
- * convertToWav と同じ処理だが、サンプルレートは元のまま保持して音質を維持する
+ * サンプルレートは元のまま保持して音質を維持する
  *
  * @param blob - MediaRecorder が出力した音声 Blob
  * @returns 正規化済み wav Blob（元のサンプルレート/モノラル/16bit PCM）
@@ -72,8 +110,6 @@ export async function normalizeForPlayback(blob: Blob): Promise<Blob> {
 
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     const monoData = mixdownToMono(audioBuffer);
-
-    // サンプルレートはそのまま（音質維持）、音量のみ正規化
     const normalizedData = normalize(monoData, NORMALIZE_TARGET_PEAK);
     const pcmData = float32ToInt16(normalizedData);
     const wavBuffer = createWavFile(pcmData, audioBuffer.sampleRate, TARGET_CHANNELS, BITS_PER_SAMPLE);
@@ -142,32 +178,30 @@ function normalize(data: Float32Array, targetPeak: number): Float32Array {
 }
 
 /**
- * サンプルレートを変換する（線形補間）
+ * OfflineAudioContext を使用したネイティブリサンプリング
+ * JSループによる線形補間よりも大幅に高速（ブラウザのネイティブコードで処理）
  */
-function resample(
+async function resampleWithOfflineContext(
   data: Float32Array,
   fromSampleRate: number,
   toSampleRate: number
-): Float32Array {
+): Promise<Float32Array> {
   if (fromSampleRate === toSampleRate) {
     return data;
   }
 
-  const ratio = fromSampleRate / toSampleRate;
-  const newLength = Math.round(data.length / ratio);
-  const result = new Float32Array(newLength);
+  const newLength = Math.round(data.length * toSampleRate / fromSampleRate);
+  const offlineCtx = new OfflineAudioContext(1, newLength, toSampleRate);
+  const buffer = offlineCtx.createBuffer(1, data.length, fromSampleRate);
+  buffer.getChannelData(0).set(data);
 
-  for (let i = 0; i < newLength; i++) {
-    const srcIndex = i * ratio;
-    const srcIndexFloor = Math.floor(srcIndex);
-    const srcIndexCeil = Math.min(srcIndexFloor + 1, data.length - 1);
-    const fraction = srcIndex - srcIndexFloor;
+  const source = offlineCtx.createBufferSource();
+  source.buffer = buffer;
+  source.connect(offlineCtx.destination);
+  source.start(0);
 
-    // 線形補間
-    result[i] = data[srcIndexFloor] * (1 - fraction) + data[srcIndexCeil] * fraction;
-  }
-
-  return result;
+  const rendered = await offlineCtx.startRendering();
+  return new Float32Array(rendered.getChannelData(0));
 }
 
 /**
